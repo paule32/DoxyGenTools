@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# Datei:  start.py
+# Datei:  filter.py
 # Author: Jens Kallup - paule32
 #
 # Rechte: (c) 2024 by kallup non-profit software
@@ -7,6 +7,33 @@
 #
 # only for education, and for non-profit usage !!!
 # commercial use ist not allowed.
+#
+# To give doxygen a little bit "faked" intelligence, I have created this
+# script, which I use for post-processing. It will start the doxygen app as a
+# sub process, and after all is done, the script is used, to delete not needed
+# stuff like:
+# - html comments
+# - whitespaces (\n\r\t)
+# - !doctype
+# - xmlns
+# - html header stuff like meta data's
+# - content header navigation html elements.
+#
+# The performed action's that are used in this script helps, to shrink down
+# the CHM project file size - because the data information's described above
+# will be delete in all found html files, in all found directories in the
+# given OUTPUT_DIRECTORY folder.
+#
+# When action is gone, the resulting content will be write back to the
+# original file name.
+#
+# ATTENTION:
+# -----------
+# This is not an offical script for the offical doxygen reprosity !
+# It is created mainly for using to my personal usage.
+# So, I give no warantees for anything.
+#
+# !!! YOU USE IT AT YOUR OWN RISK !!!
 # ----------------------------------------------------------------------------
 try:
     import os            # operating system stuff
@@ -113,8 +140,6 @@ try:
             print("error: doxygen could not be started.")
             sys.exit()
         
-        sys.exit()
-        
         # ---------------------------------------------------------
         # get all .html files, in all directories based on root ./
         # ---------------------------------------------------------
@@ -124,6 +149,8 @@ try:
         file_names = []
         
         for file_name in html_files:
+            if os_type == 1:
+                file_name = file_name.replace("/", "\\")
             file_names.append(file_name)
         
         # ---------------------------------------------------------
