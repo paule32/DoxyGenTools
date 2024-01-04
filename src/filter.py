@@ -27,6 +27,10 @@
 # When action is gone, the resulting content will be write back to the
 # original file name.
 #
+# To run this script, you have to add some environment variables to your
+# current system process domain:
+# DOXYGEN_PATH = <path\to\doxygen.exe>
+#
 # ATTENTION:
 # -----------
 # This is not an offical script for the offical doxygen reprosity !
@@ -42,16 +46,26 @@ try:
     import glob          # directory search
     import subprocess    # start sub processes
     import platform      # Windows ?
+    import shutil        # shell utils
     import traceback     # stack exception trace back
-
+    
     from bs4         import BeautifulSoup, Doctype
     from bs4.element import Comment
+    
+    # ------------------------------------------------------------------------
+    # branding water marks ...
+    # ------------------------------------------------------------------------
+    __version__ = "Version 0.0.1"
+    __authors__ = "paule32"
     
     # ------------------------------------------------------------------------
     # main is out entry point, where normal application's begin to start their
     # script command's when you click on this script file (name), or execute
     # this script by press the enter key on the command prompt.
     # ------------------------------------------------------------------------
+    EXIT_SUCCESS = 0
+    EXIT_FAILURE = 1
+
     if __name__ == "__main__":
         # ---------------------------------------------------------
         # print a nice banner on the display device ...
@@ -62,36 +76,79 @@ try:
         + "all rights reserved.\n")
         
         # ---------------------------------------------------------
+        # at startup, check system settings ...
+        # ---------------------------------------------------------
+        pcount      = len(sys.argv) - 1
+        doxy_env    = "DOXYGEN_PATH"
+        doxy_path   = "./"
+        doxyfile    = "Doxyfile"
+        os_type     = 0
+        
+        if platform.system() == "Windows":
+            os_type = 1
+        
+        if not doxy_env in os.environ:
+            print("error: " + f"{doxy_env}" \
+            + " is not set in your system settings.")
+            sys.exit(EXIT_FAILURE)
+        else:
+            doxy_path = os.environ[doxy_env]
+        
+        # ---------------------------------------------------------
+        # depend on the platform system, check if doxygen exec name
+        # was set into DOXYGEN_PATH. If no such entry exists, then
+        # add doxygen executable name to "doxy_path" ...
+        # ---------------------------------------------------------
+        if os_type == 1:
+            doxy_path = doxy_path.replace("/", "\\")
+            if doxy_path[-1] == "\\":
+                if not "doxygen.exe" in doxy_path.lower():
+                    doxy_path += "doxygen.exe"
+                elif not "doxygen" in doxygen_path.lower():
+                    doxy_path += "doxygen.exe"
+            else:
+                if not "doxygen.exe" in doxy_path.lower():
+                    doxy_path += "\\doxygen.exe"
+                elif not "doxygen" in doxy_path.lower():
+                    doxy_path += "\\doxygen.exe"
+        # ---------------------------------------------------------
+        # this is for Linux user's ,,,
+        # ---------------------------------------------------------
+        else:
+            if doxy_path[-1] == "/":
+                if not "doxygen" in doxy_path:
+                    doxy_path += "doxygen"
+            else:
+                if not "doxygen" in doxy_path:
+                    doxy_path += "/doxygen"
+        
+        # ---------------------------------------------------------
         # at startup, check parameters for a given Doxyfile config
         # file. Is none given, the name for the config will be on
         # "Doxyfile" as default.
         # ---------------------------------------------------------
-        user_system = platform.system()
-        pcount      = len(sys.argv) - 1
-        doxyfile    = "Doxyfile"
-        os_type     = 0
-        
-        if user_system == "Windows":
-            os_type = 1
-        
         if pcount < 1:
-            print("" \
-            + "info: no parameter given.\n"   \
+            print(""                          \
+            + "info: no parameter given. "    \
             + "use default: 'Doxyfile' config.")
         elif pcount > 1:
             print(""                          \
-            + "error: to many parameters.\n"  \
-            + "use default: 'Doxyfile' config.")
+            + "error: to many parameters. "   \
+            + "use first parameter as config.")
             doxyfile = sys.argv[1]
         else:
             doxyfile = sys.argv[1]
+        
+        if os_type == 1:
+            doxyfile = doxyfile.replace("/", "\\")
         
         # ---------------------------------------------------------
         # when config file not exists, then spite a error message:
         # ---------------------------------------------------------
         if not os.path.exists(doxyfile):
-            print("error: config file does not exists.")
-            sys.exit()
+            print("error: config file: '" \
+            + f"{doxyfile}" + "' does not exists.")
+            sys.exit(EXIT_FAILURE)
         
         # ---------------------------------------------------------
         # - open config file
@@ -107,45 +164,45 @@ try:
                     rows = line.split()
                     html_out = rows[2]
                     break
+        
         if os_type == 1:
             html_out = html_out.replace("/", "\\")
-        if not os.path.exists(html_out):
-            os.makedirs(html_out, exist_ok=True)
         
-        print("--> " + html_out)
+        # ---------------------------------------------------------
+        # !!! CAUTION !!!: data can be lost there.
+        # ---------------------------------------------------------
+        if os.path.exists(html_out):
+            shutil.rmtree(html_out)
         
-        sys.exit()
+        os.makedirs(html_out, exist_ok = True)
+        
         # ---------------------------------------------------------
         # here, we try to open doxygen. The path to the executable
         # must be in the PATH variable of your system...
         # ---------------------------------------------------------
-        try:
-            print("converting all files can take a while...")
-            result = subprocess.run(["doxygen",r"{doxyfile}"])
-            exit_code = result.returncode
-            
-            # -----------------------------------------------------
-            # when error level, then do nothing anyelse - exit ...
-            # -----------------------------------------------------
-            if exit_code != 0:
-                print(""                               \
-                + "error: doxygen aborted with code: " \
-                + f"{exit_code}")
-                sys.exit()
-        except:
-            # -----------------------------------------------------
-            # if doxygen can not be started, then check your PATH
-            # variable in your system settings ...
-            # -----------------------------------------------------
-            print("error: doxygen could not be started.")
-            sys.exit()
+        print("converting all files can take a while...\n")
+        
+        result = subprocess.run([f"{doxy_path}",f"{doxyfile}"])
+        exit_code = result.returncode
+        
+        # -----------------------------------------------------
+        # when error level, then do nothing anyelse - exit ...
+        # -----------------------------------------------------
+        if exit_code > 0:
+            print(""                               \
+            + "error: doxygen aborted with code: " \
+            + f"{exit_code}")
+            sys.exit(EXIT_FAILURE)
         
         # ---------------------------------------------------------
         # get all .html files, in all directories based on root ./
         # ---------------------------------------------------------
         html_directory = './**/*.html'
         
-        html_files = glob.glob(html_directory, recursive=True)
+        if os_type == 1:
+            html_directory  =  html_directory.replace("/", "\\")
+        
+        html_files = glob.glob(html_directory,recursive = True)
         file_names = []
         
         for file_name in html_files:
@@ -208,9 +265,12 @@ try:
                 # ---------------------------------------------------------
                 # remove whitespaces ...
                 # ---------------------------------------------------------
-                modh = str(soup)
-                modh = modh.split('\n', 1)[1]     # extract first line with
-                modh = re.sub(r"\s+", " ", modh)  # <!DOCTYPE ...
+                try:
+                    modh = str(soup)
+                    modh = modh.split('\n', 1)[1]     # extract first line with
+                    modh = re.sub(r"\s+", " ", modh)  # <!DOCTYPE ...
+                except Exception as ex:
+                    print(f"warning: " + f"{ex}")
                 
                 # ---------------------------------------------------------
                 # close old file, to avoid cross over's. Then write the
@@ -223,14 +283,45 @@ try:
                     output_file.close()
         
         # ---------------------------------------------------------
+        # all files are write, then create the CHM file ...
+        # ---------------------------------------------------------
+        dir_old = os.getcwd()
+        dir_new = html_out + "/"
+        
+        if os_type == 1:
+            dir_old = dir_old.replace("/", "\\")
+            dir_new = dir_new.replace("/", "\\")
+            
+            os.chdir(dir_new)
+            
+            // TODO: hhc.exe !!!
+            result = subprocess.run(["hhc.exe",f"{dir_new}" + "index.hhp"])
+            exit_code = result.returncode
+            
+            # -----------------------------------------------------
+            # when error level, then do nothing anyelse - exit ...
+            # -----------------------------------------------------
+            if exit_code > 0:
+                print(""                               \
+                + "error: hhc.exe aborted with code: " \
+                + f"{exit_code}")
+                sys.exit(EXIT_FAILURE)
+            
+            os.chdir(dir_old)
+        else:
+            print("error: this is script is for Windows hhc.exe")
+            sys.exit(EXIT_FAILURE)
+        
+        # ---------------------------------------------------------
         # when all is gone, stop the running script ...
         # ---------------------------------------------------------
         print("Done.")
-        sys.exit()
+        sys.exit(EXIT_SUCCESS)
 
 except ImportError:
     print("error: import module missing.")
-    sys.exit()
+    sys.exit(EXIT_FAILURE)
+
 # ----------------------------------------------------------------------------
 # E O F  -  End - Of - File
 # ----------------------------------------------------------------------------
