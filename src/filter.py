@@ -29,7 +29,9 @@
 #
 # To run this script, you have to add some environment variables to your
 # current system process domain:
+#
 # DOXYGEN_PATH = <path\to\doxygen.exe>
+# DOXYHHC_PATH = <path\to\hhc.exe>
 #
 # ATTENTION:
 # -----------
@@ -83,15 +85,23 @@ try:
         # ---------------------------------------------------------
         # at startup, check system settings ...
         # ---------------------------------------------------------
-        pcount      = len(sys.argv) - 1
-        doxy_env    = "DOXYGEN_PATH"
-        doxy_path   = "./"
-        doxyfile    = "Doxyfile"
-        os_type     = 0
+        pcount     = len(sys.argv) - 1
+        
+        doxy_env   = "DOXYGEN_PATH"  # doxygen.exe
+        doxy_hhc   = "DOXYHHC_PATH"  # hhc.exe
+        
+        doxy_path  = "./"
+        hhc__path  = ""
+        
+        doxyfile   = "Doxyfile"
+        os_type    = 0
         
         if platform.system() == "Windows":
             os_type = 1
         
+        # ---------------------------------------------------------
+        # doxygen.exe directory path ...
+        # ---------------------------------------------------------
         if not doxy_env in os.environ:
             print("error: " + f"{doxy_env}" \
             + " is not set in your system settings.")
@@ -100,12 +110,24 @@ try:
             doxy_path = os.environ[doxy_env]
         
         # ---------------------------------------------------------
+        # Microsoft Help Workshop path ...
+        # ---------------------------------------------------------
+        if not doxy_hhc in os.environ:
+            print("error: " + f"{doxy_hhc}" \
+            + " is not set in your system settings.")
+            sys.exit(EXIT_FAILURE)
+        else:
+            hhc__path = os.environ[doxy_hhc]
+        
+        # ---------------------------------------------------------
         # depend on the platform system, check if doxygen exec name
         # was set into DOXYGEN_PATH. If no such entry exists, then
         # add doxygen executable name to "doxy_path" ...
         # ---------------------------------------------------------
         if os_type == 1:
             doxy_path = doxy_path.replace("/", "\\")
+            hhc__path = hhc__path.replace("/", "\\")
+            
             if doxy_path[-1] == "\\":
                 if not "doxygen.exe" in doxy_path.lower():
                     doxy_path += "doxygen.exe"
@@ -116,6 +138,21 @@ try:
                     doxy_path += "\\doxygen.exe"
                 elif not "doxygen" in doxy_path.lower():
                     doxy_path += "\\doxygen.exe"
+            
+            # -----------------------------------------------------
+            # Microsoft Help Workshop Compiler path ...
+            # -----------------------------------------------------
+            if hhc__path[-1] == "\\":
+                if not "hhc.exe" in hhc__path.lower():
+                    hhc__path += "hhc.exe"
+                elif not "hhc" in hhc__path.lower():
+                    hhc__path += "hhc.exe"
+            else:
+                if not "hhc.exe" in hhc__path.lower():
+                    hhc__path += "\\hhc.exe"
+                elif not "hhc" in hhc__path.lower():
+                    hhc__path += "\\hhc.exe"
+        
         # ---------------------------------------------------------
         # this is for Linux user's ,,,
         # ---------------------------------------------------------
@@ -238,9 +275,9 @@ try:
                 # renove meta data for IE - Internet Explorer, because the
                 # IE is very old, and out of date.
                 # ---------------------------------------------------------
-                meta = soup.find("meta", {"http-equiv": "X-UA-Compatible"})
-                if meta:
-                    meta.decompose()
+                #meta = soup.find("meta", {"http-equiv": "X-UA-Compatible"})
+                #if meta:
+                #    meta.decompose()
                 
                 # ---------------------------------------------------------
                 # NOTE: Pleas be fair, and make a comment of the following
@@ -299,8 +336,7 @@ try:
             
             os.chdir(dir_new)
             
-            ## TODO: hhc.exe !!!
-            result = subprocess.run(["E:\\doxygen\\hhc\\hhc.exe", ".\\index.hhp"])
+            result = subprocess.run([f"{hhc__path}", ".\\index.hhp"])
             exit_code = result.returncode
             
             # -----------------------------------------------------
@@ -314,7 +350,7 @@ try:
             
             os.chdir(dir_old)
         else:
-            print("error: this is script is for Windows hhc.exe")
+            print("error: this script is for Windows hhc.exe")
             sys.exit(EXIT_FAILURE)
         
         # ---------------------------------------------------------
