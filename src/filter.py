@@ -37,6 +37,9 @@
 # It is created mainly for using to my personal usage.
 # So, I give no warantees for anything.
 #
+# I have insert some TODO marks, which means that modifications must be done
+# before working well.
+#
 # !!! YOU USE IT AT YOUR OWN RISK !!!
 # ----------------------------------------------------------------------------
 try:
@@ -57,6 +60,8 @@ try:
     # ------------------------------------------------------------------------
     __version__ = "Version 0.0.1"
     __authors__ = "paule32"
+
+    __date__    = "2024-01-04"
     
     # ------------------------------------------------------------------------
     # main is out entry point, where normal application's begin to start their
@@ -286,7 +291,7 @@ try:
         # all files are write, then create the CHM file ...
         # ---------------------------------------------------------
         dir_old = os.getcwd()
-        dir_new = html_out + "/"
+        dir_new = html_out + "/html"
         
         if os_type == 1:
             dir_old = dir_old.replace("/", "\\")
@@ -294,8 +299,8 @@ try:
             
             os.chdir(dir_new)
             
-            // TODO: hhc.exe !!!
-            result = subprocess.run(["hhc.exe",f"{dir_new}" + "index.hhp"])
+            ## TODO: hhc.exe !!!
+            result = subprocess.run(["E:\\doxygen\\hhc\\hhc.exe", ".\\index.hhp"])
             exit_code = result.returncode
             
             # -----------------------------------------------------
