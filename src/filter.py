@@ -44,6 +44,10 @@
 #
 # !!! YOU USE IT AT YOUR OWN RISK !!!
 # ----------------------------------------------------------------------------
+
+global EXIT_SUCCESS; EXIT_SUCCESS = 0
+global EXIT_FAILURE; EXIT_FAILURE = 1
+
 try:
     import os            # operating system stuff
     import sys           # system specifies
@@ -51,11 +55,27 @@ try:
     import glob          # directory search
     import subprocess    # start sub processes
     import platform      # Windows ?
+    import keyboard
     import shutil        # shell utils
+    
+    import gettext       # localization
+    import locale        # internal system locale
+    
+    import configparser  # .ini files
     import traceback     # stack exception trace back
     
-    from bs4         import BeautifulSoup, Doctype
-    from bs4.element import Comment
+    # ------------------------------------------------------------------------
+    # html parser modules
+    # ------------------------------------------------------------------------
+    from bs4             import BeautifulSoup, Doctype
+    from bs4.element     import Comment
+    
+    # ------------------------------------------------------------------------
+    # Qt5 gui framework
+    # ------------------------------------------------------------------------
+    from PyQt5.QtWidgets import *             # Qt5 widgets
+    from PyQt5.QtGui     import QIcon, QFont  # Qt5 gui
+    from PyQt5.QtCore    import pyqtSlot, Qt  # Qt5 core
     
     # ------------------------------------------------------------------------
     # branding water marks ...
@@ -66,21 +86,616 @@ try:
     __date__    = "2024-01-04"
     
     # ------------------------------------------------------------------------
-    # main is out entry point, where normal application's begin to start their
-    # script command's when you click on this script file (name), or execute
-    # this script by press the enter key on the command prompt.
+    # constants, and varibales that are used multiple times ...
     # ------------------------------------------------------------------------
-    EXIT_SUCCESS = 0
-    EXIT_FAILURE = 1
-
+    __copy__ = ""                               \
+        + "doxygen 1.10.0 HTML Filter 0.0.1\n"  \
+        + "(c) 2024 by paule32\n"               \
+        + "all rights reserved.\n"
+    
+    __error__os__error = "" \
+        + "can not determine operating system.\n" \
+        + "start aborted."
+        
+    __error__locales_error = "" \
+        + "no locales file for this application.\n" \
+        + "use default: english"
+    
+    # ------------------------------------------------------------------------
+    # global used locales constants ...
+    # ------------------------------------------------------------------------
+    __locale__    = "locales"
+    __locale__enu = "en_us"
+    __locale__deu = "de_de"
+    
+    # ------------------------------------------------------------------------
+    # global used application stuff ...
+    # ------------------------------------------------------------------------
+    __app__name        = "chmfilter"
+    __app__config_ini  = "chmfilter.ini"
+    
+    __app__framework   = "PyQt5.QtWidgets.QApplication"
+    __app__exec_name   = sys.executable
+    
+    __app__error_level = "0"
+    
+    # ------------------------------------------------------------------------
+    # get the locale, based on the system locale settings ...
+    # ------------------------------------------------------------------------
+    def handle_language(lang):
+        try:
+            system_lang, _ = locale.getdefaultlocale()
+            if   system_lang.lower() == __locale__enu:
+                 if lang.lower() == __locale__enu[:2]:
+                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__enu[:2]])  # english
+                 if lang.lower() == __locale__deu[:2]:
+                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__deu[:2]])  # german
+            elif system_lang.lower() == __locale__deu:
+                 if lang.lower() == __locale__enu[:2]:
+                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__enu[:2]])  # english
+                 if lang.lower() == __locale__deu[:2]:
+                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__deu[:2]])  # german
+            else:
+                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__enu[:2]])  # fallback
+            
+            loca.install()
+            return loca
+        except Exception as ex:
+            return
+            
+    # ------------------------------------------------------------------------
+    # get current time, and date measured on "now" ...
+    # ------------------------------------------------------------------------
+    def get_current_time():
+        return datetime.datetime.now().strftime("%H_%M")
+    def get_current_date():
+        return datetime.datetime.now().strftime("%Y_%m_%d")
+    
+    # ------------------------------------------------------------------------
+    # pythonw.exe is for gui application's
+    # python .exe is for text application's
+    # ------------------------------------------------------------------------
+    def isPythonWindows():
+        if "pythonw" in __app__exec_name:
+            return True
+        elif "python" in __app__exec_name:
+            return False
+    
+    # ------------------------------------------------------------------------
+    # check, if the gui application is initialized by an instance of app ...
+    # ------------------------------------------------------------------------
+    def isApplicationInit():
+        app_instance = QApplication.instance()
+        return app_instance is not None
+    
+    # ------------------------------------------------------------------------
+    # methode to show information about this application script ...
+    # ------------------------------------------------------------------------
+    def showInfo(text):
+        infoWindow = QMessageBox()
+        infoWindow.setIcon(QMessageBox.Information)
+        infoWindow.setWindowTitle("Information")
+        infoWindow.setText(text)
+        infoWindow.exec_()
+    
+    def showApplicationInformation(text):
+        if isPythonWindows() == True:
+            if isApplicationInit() == False:
+                app = QApplication(sys.argv)
+            showInfo(text)
+        else:
+            print(text)
+    
+    # ------------------------------------------------------------------------
+    # methode to show error about this application script ...
+    # ------------------------------------------------------------------------
+    def showError(text):
+        infoWindow = QMessageBox()
+        infoWindow.setIcon(QMessageBox.Critical)
+        infoWindow.setWindowTitle("Error")
+        infoWindow.setText(text)
+        infoWindow.show()
+        infoWindow.exec_()
+    
+    def showApplicationError(text):
+        if isPythonWindows() == True:
+            if isApplicationInit() == False:
+                app = QApplication(sys.argv)
+            showError(text)
+        else:
+            print(text)
+    
+    # ------------------------------------------------------------------------
+    # convert the os path seperator depend ond the os system ...
+    # ------------------------------------------------------------------------
+    def convertPath(text):
+        if os_type == os_type_windows:
+            result = text.replace("/", "\\")
+        elif os_type == os_type_linux:
+            result = text.replace("\\", "/")
+        else:
+            showApplicationError(__error__os__error)
+            sys.exit(EXIT_FAILURE)
+        return result
+    
+    # ------------------------------------------------------------------------
+    # after main was process, create the main application gui window ...
+    # ------------------------------------------------------------------------
+    class mainWindow(QDialog):
+        def __init__(self):
+            super().__init__()
+            
+            self.minimumWidth = 820
+            self.controlFont = "font-size:10pt;"
+            
+            self.init_ui()
+        
+        def init_ui(self):
+            font = QFont("Arial", 10)
+            self.setFont(font)
+            self.setContentsMargins(0,0,0,0)
+            self.setStyleSheet("padding:0px;margin:0px;")
+            
+            container = QVBoxLayout(self)
+            container.setContentsMargins(0,0,0,0)
+            container.setAlignment(Qt.AlignTop)
+            
+            # ----------------------------------------
+            # color for the menu items ...
+            # ----------------------------------------
+            menu_item_style = ""          \
+            + "QMenuBar{"                 \
+            + "background-color:navy;"    \
+            + "padding:2px;margin:0px;"   \
+            + "color:yellow;"             \
+            + "font-size:11pt;"           \
+            + "font-weight:bold;}"        \
+            + "QMenuBar:item:selected {"  \
+            + "background-color:#3366CC;" \
+            + "color:white;}"
+            
+            # ----------------------------------------
+            # create a new fresh menubar ...
+            # ----------------------------------------
+            menubar = QMenuBar()
+            menubar.setStyleSheet(menu_item_style)
+            
+            menu_file = menubar.addMenu("File")
+            menu_edit = menubar.addMenu("Edit")
+            menu_help = menubar.addMenu("Help")
+            
+            menu_font = menu_file.font()
+            menu_font.setPointSize(11)
+            
+            menu_file.setFont(menu_font)
+            menu_edit.setFont(menu_font)
+            menu_help.setFont(menu_font)
+            
+            # ----------------------------------------
+            # file menu action's ...
+            # ----------------------------------------
+            menu_file_new    = QWidgetAction(menu_file)
+            menu_file.addSeparator()
+            menu_file_open   = QWidgetAction(menu_file)
+            menu_file_save   = QWidgetAction(menu_file)
+            menu_file_saveas = QWidgetAction(menu_file)
+            menu_file.addSeparator()
+            menu_file_exit   = QWidgetAction(menu_file)
+            menu_file.setStyleSheet("color:white;font-weight:normal;font-style:italic")
+            
+            menu_label_style = "" \
+            + "QLabel{background-color:navy;color:yellow;" \
+            + "font-weight:bold;font-size:11pt;padding:4px;margin:0px;}" \
+            + "QLabel:hover{background-color:green;color:yellow;}"
+            
+            menu_icon_1 = QIcon("")
+            menu_icon_2 = QIcon("")
+            menu_icon_3 = QIcon("")
+            
+            menu_widget_1 = QWidget()
+            menu_layout_1 = QHBoxLayout(menu_widget_1)
+            menu_layout_1.setContentsMargins(0,0,0,0)
+            #
+            menu_icon_widget_1 = QWidget()
+            menu_icon_widget_1.setFixedWidth(26)
+            menu_icon_widget_1.setContentsMargins(0,0,0,0)
+            #
+            menu_label_1 = QLabel("New ...")
+            menu_label_1.setStyleSheet(menu_label_style)
+            menu_label_1.setMinimumWidth(160)
+            menu_label_1_shortcut = QLabel("Ctrl-N")
+            #
+            menu_layout_1.addWidget(menu_icon_widget_1)
+            menu_layout_1.addWidget(menu_label_1)
+            menu_layout_1.addWidget(menu_label_1_shortcut)
+            #
+            menu_widget_1.setLayout(menu_layout_1)
+            
+            
+            menu_widget_2 = QWidget()
+            menu_layout_2 = QHBoxLayout(menu_widget_2)
+            menu_layout_2.setContentsMargins(0,0,0,0)
+            #
+            menu_icon_widget_2 = QWidget()
+            menu_icon_widget_2.setFixedWidth(26)
+            menu_icon_widget_2.setContentsMargins(0,0,0,0)
+            #
+            menu_label_2 = QLabel("Open");
+            menu_label_2.setStyleSheet(menu_label_style)
+            menu_label_2.setMinimumWidth(160)
+            menu_label_2_shortcut = QLabel("Ctrl-O")
+            #
+            menu_layout_2.addWidget(menu_icon_widget_2)
+            menu_layout_2.addWidget(menu_label_2)
+            menu_layout_2.addWidget(menu_label_2_shortcut)
+            #
+            menu_widget_2.setLayout(menu_layout_2)
+            
+            
+            menu_widget_3 = QWidget()
+            menu_layout_3 = QHBoxLayout(menu_widget_3)
+            menu_layout_3.setContentsMargins(0,0,0,0)
+            #
+            menu_icon_widget_3 = QWidget()
+            menu_icon_widget_3.setFixedWidth(26)
+            menu_icon_widget_3.setContentsMargins(0,0,0,0)
+            #
+            menu_label_3 = QLabel("Save");
+            menu_label_3.setStyleSheet(menu_label_style)
+            menu_label_3.setMinimumWidth(160)
+            menu_label_3_shortcut = QLabel("Ctrl-S")
+            #
+            menu_layout_3.addWidget(menu_icon_widget_3)
+            menu_layout_3.addWidget(menu_label_3)
+            menu_layout_3.addWidget(menu_label_3_shortcut)
+            #
+            menu_widget_3.setLayout(menu_layout_3)
+            
+            
+            menu_widget_4 = QWidget()
+            menu_layout_4 = QHBoxLayout(menu_widget_4)
+            menu_layout_4.setContentsMargins(0,0,0,0)
+            #
+            menu_icon_widget_4 = QWidget()
+            menu_icon_widget_4.setFixedWidth(26)
+            menu_icon_widget_4.setContentsMargins(0,0,0,0)
+            #
+            menu_label_4 = QLabel("Save As ...");
+            menu_label_4.setStyleSheet(menu_label_style)
+            menu_label_4.setMinimumWidth(160)
+            menu_label_4_shortcut = QLabel("")
+            #
+            menu_layout_4.addWidget(menu_icon_widget_4)
+            menu_layout_4.addWidget(menu_label_4)
+            menu_layout_4.addWidget(menu_label_4_shortcut)
+            #
+            menu_widget_4.setLayout(menu_layout_4)
+            
+            
+            menu_widget_5 = QWidget()
+            menu_layout_5 = QHBoxLayout(menu_widget_5)
+            menu_layout_5.setContentsMargins(0,0,0,0)
+            #
+            menu_icon_widget_5 = QWidget()
+            menu_icon_widget_5.setFixedWidth(26)
+            menu_icon_widget_5.setContentsMargins(0,0,0,0)
+            #
+            menu_label_5 = QLabel("Exit");
+            menu_label_5.setStyleSheet(menu_label_style)
+            menu_label_5.setMinimumWidth(160)
+            menu_label_5_shortcut = QLabel("")
+            #
+            menu_layout_5.addWidget(menu_icon_widget_5)
+            menu_layout_5.addWidget(menu_label_5)
+            menu_layout_5.addWidget(menu_label_5_shortcut)
+            #
+            menu_widget_5.setLayout(menu_layout_5)
+            
+            
+            menu_file_new   .setDefaultWidget(menu_widget_1)
+            menu_file_open  .setDefaultWidget(menu_widget_2)
+            menu_file_save  .setDefaultWidget(menu_widget_3)
+            menu_file_saveas.setDefaultWidget(menu_widget_4)
+            menu_file_exit  .setDefaultWidget(menu_widget_5)
+            
+            # ----------------------------------------
+            # menu action event's (mouse click):
+            # ----------------------------------------
+            menu_file_new   .triggered.connect(self.menu_file_clicked_new)
+            menu_file_open  .triggered.connect(self.menu_file_clicked_open)
+            menu_file_save  .triggered.connect(self.menu_file_clicked_save)
+            menu_file_saveas.triggered.connect(self.menu_file_clicked_saveas)
+            menu_file_exit  .triggered.connect(self.menu_file_clicked_exit)
+            
+            menu_file.addAction(menu_file_new)
+            menu_file.addAction(menu_file_open)
+            menu_file.addAction(menu_file_save)
+            menu_file.addAction(menu_file_saveas)
+            menu_file.addAction(menu_file_exit)
+            
+            # ----------------------------------------
+            # add toolbar under the main menu ...
+            # ----------------------------------------
+            toolbar = QToolBar("main-toolbar")
+            toolbar.setContentsMargins(0,0,0,0)
+            toolbar.setStyleSheet("background-color:gray;font-size:11pt;height:38px;")
+            
+            toolbar_action_new  = QAction(QIcon("image/new-document.png"),"New Config.", self)
+            toolbar_action_open = QAction(QIcon("image/open-folder.png") ,"Open existing Config.", self)
+            toolbar_action_save = QAction(QIcon("image/floppy-disk.png") ,"Save current session.", self)
+            
+            toolbar_action_new .triggered.connect(self.menu_file_clicked_new)
+            toolbar_action_open.triggered.connect(self.menu_file_clicked_open)
+            toolbar_action_open.triggered.connect(self.menu_file_clicked_open)
+            
+            toolbar.addAction(toolbar_action_new )
+            toolbar.addAction(toolbar_action_open)
+            toolbar.addAction(toolbar_action_save)
+            
+            
+            # ----------------------------------------
+            # select working directory widget ...
+            # ----------------------------------------
+            text_layout_widget_1 = QWidget()
+            text_layout_widget_1.setStyleSheet(self.controlFont)
+            text_layout_widget_1.setContentsMargins(0,0,0,0)
+            #
+            text_layout_1 = QHBoxLayout()
+            text_layout_1.setContentsMargins(10,0,0,0)
+            #
+            text_label_1 = QLabel("Working directory")
+            text_label_1.setStyleSheet(self.controlFont)
+            text_label_1.setFixedWidth(150)
+            #
+            self.text_label_1_editfield_1 = QLineEdit()
+            self.text_label_1_editfield_1.setStyleSheet(self.controlFont)
+            self.text_label_1_editfield_1.setFixedWidth(520)
+            #
+            text_label_1_button_1 = QPushButton("Select")
+            text_label_1_button_1.setStyleSheet(self.controlFont)
+            text_label_1_button_1.setMinimumWidth(100)
+            text_label_1_button_1.setMaximumWidth(100)
+            text_label_1_button_1.setMinimumHeight(32)
+            
+            # ----------------------------------------
+            # add working dir widgets to layout ...
+            # ----------------------------------------
+            text_layout_1.addWidget(text_label_1)
+            text_layout_1.addWidget(self.text_label_1_editfield_1)
+            text_layout_1.addWidget(text_label_1_button_1)
+            #
+            text_layout_1.setAlignment(text_label_1, Qt.AlignLeft)
+            text_layout_1.setAlignment(self.text_label_1_editfield_1, Qt.AlignLeft)
+            text_layout_1.setAlignment(text_label_1_button_1, Qt.AlignLeft)
+            
+            spacer_1 = QSpacerItem(440, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+            text_layout_1.addItem(spacer_1)
+            
+            # ----------------------------------------
+            # left card panel on main screen:
+            # ----------------------------------------
+            container_widget_2 = QWidget()
+            container_layout_2 = QHBoxLayout(container_widget_2)
+            container_layout_2.setAlignment(Qt.AlignTop)
+            
+            # ----------------------------------------
+            # left register card ...
+            # ----------------------------------------
+            tab_widget_1 = QTabWidget()
+            
+            tab_1 = QWidget()
+            tab_2 = QWidget()
+            tab_3 = QWidget()
+            
+            tab_widget_1.addTab(tab_1, "Wizard")
+            tab_widget_1.addTab(tab_2, "Expert")
+            tab_widget_1.addTab(tab_3, "Run")
+            
+            # ----------------------------------------
+            # middle area ...
+            # ----------------------------------------
+            container_layout_2.addWidget(tab_widget_1)
+            #container_layout_2.addWidget(lab)
+            
+            
+            # ----------------------------------------
+            # the status bar is the last widget ...
+            # ----------------------------------------
+            status_bar = QStatusBar()
+            status_bar.setStyleSheet("background-color:gray;color:white;font-size:9pt;")
+            status_bar.showMessage("Willkommen")
+            
+            
+            # ----------------------------------------
+            # the main container for all widget's ...
+            # ----------------------------------------
+            container.setMenuBar(menubar)
+            container.addWidget(toolbar)
+            
+            container.addLayout(text_layout_1)
+            container.addItem(spacer_1)
+            
+            container.addWidget(container_widget_2)
+            
+            container.addWidget(status_bar)
+            
+            
+            
+            self.setLayout(container)
+            
+            # ----------------------------------------
+            # add windows specified informations ...
+            # ----------------------------------------
+            self.setWindowFlags(
+            self.windowFlags()
+                | Qt.WindowMinimizeButtonHint
+                | Qt.WindowMaximizeButtonHint)
+            
+            self.setWindowTitle("doxygen CHM filter (c) 2024 by paule32")
+            self.setGeometry(100, 100, 400, 300)
+            self.setMinimumWidth(self.minimumWidth)
+            self.setModal(True)
+            self.show()
+        
+        def menu_file_clicked_new(self):
+            return
+        
+        def menu_file_clicked_open(self):
+            return
+        
+        def menu_file_clicked_save(self):
+            return
+        
+        def menu_file_clicked_saveas(self):
+            return
+        
+        def menu_file_clicked_exit(self):
+            return
+        
+    
+    # ------------------------------------------------------------------------
+    # inform the user about the rules/license of this application script ...
+    # ------------------------------------------------------------------------
+    class licenseWindow(QDialog):
+        def __init__(self):
+            super().__init__()
+            
+            self.returnCode = 0
+            
+            self.setWindowTitle("LICENSE - Please read, before you start.")
+            self.setMinimumWidth(820)
+        
+            font = QFont("Courier New", 10)
+            self.setFont(font)
+            
+            layout = QVBoxLayout()
+            
+            button1 = QPushButton("Accept")
+            button2 = QPushButton("Decline")
+            
+            button1.clicked.connect(self.button1_clicked)
+            button2.clicked.connect(self.button2_clicked)
+            
+            textfield = QTextEdit(self)
+            
+            layout.addWidget(textfield)
+            layout.addWidget(button1)
+            layout.addWidget(button2)
+            
+            self.setLayout(layout)
+            
+            # ---------------------------------------------------------
+            # get license to front, before the start shot ...
+            # ---------------------------------------------------------
+            file_lic = os.getcwd() + "/LICENSE"
+            if not os.path.exists(file_lic):
+                showApplicationError("no license - aborted.")
+                sys.exit(EXIT_FAILURE)
+            
+            with open(file_lic, 'r') as file:
+                content = file.read()
+                file.close()
+                textfield.setPlainText(content)
+        
+        def button1_clicked(self):
+            self.returnCode = 0
+            self.close()
+        
+        def button2_clicked(self):
+            self.returnCode = 1
+            self.close()
+   
+    # ------------------------------------------------------------------------
+    # this is our "main" entry point, where the application will start, if you
+    # type the name of the script into the console, or by mouse click at the
+    # file explorer under a GUI system (Windows) ...
+    # ------------------------------------------------------------------------
     if __name__ == "__main__":
+        
+        # ---------------------------------------------------------
+        # first, we check the operating system platform:
+        # 0 - unknown
+        # 1 - Windows
+        # 2 - Linux
+        # ---------------------------------------------------------
+        global os_type, os_type_windows, os_type_linux
+        
+        os_type_unknown = 0
+        os_type_windows = 1
+        os_type_linux   = 2
+        
+        os_type = os_type_unknown
+        
+        if platform.system() == "Windows":
+            os_type = os_type_windows
+        elif platform.system() == "Linux":
+            os_type = os_type_linux
+        else:
+            os_type = os_type_unknown
+            if isPythonWindows():
+                if not isApplicationInit():
+                    app = QApplication(sys.argv)
+                showApplicationError(__error__os__error)
+            elif "python" in __app__exec_name:
+                print(__error__os_error)
+            sys.exit(EXIT_FAILURE)
+        
+        # ---------------------------------------------------------
+        # when config.ini does not exists, then create a small one:
+        # ---------------------------------------------------------
+        if not os.path.exists(__app__config_ini):
+            with open(__app__config_ini, "w", encoding="utf-8") as output_file:
+                content = ""   \
+                + "[common]\n" \
+                + "language = en\n"
+                output_file.write(content)
+                output_file.close()
+                ini_lang = "en" # default is english; en
+        else:
+            config = configparser.ConfigParser()
+            config.read(__app__config_ini)
+            ini_lang = config.get("common", "language")
+        
+        loca = handle_language(ini_lang)
+        if not loca == None:
+            _  = loca.gettext
+        
+        # ---------------------------------------------------------
+        # combine the puzzle names, and folders ...
+        # ---------------------------------------------------------
+        po_file_name = "./locales/"    \
+            + f"{ini_lang}"    + "/LC_MESSAGES/" \
+            + f"{__app__name}" + ".po"
+        
+        if not os.path.exists(convertPath(po_file_name)):
+            if isPythonWindows() == True:
+                showApplicationInformation(__error__locales_error)
+            else:
+                print(__error__locales_error)
+        
+        if isPythonWindows() == True:
+            # -----------------------------------------------------
+            # show a license window, when readed, and user give a
+            # okay, to accept it, then start the application ...
+            # -----------------------------------------------------
+            if isApplicationInit() == False:
+                app = QApplication(sys.argv)
+            
+            license_window = licenseWindow()
+            license_window.show()
+            license_window.exec_()
+            
+            if license_window.returnCode == 1:
+                del license_window
+                sys.exit(EXIT_SUCCESS)
+            
+            del license_window  # free memory
+        
         # ---------------------------------------------------------
         # print a nice banner on the display device ...
         # ---------------------------------------------------------
-        print(""                                \
-        + "doxygen 1.10.0 HTML Filter 0.0.1\n"  \
-        + "(c) 2024 by paule32\n"               \
-        + "all rights reserved.\n")
+        if isPythonWindows() == False:
+            print(__copy__)
         
         # ---------------------------------------------------------
         # at startup, check system settings ...
@@ -94,28 +709,42 @@ try:
         hhc__path  = ""
         
         doxyfile   = "Doxyfile"
-        os_type    = 0
-        
-        if platform.system() == "Windows":
-            os_type = 1
         
         # ---------------------------------------------------------
         # doxygen.exe directory path ...
         # ---------------------------------------------------------
         if not doxy_env in os.environ:
-            print("error: " + f"{doxy_env}" \
-            + " is not set in your system settings.")
-            sys.exit(EXIT_FAILURE)
+            if isPythonWindows() == False:
+                print(_("error: " + f"{doxy_env}" \
+                + " is not set in your system settings."))
+                sys.exit(EXIT_FAILURE)
+            else:
+                if not isApplicationInit():
+                    app = QApplication(sys.argv)
+                showApplicationError(_(""   \
+                + "error: " + f"{doxy_env}" \
+                + " is not set in your system settings."))
+                sys.exit(EXIT_FAILURE)
         else:
             doxy_path = os.environ[doxy_env]
+        
         
         # ---------------------------------------------------------
         # Microsoft Help Workshop path ...
         # ---------------------------------------------------------
         if not doxy_hhc in os.environ:
-            print("error: " + f"{doxy_hhc}" \
-            + " is not set in your system settings.")
-            sys.exit(EXIT_FAILURE)
+            if isPythonWindows() == False:
+                print(""                    \
+                + "error: " + f"{doxy_hhc}" \
+                + " is not set in your system settings.")
+                sys.exit(EXIT_FAILURE)
+            else:
+                if not isApplicationInit():
+                    app = QApplication(sys.argv)
+                showApplicationError(""     \
+                + "error: " + f"{doxy_hhc}" \
+                + " is not set in your system settings.")
+                sys.exit(EXIT_FAILURE)
         else:
             hhc__path = os.environ[doxy_hhc]
         
@@ -124,39 +753,43 @@ try:
         # was set into DOXYGEN_PATH. If no such entry exists, then
         # add doxygen executable name to "doxy_path" ...
         # ---------------------------------------------------------
-        if os_type == 1:
-            doxy_path = doxy_path.replace("/", "\\")
-            hhc__path = hhc__path.replace("/", "\\")
-            
-            if doxy_path[-1] == "\\":
-                if not "doxygen.exe" in doxy_path.lower():
-                    doxy_path += "doxygen.exe"
-                elif not "doxygen" in doxygen_path.lower():
-                    doxy_path += "doxygen.exe"
+        if os_type == os_type_windows:
+            doxy_path = convertPath(doxy_path)
+            if isPythonWindows() == True:
+                if doxy_path[-1] == "\\":
+                    if not "doxygen.exe" in doxy_path.lower():
+                        doxy_path += "doxygen.exe"
+                else:
+                    if not "doxygen.exe" in doxy_path.lower():
+                        doxy_path += "\\doxygen.exe"
             else:
-                if not "doxygen.exe" in doxy_path.lower():
-                    doxy_path += "\\doxygen.exe"
-                elif not "doxygen" in doxy_path.lower():
-                    doxy_path += "\\doxygen.exe"
+                if doxy_path[-1] == "/":
+                    if not "doxygen" in doxy_path.lower():
+                        doxy_path += "doxygen"
+                else:
+                    if not "doxygen" in doxy_path.lower():
+                        doxy_path += "/doxygen"
             
             # -----------------------------------------------------
             # Microsoft Help Workshop Compiler path ...
             # -----------------------------------------------------
-            if hhc__path[-1] == "\\":
-                if not "hhc.exe" in hhc__path.lower():
-                    hhc__path += "hhc.exe"
-                elif not "hhc" in hhc__path.lower():
-                    hhc__path += "hhc.exe"
+            hhc__path = convertPath(hhc__path)
+            if isPythonWindows() == True:
+                if doxy_path[-1] == "\\":
+                    if not "hhc.exe" in hhc__path.lower():
+                        hhc__path += "hhc.exe"
+                else:
+                    if not "hhc.exe" in hhc__path.lower():
+                        hhc__path += "\\hhc.exe"
             else:
-                if not "hhc.exe" in hhc__path.lower():
-                    hhc__path += "\\hhc.exe"
-                elif not "hhc" in hhc__path.lower():
-                    hhc__path += "\\hhc.exe"
+                if doxy_path[-1] == "/":
+                    if not "hhc" in hhc__path.lower():
+                        hhc__path += "/hhc"
         
         # ---------------------------------------------------------
         # this is for Linux user's ,,,
         # ---------------------------------------------------------
-        else:
+        elif os_type == os_type_linux:
             if doxy_path[-1] == "/":
                 if not "doxygen" in doxy_path:
                     doxy_path += "doxygen"
@@ -170,16 +803,43 @@ try:
         # "Doxyfile" as default.
         # ---------------------------------------------------------
         if pcount < 1:
-            print(""                          \
-            + "info: no parameter given. "    \
-            + "use default: 'Doxyfile' config.")
+            if isPythonWindows() == True:
+                if not isApplicationInit():
+                    app = QApplication(sys.argv)
+                showApplicationInformation( ""    \
+                + "info: no parameter given. "    \
+                + "use default: 'Doxyfile' config.")
+            else:
+                print(""                          \
+                + "info: no parameter given. "    \
+                + "use default: 'Doxyfile' config.")
         elif pcount > 1:
-            print(""                          \
-            + "error: to many parameters. "   \
-            + "use first parameter as config.")
-            doxyfile = sys.argv[1]
+            if isPythonWindows() == True:
+                if not isApplicationInit():
+                    app = QApplication(sys.argv)
+                showApplicationInformation( ""    \
+                + "error: to many parameters. "   \
+                + "use first parameter as config.")
+            else:
+                print(""                          \
+                + "error: to many parameters. "   \
+                + "use first parameter as config.")
+                doxyfile = sys.argv[1]
         else:
             doxyfile = sys.argv[1]
+        
+        
+        if isApplicationInit() == False:
+            app = QApplication(sys.argv)
+        
+        appWindow = mainWindow()
+        appWindow.show()
+        appWindow.exec_()
+        
+        del appWindow  # free memory
+        
+        result = app.exec_()
+        sys.exit(result)
         
         if os_type == 1:
             doxyfile = doxyfile.replace("/", "\\")
@@ -359,8 +1019,9 @@ try:
         print("Done.")
         sys.exit(EXIT_SUCCESS)
 
-except ImportError:
-    print("error: import module missing.")
+except ImportError as ex:
+    print("error: import module missing: " + f"{ex}")
+    taste = keyboard.read_event(suppress=True)
     sys.exit(EXIT_FAILURE)
 
 # ----------------------------------------------------------------------------
