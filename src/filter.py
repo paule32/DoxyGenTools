@@ -74,8 +74,10 @@ try:
     # Qt5 gui framework
     # ------------------------------------------------------------------------
     from PyQt5.QtWidgets import *             # Qt5 widgets
-    from PyQt5.QtGui     import QIcon, QFont  # Qt5 gui
+    from PyQt5.QtGui     import *             # Qt5 gui
     from PyQt5.QtCore    import pyqtSlot, Qt  # Qt5 core
+    
+    from functools       import partial       # callback functions
     
     # ------------------------------------------------------------------------
     # branding water marks ...
@@ -96,7 +98,7 @@ try:
     __error__os__error = "" \
         + "can not determine operating system.\n" \
         + "start aborted."
-        
+    
     __error__locales_error = "" \
         + "no locales file for this application.\n" \
         + "use default: english"
@@ -219,6 +221,43 @@ try:
         return result
     
     # ------------------------------------------------------------------------
+    # custom widget for QListWidgetItem element's ...
+    # ------------------------------------------------------------------------
+    class customQListWidgetItem(QListWidgetItem):
+        def __init__(self, name, parent):
+            super().__init__()
+            
+            font = QFont("Arial", 10)
+            
+            self.name = name
+            self.parent = parent
+            
+            element = QListWidgetItem(name, parent)
+            self.setSizeHint(element.sizeHint())
+            self.setFont(font)
+            self.setData(0, self.name)
+    
+    # ------------------------------------------------------------------------
+    # create a scroll view for the tabs on left side of application ...
+    # ------------------------------------------------------------------------
+    class customScrollView(QScrollArea):
+        def __init__(self, name):
+            super().__init__()
+            
+            self.name = name
+            
+            self.init_ui()
+        
+        def init_ui(self):
+            content_widget = QWidget(self)
+            layout = QHBoxLayout(content_widget)
+            text_edit = QTextEdit()
+            layout.addWidget(text_edit)
+            
+            self.setWidgetResizable(False)
+            self.setWidget(content_widget)
+    
+    # ------------------------------------------------------------------------
     # after main was process, create the main application gui window ...
     # ------------------------------------------------------------------------
     class mainWindow(QDialog):
@@ -227,6 +266,21 @@ try:
             
             self.minimumWidth = 820
             self.controlFont = "font-size:10pt;"
+            
+            self.__error__internal_widget_error_1 = "" \
+                + "internal error:\n"                  \
+                + "itemWidget could not found."
+            self.__error__internal_widget_error_2 = "" \
+                + "internal error:\n"                  \
+                + "item label could not found."
+            
+            self.__css__widget_item = ""                                          \
+            + "QListView::item{background-color:white;color:black;"               \
+            + "border:0px;padding-left:10px;padding-top:5px;padding-bottom:5px;}" \
+            + "QListView::item::selected{background-color:blue;color:yellow;"     \
+            + "font-weight:620;border:none;outline:none;}"                        \
+            + "QListView::icon{left:10px;}"                                       \
+            + "QListView::text{left:10px;}"
             
             self.init_ui()
         
@@ -420,9 +474,9 @@ try:
             toolbar.setContentsMargins(0,0,0,0)
             toolbar.setStyleSheet("background-color:gray;font-size:11pt;height:38px;")
             
-            toolbar_action_new  = QAction(QIcon("image/new-document.png"),"New Config.", self)
-            toolbar_action_open = QAction(QIcon("image/open-folder.png") ,"Open existing Config.", self)
-            toolbar_action_save = QAction(QIcon("image/floppy-disk.png") ,"Save current session.", self)
+            toolbar_action_new  = QAction(QIcon("img/new-document.png"),"New Config.", self)
+            toolbar_action_open = QAction(QIcon("img/open-folder.png") ,"Open existing Config.", self)
+            toolbar_action_save = QAction(QIcon("img/floppy-disk.png") ,"Save current session.", self)
             
             toolbar_action_new .triggered.connect(self.menu_file_clicked_new)
             toolbar_action_open.triggered.connect(self.menu_file_clicked_open)
@@ -447,9 +501,14 @@ try:
             text_label_1.setStyleSheet(self.controlFont)
             text_label_1.setFixedWidth(150)
             #
+            self.text_label_palette_1 = QPalette()
+            self.text_label_palette_1.setColor(QPalette.Base, QColor("yellow"))
+            
             self.text_label_1_editfield_1 = QLineEdit()
             self.text_label_1_editfield_1.setStyleSheet(self.controlFont)
             self.text_label_1_editfield_1.setFixedWidth(520)
+            self.text_label_1_editfield_1.setText(os.getcwd())
+            self.text_label_1_editfield_1.setPalette(self.text_label_palette_1)
             #
             text_label_1_button_1 = QPushButton("Select")
             text_label_1_button_1.setStyleSheet(self.controlFont)
@@ -478,24 +537,105 @@ try:
             container_layout_2 = QHBoxLayout(container_widget_2)
             container_layout_2.setAlignment(Qt.AlignTop)
             
+            widget_font = QFont("Arial", 10)
+            
             # ----------------------------------------
             # left register card ...
             # ----------------------------------------
             tab_widget_1 = QTabWidget()
+            tab_widget_1.setFont(widget_font)
+            tab_widget_1.setMinimumHeight(380)
+            
+            tab_widget_1.setStyleSheet("" \
+            + "QTabWidget::pane    { border-top: 2px solid #C2C7CB;}" \
+            + "QTabWidget::tab-bar { left: 5px;  }" \
+            + "QTabBar::tab {" \
+            + "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1," \
+            + "stop: 0 #E1E1E1, stop: 0.4 #DDDDDD," \
+            + "stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);" \
+            + "border: 2px solid #C4C4C3;" \
+            + "border-bottom-color: #C2C7CB;" \
+            + "border-top-left-radius: 4px;" \
+            + "border-top-right-radius: 4px;" \
+            + "min-width: 8ex;" \
+            + "padding: 2px;}" \
+            + "QTabBar::tab:selected, QTabBar::tab:hover {" \
+            + "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"\
+            + "stop: 0 #fafafa, stop: 0.4 #f4f4f4,"\
+            + "stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);}" \
+            + "QTabBar::tab:selected {" \
+            + "border-color: #9B9B9B;" \
+            + "border-bottom-color: #C2C7CB;}" \
+            + "QTabBar::tab:!selected { margin-top: 2px; }")
             
             tab_1 = QWidget()
             tab_2 = QWidget()
             tab_3 = QWidget()
             
+            tab_1.setFont(widget_font)
+            tab_2.setFont(widget_font)
+            tab_3.setFont(widget_font)
+            
             tab_widget_1.addTab(tab_1, "Wizard")
             tab_widget_1.addTab(tab_2, "Expert")
             tab_widget_1.addTab(tab_3, "Run")
+            
+            font = QFont("Arial", 10)
+            font.setBold(True)
+            #
+            list_layout_1 = QHBoxLayout(tab_1)
+            list_widget_1 = QListWidget()
+            
+            list_widget_1.setFont(font)
+            list_widget_1.setFocusPolicy(Qt.NoFocus)
+            list_widget_1.setStyleSheet(self.__css__widget_item)
+            list_widget_1.setMinimumHeight(300)
+            list_widget_1.setMaximumWidth(200)
+            list_widget_1_elements = ["Project", "Mode", "Output", "Diagrams" ]
+            #
+            #
+            list_layout_2 = QHBoxLayout(tab_2)
+            list_widget_2 = QListWidget()
+            
+            list_widget_2.setFont(font)
+            list_widget_2.setFocusPolicy(Qt.NoFocus)
+            list_widget_2.setStyleSheet(self.__css__widget_item)
+            list_widget_2.setMinimumHeight(300)
+            list_widget_2.setMaximumWidth(200)
+            list_widget_2_elements = [                                       \
+                "Project", "Build", "Messages", "Input", "Source Browser",   \
+                "Index", "HTML", "LaTeX", "RTF", "Man", "XML", "DocBook",    \
+                "AutoGen", "SqLite3", "PerlMod", "Preprocessor", "External", \
+                "Dot" ]
+            
+            self.list_widget_3 = QListWidget(tab_3)
+            self.list_widget_3.setMinimumHeight(300)
+            self.list_widget_3_elements = []
+            
+            for element in list_widget_1_elements:
+                list_item = customQListWidgetItem(element, list_widget_1)
+                list_item.setFont(widget_font)
+                
+            list_widget_1.itemClicked.connect(self.handle_item_click)
+            list_layout_1.addWidget(list_widget_1)
+            #
+            for element in list_widget_2_elements:
+                list_item = customQListWidgetItem(element, list_widget_2)
+                list_item.setFont(widget_font)
+                
+            list_widget_2.itemClicked.connect(self.handle_item_click)
+            list_layout_2.addWidget(list_widget_2)
+            
+            sv_1 = customScrollView("view1")
+            sv_2 = customScrollView("view2")
+            
+            list_layout_1.addWidget(sv_1)
+            list_layout_2.addWidget(sv_2)
             
             # ----------------------------------------
             # middle area ...
             # ----------------------------------------
             container_layout_2.addWidget(tab_widget_1)
-            #container_layout_2.addWidget(lab)
             
             
             # ----------------------------------------
@@ -536,6 +676,20 @@ try:
             self.setMinimumWidth(self.minimumWidth)
             self.setModal(True)
             self.show()
+        
+        # ------------------------------------------------------------------------
+        # class member to get the widget item from list_widget_1 or list_widget_2.
+        # The application script will stop, if an internal error occur ...
+        # ------------------------------------------------------------------------
+        def handle_item_click(self, item):
+            if not item:
+                if isPythonWindows() == True:
+                    showApplicationError(self.__error__internal_widget_error_2)
+                    sys.exit(EXIT_FAILURE)
+                else:
+                    print(self.__error__internal_widget_error_2)
+                    sys.exit(EXIT_FAILURE)
+            print(item.data(0))
         
         def menu_file_clicked_new(self):
             return
