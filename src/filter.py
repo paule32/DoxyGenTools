@@ -51,6 +51,7 @@ global EXIT_FAILURE; EXIT_FAILURE = 1
 try:
     import os            # operating system stuff
     import sys           # system specifies
+    import time          # thread count
     import re            # regular expression handling
     import glob          # directory search
     import subprocess    # start sub processes
@@ -73,11 +74,11 @@ try:
     # ------------------------------------------------------------------------
     # Qt5 gui framework
     # ------------------------------------------------------------------------
-    from PyQt5.QtWidgets import *             # Qt5 widgets
-    from PyQt5.QtGui     import *             # Qt5 gui
-    from PyQt5.QtCore    import pyqtSlot, Qt  # Qt5 core
+    from PyQt5.QtWidgets import *         # Qt5 widgets
+    from PyQt5.QtGui     import *         # Qt5 gui
+    from PyQt5.QtCore    import *         # Qt5 core
     
-    from functools       import partial       # callback functions
+    from functools       import partial   # callback functions
     
     # ------------------------------------------------------------------------
     # branding water marks ...
@@ -120,6 +121,16 @@ try:
     __app__exec_name   = sys.executable
     
     __app__error_level = "0"
+    
+    # ------------------------------------------------------------------------
+    # worker thread for the progress bar ...
+    # ------------------------------------------------------------------------
+    class WorkerThread(QThread):
+        progress_changed = pyqtSignal(int)
+        def run(self):
+            for i in range(101):
+                time.sleep(0.1)
+                self.progress_changed.emit(i)
     
     # ------------------------------------------------------------------------
     # get the locale, based on the system locale settings ...
@@ -220,6 +231,141 @@ try:
             sys.exit(EXIT_FAILURE)
         return result
     
+    # ---------------------------------------------------------
+    # here, we try to open doxygen. The path to the executable
+    # must be in the PATH variable of your system...
+    # ---------------------------------------------------------
+    def convertFiles():
+        print("converting all files can take a while...\n")
+        
+        result = subprocess.run([f"{doxy_path}",f"{doxyfile}"])
+        exit_code = result.returncode
+        
+        # -----------------------------------------------------
+        # when error level, then do nothing anyelse - exit ...
+        # -----------------------------------------------------
+        if exit_code > 0:
+            print(""                               \
+            + "error: doxygen aborted with code: " \
+            + f"{exit_code}")
+            sys.exit(EXIT_FAILURE)
+        
+        # ---------------------------------------------------------
+        # get all .html files, in all directories based on root ./
+        # ---------------------------------------------------------
+        html_directory = './**/*.html'
+        
+        if os_type == os_type_windows:
+            html_directory  =  html_directory.replace("/", "\\")
+        
+        html_files = glob.glob(html_directory,recursive = True)
+        file_names = []
+        
+        for file_name in html_files:
+            if os_type == os_type_windows:
+                file_name = file_name.replace("/", "\\")
+            file_names.append(file_name)
+        
+        # ---------------------------------------------------------
+        # open the html files where to remove the not neccassary
+        # data from "read" content.
+        # ---------------------------------------------------------
+        for htm_file in file_names:
+            with open(htm_file, "r", encoding="utf-8") as input_file:
+                soup = BeautifulSoup(input_file, "html.parser")
+                divs = soup.find_all("div")
+                
+                # ---------------------------------------------------------
+                # remove the header bar stuff from the html file ...
+                # ---------------------------------------------------------
+                counter = 1
+                for div in divs:
+                    idname = "navrow" + str(counter)
+                    if div.get("id") == f"{idname}":
+                        div.extract()
+                        counter = counter + 1
+                
+                # ---------------------------------------------------------
+                # renove meta data for IE - Internet Explorer, because the
+                # IE is very old, and out of date.
+                # ---------------------------------------------------------
+                #meta = soup.find("meta", {"http-equiv": "X-UA-Compatible"})
+                #if meta:
+                #    meta.decompose()
+                
+                # ---------------------------------------------------------
+                # NOTE: Pleas be fair, and make a comment of the following
+                # three lines, if you would hold on CODEOFCONDUCT.
+                # They are only for meassure usage...
+                # THANK YOU !!!
+                # ---------------------------------------------------------
+                meta = soup.find("meta", {"name": "generator"})
+                if meta:
+                    meta.decompose()
+                
+                meta = soup.find("a", {"href": "doxygen_crawl.html"})
+                if meta:
+                    meta.decompose()
+                
+                # ---------------------------------------------------------
+                # remove the "not" neccassary html comments from the input:
+                # ---------------------------------------------------------
+                rems = soup.find_all(string=lambda string: isinstance(string, Comment))
+                for comment in rems:
+                    comment.extract()
+                
+                html_tag = soup.find("html")
+                if html_tag and 'xmlns' in html_tag.attrs:
+                    del html_tag["xmlns"]
+                
+                # ---------------------------------------------------------
+                # remove whitespaces ...
+                # ---------------------------------------------------------
+                try:
+                    modh = str(soup)
+                    modh = modh.split('\n', 1)[1]     # extract first line with
+                    modh = re.sub(r"\s+", " ", modh)  # <!DOCTYPE ...
+                except Exception as ex:
+                    print(f"warning: " + f"{ex}")
+                
+                # ---------------------------------------------------------
+                # close old file, to avoid cross over's. Then write the
+                # modified content back to the original file...
+                # ---------------------------------------------------------
+                input_file.close()
+                
+                with open(htm_file, "w", encoding="utf-8") as output_file:            
+                    output_file.write(modh)
+                    output_file.close()
+        
+        # ---------------------------------------------------------
+        # all files are write, then create the CHM file ...
+        # ---------------------------------------------------------
+        dir_old = os.getcwd()
+        dir_new = html_out + "/html"
+        
+        if os_type == os_type_windows:
+            dir_old = dir_old.replace("/", "\\")
+            dir_new = dir_new.replace("/", "\\")
+            
+            os.chdir(dir_new)
+            result = subprocess.run([f"{hhc__path}" + "hhc.exe", ".\\index.hhp"])
+            exit_code = result.returncode
+            
+            # -----------------------------------------------------
+            # when error level, then do nothing anyelse - exit ...
+            # -----------------------------------------------------
+            if exit_code != 1:
+                print(""                               \
+                + "error: hhc.exe aborted with code: " \
+                + f"{exit_code}")
+                sys.exit(EXIT_FAILURE)
+            
+            os.chdir(dir_old)
+        else:
+            print("error: this script is for Windows hhc.exe")
+            sys.exit(EXIT_FAILURE)
+    
     # ------------------------------------------------------------------------
     # custom widget for QListWidgetItem element's ...
     # ------------------------------------------------------------------------
@@ -265,7 +411,7 @@ try:
             super().__init__()
             
             self.minimumWidth = 820
-            self.controlFont = "font-size:10pt;"
+            self.controlFont = "font-size:10pt;font-weight:bold;border-width:5px;"
             
             self.__error__internal_widget_error_1 = "" \
                 + "internal error:\n"                  \
@@ -490,6 +636,8 @@ try:
             # ----------------------------------------
             # select working directory widget ...
             # ----------------------------------------
+            widget_font = QFont("Arial", 10)
+            
             text_layout_widget_1 = QWidget()
             text_layout_widget_1.setStyleSheet(self.controlFont)
             text_layout_widget_1.setContentsMargins(0,0,0,0)
@@ -498,7 +646,7 @@ try:
             text_layout_1.setContentsMargins(10,0,0,0)
             #
             text_label_1 = QLabel("Working directory")
-            text_label_1.setStyleSheet(self.controlFont)
+            text_label_1.setFont(widget_font)
             text_label_1.setFixedWidth(150)
             #
             self.text_label_palette_1 = QPalette()
@@ -511,7 +659,22 @@ try:
             self.text_label_1_editfield_1.setPalette(self.text_label_palette_1)
             #
             text_label_1_button_1 = QPushButton("Select")
-            text_label_1_button_1.setStyleSheet(self.controlFont)
+            text_label_1_button_1.setStyleSheet("" \
+            + "QPushButton { border-radius: 3px;" \
+            + "background: #012d8c;" \
+            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
+            + "font-family: Arial;" \
+            + "color: #f7ff03;" \
+            + "font-size: 11pt;" \
+            + "padding: 10px 20px 10px 20px;" \
+            + "text-decoration: none;" \
+            + "}" \
+            + "QPushButton::hover { background: #183b91;" \
+            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
+            + "text-decoration: none;}")
+            
+            text_label_1_button_1.clicked.connect(self.show_directory_dialog)
+            
             text_label_1_button_1.setMinimumWidth(100)
             text_label_1_button_1.setMaximumWidth(100)
             text_label_1_button_1.setMinimumHeight(32)
@@ -527,7 +690,7 @@ try:
             text_layout_1.setAlignment(self.text_label_1_editfield_1, Qt.AlignLeft)
             text_layout_1.setAlignment(text_label_1_button_1, Qt.AlignLeft)
             
-            spacer_1 = QSpacerItem(440, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+            spacer_1 = QSpacerItem(440, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
             text_layout_1.addItem(spacer_1)
             
             # ----------------------------------------
@@ -535,9 +698,9 @@ try:
             # ----------------------------------------
             container_widget_2 = QWidget()
             container_layout_2 = QHBoxLayout(container_widget_2)
+            container_layout_2.setContentsMargins(5,0,0,0)
             container_layout_2.setAlignment(Qt.AlignTop)
             
-            widget_font = QFont("Arial", 10)
             
             # ----------------------------------------
             # left register card ...
@@ -557,7 +720,7 @@ try:
             + "border-bottom-color: #C2C7CB;" \
             + "border-top-left-radius: 4px;" \
             + "border-top-right-radius: 4px;" \
-            + "min-width: 8ex;" \
+            + "min-width: 20ex;" \
             + "padding: 2px;}" \
             + "QTabBar::tab:selected, QTabBar::tab:hover {" \
             + "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"\
@@ -626,11 +789,22 @@ try:
             list_widget_2.itemClicked.connect(self.handle_item_click)
             list_layout_2.addWidget(list_widget_2)
             
+            
+            
             sv_1 = customScrollView("view1")
             sv_2 = customScrollView("view2")
             
             list_layout_1.addWidget(sv_1)
             list_layout_2.addWidget(sv_2)
+            
+            
+            btn = QPushButton("clock")
+            btn.clicked.connect(self.btn_clicked)
+            list_layout_1.addWidget(btn)
+            self.progress_bar = QProgressBar()
+            self.progress_bar.setMinimumWidth = 100
+            self.progress_bar.setMinimumHeight = 24
+            list_layout_1.addWidget(self.progress_bar)
             
             # ----------------------------------------
             # middle area ...
@@ -677,6 +851,17 @@ try:
             self.setModal(True)
             self.show()
         
+        def btn_clicked(self):
+            self.thread = WorkerThread()
+            self.thread.progress_changed.connect(self.update_progress)
+            self.thread.start()
+            
+            # !! TODO: count html files - for thread !!
+            #convertFiles()
+        
+        def update_progress(self, value):
+            self.progress_bar.setValue(value)
+        
         # ------------------------------------------------------------------------
         # class member to get the widget item from list_widget_1 or list_widget_2.
         # The application script will stop, if an internal error occur ...
@@ -691,6 +876,27 @@ try:
                     sys.exit(EXIT_FAILURE)
             print(item.data(0))
         
+        # ------------------------------------------------------------------------
+        # select the work space directory where the Doxyfile resides, and let the
+        # directory to be the root directory, if it not overwrite by config.ini
+        # settings,
+        # ------------------------------------------------------------------------
+        def show_directory_dialog(self):
+            options = QFileDialog.Options()
+            options |= QFileDialog.ShowDirsOnly | QFileDialog.DontUseNativeDialog
+            
+            font = QFont("Arial")
+            font.setPointSize(11)
+            
+            file_dialog = QFileDialog(self, "Select directory:", options=options)
+            file_dialog.setFont(font)
+            
+            directory = file_dialog.getExistingDirectory(self)
+            if directory:
+                directory = convertPath(directory)
+                self.text_label_1_editfield_1.setText(directory)
+                print(doxyfile)
+        
         def menu_file_clicked_new(self):
             return
         
@@ -704,6 +910,7 @@ try:
             return
         
         def menu_file_clicked_exit(self):
+            sys.exit(EXIT_SUCCESS)
             return
         
     
@@ -758,13 +965,28 @@ try:
         def button2_clicked(self):
             self.returnCode = 1
             self.close()
-   
+    
     # ------------------------------------------------------------------------
     # this is our "main" entry point, where the application will start, if you
     # type the name of the script into the console, or by mouse click at the
     # file explorer under a GUI system (Windows) ...
     # ------------------------------------------------------------------------
     if __name__ == "__main__":
+        
+        # ---------------------------------------------------------
+        # scoped global stuff ...
+        # ---------------------------------------------------------
+        global doxyfile, hhc__path
+        
+        pcount     = len(sys.argv) - 1
+        
+        doxy_env   = "DOXYGEN_PATH"  # doxygen.exe
+        doxy_hhc   = "DOXYHHC_PATH"  # hhc.exe
+        
+        doxy_path  = "./"
+        hhc__path  = ""
+        
+        doxyfile   = "Doxyfile"
         
         # ---------------------------------------------------------
         # first, we check the operating system platform:
@@ -778,8 +1000,8 @@ try:
         os_type_windows = 1
         os_type_linux   = 2
         
-        os_type = os_type_unknown
-        
+        os_type         = os_type_unknown
+        # ---------------------------------------------------------
         if platform.system() == "Windows":
             os_type = os_type_windows
         elif platform.system() == "Linux":
@@ -793,6 +1015,12 @@ try:
             elif "python" in __app__exec_name:
                 print(__error__os_error)
             sys.exit(EXIT_FAILURE)
+        
+        # ---------------------------------------------------------
+        # print a nice banner on the display device ...
+        # ---------------------------------------------------------
+        if isPythonWindows() == False:
+            print(__copy__)
         
         # ---------------------------------------------------------
         # when config.ini does not exists, then create a small one:
@@ -844,25 +1072,6 @@ try:
                 sys.exit(EXIT_SUCCESS)
             
             del license_window  # free memory
-        
-        # ---------------------------------------------------------
-        # print a nice banner on the display device ...
-        # ---------------------------------------------------------
-        if isPythonWindows() == False:
-            print(__copy__)
-        
-        # ---------------------------------------------------------
-        # at startup, check system settings ...
-        # ---------------------------------------------------------
-        pcount     = len(sys.argv) - 1
-        
-        doxy_env   = "DOXYGEN_PATH"  # doxygen.exe
-        doxy_hhc   = "DOXYHHC_PATH"  # hhc.exe
-        
-        doxy_path  = "./"
-        hhc__path  = ""
-        
-        doxyfile   = "Doxyfile"
         
         # ---------------------------------------------------------
         # doxygen.exe directory path ...
@@ -928,6 +1137,7 @@ try:
             # Microsoft Help Workshop Compiler path ...
             # -----------------------------------------------------
             hhc__path = convertPath(hhc__path)
+            print("ooo>  " + hhc__path)
             if isPythonWindows() == True:
                 if doxy_path[-1] == "\\":
                     if not "hhc.exe" in hhc__path.lower():
@@ -983,27 +1193,18 @@ try:
             doxyfile = sys.argv[1]
         
         
-        if isApplicationInit() == False:
-            app = QApplication(sys.argv)
-        
-        appWindow = mainWindow()
-        appWindow.show()
-        appWindow.exec_()
-        
-        del appWindow  # free memory
-        
-        result = app.exec_()
-        sys.exit(result)
-        
-        if os_type == 1:
+        if os_type == os_type_windows:
             doxyfile = doxyfile.replace("/", "\\")
         
         # ---------------------------------------------------------
-        # when config file not exists, then spite a error message:
+        # when config file not exists, then spite a info message,
+        # and create a default template for doxygen 1.10.0
         # ---------------------------------------------------------
         if not os.path.exists(doxyfile):
-            print("error: config file: '" \
-            + f"{doxyfile}" + "' does not exists.")
+            print("info: config: '" \
+            + f"{doxyfile}" + "' does not exists. I will fix this by create a default file.")
+            
+            # !! TODO !!
             sys.exit(EXIT_FAILURE)
         
         # ---------------------------------------------------------
@@ -1021,7 +1222,7 @@ try:
                     html_out = rows[2]
                     break
         
-        if os_type == 1:
+        if os_type == os_type_windows:
             html_out = html_out.replace("/", "\\")
         
         # ---------------------------------------------------------
@@ -1033,139 +1234,19 @@ try:
         os.makedirs(html_out, exist_ok = True)
         
         # ---------------------------------------------------------
-        # here, we try to open doxygen. The path to the executable
-        # must be in the PATH variable of your system...
+        # now, we are ready to start our user interface ...
         # ---------------------------------------------------------
-        print("converting all files can take a while...\n")
+        if isApplicationInit() == False:
+            app = QApplication(sys.argv)
         
-        result = subprocess.run([f"{doxy_path}",f"{doxyfile}"])
-        exit_code = result.returncode
+        appWindow = mainWindow()
+        appWindow.show()
+        appWindow.exec_()
         
-        # -----------------------------------------------------
-        # when error level, then do nothing anyelse - exit ...
-        # -----------------------------------------------------
-        if exit_code > 0:
-            print(""                               \
-            + "error: doxygen aborted with code: " \
-            + f"{exit_code}")
-            sys.exit(EXIT_FAILURE)
+        del appWindow  # free memory
         
-        # ---------------------------------------------------------
-        # get all .html files, in all directories based on root ./
-        # ---------------------------------------------------------
-        html_directory = './**/*.html'
-        
-        if os_type == 1:
-            html_directory  =  html_directory.replace("/", "\\")
-        
-        html_files = glob.glob(html_directory,recursive = True)
-        file_names = []
-        
-        for file_name in html_files:
-            if os_type == 1:
-                file_name = file_name.replace("/", "\\")
-            file_names.append(file_name)
-        
-        # ---------------------------------------------------------
-        # open the html files where to remove the not neccassary
-        # data from "read" content.
-        # ---------------------------------------------------------
-        for htm_file in file_names:
-            with open(htm_file, "r", encoding="utf-8") as input_file:
-                soup = BeautifulSoup(input_file, "html.parser")
-                divs = soup.find_all("div")
-                
-                # ---------------------------------------------------------
-                # remove the header bar stuff from the html file ...
-                # ---------------------------------------------------------
-                counter = 1
-                for div in divs:
-                    idname = "navrow" + str(counter)
-                    if div.get("id") == f"{idname}":
-                        div.extract()
-                        counter = counter + 1
-                
-                # ---------------------------------------------------------
-                # renove meta data for IE - Internet Explorer, because the
-                # IE is very old, and out of date.
-                # ---------------------------------------------------------
-                #meta = soup.find("meta", {"http-equiv": "X-UA-Compatible"})
-                #if meta:
-                #    meta.decompose()
-                
-                # ---------------------------------------------------------
-                # NOTE: Pleas be fair, and make a comment of the following
-                # three lines, if you would hold on CODEOFCONDUCT.
-                # They are only for meassure usage...
-                # THANK YOU !!!
-                # ---------------------------------------------------------
-                meta = soup.find("meta", {"name": "generator"})
-                if meta:
-                    meta.decompose()
-                
-                meta = soup.find("a", {"href": "doxygen_crawl.html"})
-                if meta:
-                    meta.decompose()
-                
-                # ---------------------------------------------------------
-                # remove the "not" neccassary html comments from the input:
-                # ---------------------------------------------------------
-                rems = soup.find_all(string=lambda string: isinstance(string, Comment))
-                for comment in rems:
-                    comment.extract()
-                
-                html_tag = soup.find("html")
-                if html_tag and 'xmlns' in html_tag.attrs:
-                    del html_tag["xmlns"]
-                
-                # ---------------------------------------------------------
-                # remove whitespaces ...
-                # ---------------------------------------------------------
-                try:
-                    modh = str(soup)
-                    modh = modh.split('\n', 1)[1]     # extract first line with
-                    modh = re.sub(r"\s+", " ", modh)  # <!DOCTYPE ...
-                except Exception as ex:
-                    print(f"warning: " + f"{ex}")
-                
-                # ---------------------------------------------------------
-                # close old file, to avoid cross over's. Then write the
-                # modified content back to the original file...
-                # ---------------------------------------------------------
-                input_file.close()
-                
-                with open(htm_file, "w", encoding="utf-8") as output_file:            
-                    output_file.write(modh)
-                    output_file.close()
-        
-        # ---------------------------------------------------------
-        # all files are write, then create the CHM file ...
-        # ---------------------------------------------------------
-        dir_old = os.getcwd()
-        dir_new = html_out + "/html"
-        
-        if os_type == 1:
-            dir_old = dir_old.replace("/", "\\")
-            dir_new = dir_new.replace("/", "\\")
-            
-            os.chdir(dir_new)
-            
-            result = subprocess.run([f"{hhc__path}", ".\\index.hhp"])
-            exit_code = result.returncode
-            
-            # -----------------------------------------------------
-            # when error level, then do nothing anyelse - exit ...
-            # -----------------------------------------------------
-            if exit_code > 0:
-                print(""                               \
-                + "error: hhc.exe aborted with code: " \
-                + f"{exit_code}")
-                sys.exit(EXIT_FAILURE)
-            
-            os.chdir(dir_old)
-        else:
-            print("error: this script is for Windows hhc.exe")
-            sys.exit(EXIT_FAILURE)
+        result = app.exec_()
+        sys.exit(result)
         
         # ---------------------------------------------------------
         # when all is gone, stop the running script ...
@@ -1175,7 +1256,6 @@ try:
 
 except ImportError as ex:
     print("error: import module missing: " + f"{ex}")
-    taste = keyboard.read_event(suppress=True)
     sys.exit(EXIT_FAILURE)
 
 # ----------------------------------------------------------------------------
