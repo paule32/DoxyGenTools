@@ -235,136 +235,78 @@ try:
     # here, we try to open doxygen. The path to the executable
     # must be in the PATH variable of your system...
     # ---------------------------------------------------------
-    def convertFiles():
-        print("converting all files can take a while...\n")
-        
-        result = subprocess.run([f"{doxy_path}",f"{doxyfile}"])
-        exit_code = result.returncode
-        
-        # -----------------------------------------------------
-        # when error level, then do nothing anyelse - exit ...
-        # -----------------------------------------------------
-        if exit_code > 0:
-            print(""                               \
-            + "error: doxygen aborted with code: " \
-            + f"{exit_code}")
-            sys.exit(EXIT_FAILURE)
-        
-        # ---------------------------------------------------------
-        # get all .html files, in all directories based on root ./
-        # ---------------------------------------------------------
-        html_directory = './**/*.html'
-        
-        if os_type == os_type_windows:
-            html_directory  =  html_directory.replace("/", "\\")
-        
-        html_files = glob.glob(html_directory,recursive = True)
-        file_names = []
-        
-        for file_name in html_files:
-            if os_type == os_type_windows:
-                file_name = file_name.replace("/", "\\")
-            file_names.append(file_name)
-        
+    def convertFiles(htm_file):
         # ---------------------------------------------------------
         # open the html files where to remove the not neccassary
         # data from "read" content.
         # ---------------------------------------------------------
-        for htm_file in file_names:
-            with open(htm_file, "r", encoding="utf-8") as input_file:
-                soup = BeautifulSoup(input_file, "html.parser")
-                divs = soup.find_all("div")
-                
-                # ---------------------------------------------------------
-                # remove the header bar stuff from the html file ...
-                # ---------------------------------------------------------
-                counter = 1
-                for div in divs:
-                    idname = "navrow" + str(counter)
-                    if div.get("id") == f"{idname}":
-                        div.extract()
-                        counter = counter + 1
-                
-                # ---------------------------------------------------------
-                # renove meta data for IE - Internet Explorer, because the
-                # IE is very old, and out of date.
-                # ---------------------------------------------------------
-                #meta = soup.find("meta", {"http-equiv": "X-UA-Compatible"})
-                #if meta:
-                #    meta.decompose()
-                
-                # ---------------------------------------------------------
-                # NOTE: Pleas be fair, and make a comment of the following
-                # three lines, if you would hold on CODEOFCONDUCT.
-                # They are only for meassure usage...
-                # THANK YOU !!!
-                # ---------------------------------------------------------
-                meta = soup.find("meta", {"name": "generator"})
-                if meta:
-                    meta.decompose()
-                
-                meta = soup.find("a", {"href": "doxygen_crawl.html"})
-                if meta:
-                    meta.decompose()
-                
-                # ---------------------------------------------------------
-                # remove the "not" neccassary html comments from the input:
-                # ---------------------------------------------------------
-                rems = soup.find_all(string=lambda string: isinstance(string, Comment))
-                for comment in rems:
-                    comment.extract()
-                
-                html_tag = soup.find("html")
-                if html_tag and 'xmlns' in html_tag.attrs:
-                    del html_tag["xmlns"]
-                
-                # ---------------------------------------------------------
-                # remove whitespaces ...
-                # ---------------------------------------------------------
-                try:
-                    modh = str(soup)
-                    modh = modh.split('\n', 1)[1]     # extract first line with
-                    modh = re.sub(r"\s+", " ", modh)  # <!DOCTYPE ...
-                except Exception as ex:
-                    print(f"warning: " + f"{ex}")
-                
-                # ---------------------------------------------------------
-                # close old file, to avoid cross over's. Then write the
-                # modified content back to the original file...
-                # ---------------------------------------------------------
-                input_file.close()
-                
-                with open(htm_file, "w", encoding="utf-8") as output_file:            
-                    output_file.write(modh)
-                    output_file.close()
-        
-        # ---------------------------------------------------------
-        # all files are write, then create the CHM file ...
-        # ---------------------------------------------------------
-        dir_old = os.getcwd()
-        dir_new = html_out + "/html"
-        
-        if os_type == os_type_windows:
-            dir_old = dir_old.replace("/", "\\")
-            dir_new = dir_new.replace("/", "\\")
+        with open(htm_file, "r", encoding="utf-8") as input_file:
+            soup = BeautifulSoup(input_file, "html.parser")
+            divs = soup.find_all("div")
             
-            os.chdir(dir_new)
-            result = subprocess.run([f"{hhc__path}" + "hhc.exe", ".\\index.hhp"])
-            exit_code = result.returncode
+            # ---------------------------------------------------------
+            # remove the header bar stuff from the html file ...
+            # ---------------------------------------------------------
+            counter = 1
+            for div in divs:
+                idname = "navrow" + str(counter)
+                if div.get("id") == f"{idname}":
+                    div.extract()
+                    counter = counter + 1
             
-            # -----------------------------------------------------
-            # when error level, then do nothing anyelse - exit ...
-            # -----------------------------------------------------
-            if exit_code != 1:
-                print(""                               \
-                + "error: hhc.exe aborted with code: " \
-                + f"{exit_code}")
-                sys.exit(EXIT_FAILURE)
+            # ---------------------------------------------------------
+            # renove meta data for IE - Internet Explorer, because the
+            # IE is very old, and out of date.
+            # ---------------------------------------------------------
+            #meta = soup.find("meta", {"http-equiv": "X-UA-Compatible"})
+            #if meta:
+            #    meta.decompose()
             
-            os.chdir(dir_old)
-        else:
-            print("error: this script is for Windows hhc.exe")
-            sys.exit(EXIT_FAILURE)
+            # ---------------------------------------------------------
+            # NOTE: Pleas be fair, and make a comment of the following
+            # three lines, if you would hold on CODEOFCONDUCT.
+            # They are only for meassure usage...
+            # THANK YOU !!!
+            # ---------------------------------------------------------
+            meta = soup.find("meta", {"name": "generator"})
+            if meta:
+                meta.decompose()
+            
+            meta = soup.find("a", {"href": "doxygen_crawl.html"})
+            if meta:
+                meta.decompose()
+            
+            # ---------------------------------------------------------
+            # remove the "not" neccassary html comments from the input:
+            # ---------------------------------------------------------
+            rems = soup.find_all(string=lambda string: isinstance(string, Comment))
+            for comment in rems:
+                comment.extract()
+            
+            html_tag = soup.find("html")
+            if html_tag and 'xmlns' in html_tag.attrs:
+                del html_tag["xmlns"]
+            
+            # ---------------------------------------------------------
+            # remove whitespaces ...
+            # ---------------------------------------------------------
+            try:
+                modh = str(soup)
+                modh = modh.split('\n', 1)[1]     # extract first line with
+                modh = re.sub(r"\s+", " ", modh)  # <!DOCTYPE ...
+            except Exception as ex:
+                foo = 1
+                #print(f"warning: " + f"{ex}")
+            
+            # ---------------------------------------------------------
+            # close old file, to avoid cross over's. Then write the
+            # modified content back to the original file...
+            # ---------------------------------------------------------
+            input_file.close()
+            
+            with open(htm_file, "w", encoding="utf-8") as output_file:            
+                output_file.write(modh)
+                output_file.close()
     
     # ------------------------------------------------------------------------
     # custom widget for QListWidgetItem element's ...
@@ -397,11 +339,132 @@ try:
         def init_ui(self):
             content_widget = QWidget(self)
             layout = QHBoxLayout(content_widget)
-            text_edit = QTextEdit()
-            layout.addWidget(text_edit)
+            
+            font = QFont("Arial")
+            font.setPointSize(10)
+            
+            btn_1 = QPushButton("Start")
+            btn_1.setStyleSheet("" \
+            + "QPushButton { border-radius: 3px;" \
+            + "background: #012d8c;" \
+            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
+            + "font-family: Arial;" \
+            + "color: #f7ff03;" \
+            + "font-size: 11pt;" \
+            + "padding: 10px 20px 10px 20px;" \
+            + "text-decoration: none;" \
+            + "}" \
+            + "QPushButton::hover { background: #183b91;" \
+            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
+            + "text-decoration: none;}")
+            
+            btn_1.clicked.connect(self.btn_clicked_1)
+            
+            btn_1.setMinimumWidth  = 100
+            btn_1.setMinimumHeight = 26
+            layout.addWidget(btn_1)
+            
+            self.progress_bar = QProgressBar()
+            self.progress_bar.setMinimumWidth = 100
+            self.progress_bar.setMinimumHeight = 24
+            
+            btn_2 = QPushButton("Compile")
+            btn_2.setStyleSheet("" \
+            + "QPushButton { border-radius: 3px;" \
+            + "background: #012d8c;" \
+            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
+            + "font-family: Arial;" \
+            + "color: #f7ff03;" \
+            + "font-size: 11pt;" \
+            + "padding: 10px 20px 10px 20px;" \
+            + "text-decoration: none;" \
+            + "}" \
+            + "QPushButton::hover { background: #183b91;" \
+            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
+            + "text-decoration: none;}")
+            
+            btn_2.clicked.connect(self.btn_clicked_2)
+            
+            btn_2.setMinimumWidth  = 100
+            btn_2.setMinimumHeight = 26
+            
+            layout.addWidget(btn_2)
+            layout.addWidget(self.progress_bar)
+            
+            
             
             self.setWidgetResizable(False)
             self.setWidget(content_widget)
+        
+        def btn_clicked_2(self):
+            # ---------------------------------------------------------
+            # all files are write, then create the CHM file ...
+            # ---------------------------------------------------------
+            dir_old = os.getcwd()
+            dir_new = html_out + "/html"
+            
+            if os_type == os_type_windows:
+                dir_old = dir_old.replace("/", "\\")
+                dir_new = dir_new.replace("/", "\\")
+                
+                os.chdir(dir_new)
+                result = subprocess.run([f"{hhc__path}" + "hhc.exe", ".\\index.hhp"])
+                exit_code = result.returncode
+                
+                # -----------------------------------------------------
+                # when error level, then do nothing anyelse - exit ...
+                # -----------------------------------------------------
+                if exit_code != 1:
+                    print(""                               \
+                    + "error: hhc.exe aborted with code: " \
+                    + f"{exit_code}")
+                    sys.exit(EXIT_FAILURE)
+                
+                os.chdir(dir_old)
+            else:
+                print("error: this script is for Windows hhc.exe")
+                sys.exit(EXIT_FAILURE)
+        
+        def btn_clicked_1(self):
+            print("converting all files can take a while...\n")
+            
+            result = subprocess.run([f"{doxy_path}",f"{doxyfile}"])
+            exit_code = result.returncode
+            
+            # -----------------------------------------------------
+            # when error level, then do nothing anyelse - exit ...
+            # -----------------------------------------------------
+            if exit_code > 0:
+                print(""                               \
+                + "error: doxygen aborted with code: " \
+                + f"{exit_code}")
+                sys.exit(EXIT_FAILURE)
+            
+            # ---------------------------------------------------------
+            # get all .html files, in all directories based on root ./
+            # ---------------------------------------------------------
+            html_directory = './**/*.html'
+            
+            if os_type == os_type_windows:
+                html_directory  =  html_directory.replace("/", "\\")
+            
+            self.html_files = glob.glob(html_directory,recursive = True)
+            self.file_names = []
+            
+            # ---------------------------------------------------------
+            # start thread ...
+            # ---------------------------------------------------------
+            self.thread = WorkerThread()
+            self.thread.progress_changed.connect(self.update_progress)
+            self.thread.start()  # start
+        
+        def update_progress(self, value):
+            for file_name in self.html_files:
+                if os_type == os_type_windows:
+                    file_name = file_name.replace("/", "\\")
+                #self.file_names.append(file_name)
+                self.progress_bar.setValue(value)
+                convertFiles(file_name)
     
     # ------------------------------------------------------------------------
     # after main was process, create the main application gui window ...
@@ -798,13 +861,6 @@ try:
             list_layout_2.addWidget(sv_2)
             
             
-            btn = QPushButton("clock")
-            btn.clicked.connect(self.btn_clicked)
-            list_layout_1.addWidget(btn)
-            self.progress_bar = QProgressBar()
-            self.progress_bar.setMinimumWidth = 100
-            self.progress_bar.setMinimumHeight = 24
-            list_layout_1.addWidget(self.progress_bar)
             
             # ----------------------------------------
             # middle area ...
@@ -850,17 +906,6 @@ try:
             self.setMinimumWidth(self.minimumWidth)
             self.setModal(True)
             self.show()
-        
-        def btn_clicked(self):
-            self.thread = WorkerThread()
-            self.thread.progress_changed.connect(self.update_progress)
-            self.thread.start()
-            
-            # !! TODO: count html files - for thread !!
-            #convertFiles()
-        
-        def update_progress(self, value):
-            self.progress_bar.setValue(value)
         
         # ------------------------------------------------------------------------
         # class member to get the widget item from list_widget_1 or list_widget_2.
@@ -1055,7 +1100,7 @@ try:
             else:
                 print(__error__locales_error)
         
-        if isPythonWindows() == True:
+        if os_type == os_type_windows or isPythonWindows() == True:
             # -----------------------------------------------------
             # show a license window, when readed, and user give a
             # okay, to accept it, then start the application ...
@@ -1137,7 +1182,6 @@ try:
             # Microsoft Help Workshop Compiler path ...
             # -----------------------------------------------------
             hhc__path = convertPath(hhc__path)
-            print("ooo>  " + hhc__path)
             if isPythonWindows() == True:
                 if doxy_path[-1] == "\\":
                     if not "hhc.exe" in hhc__path.lower():
