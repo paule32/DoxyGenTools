@@ -338,12 +338,69 @@ try:
         
         def init_ui(self):
             content_widget = QWidget(self)
-            layout = QHBoxLayout(content_widget)
+            layout = QVBoxLayout(content_widget)
             
             font = QFont("Arial")
             font.setPointSize(10)
             
-            btn_1 = QPushButton("Start")
+            widget_1_label_1 = QLabel("Provide some informations about the Project you are documenting")
+            widget_1_label_1.setMinimumWidth(580)
+            widget_1_label_1.setFont(font)
+            layout.addWidget(widget_1_label_1)
+            
+            layout_2 = QHBoxLayout()
+            widget_2_label_1 = QLabel("Project name:")
+            widget_2_label_1.setMinimumWidth(160)
+            widget_2_label_1.setMaximumWidth(220)
+            widget_2_label_1.setFont(font)
+            widget_2_texte_1 = QLineEdit()
+            widget_2_texte_1.setMinimumWidth(280)
+            widget_2_texte_1.setFont(font)
+            layout_2.addWidget(widget_2_label_1)
+            layout_2.addWidget(widget_2_texte_1)
+            layout.addLayout(layout_2)
+            
+            layout_3 = QHBoxLayout()
+            widget_3_label_1 = QLabel("Project author:")
+            widget_3_label_1.setMinimumWidth(160)
+            widget_3_label_1.setMaximumWidth(220)
+            widget_3_label_1.setFont(font)
+            widget_3_texte_1 = QLineEdit()
+            widget_3_texte_1.setMinimumWidth(280)
+            widget_3_texte_1.setFont(font)
+            layout_3.addWidget(widget_3_label_1)
+            layout_3.addWidget(widget_3_texte_1)
+            layout.addLayout(layout_3)
+            
+            layout_4 = QHBoxLayout()
+            widget_4_label_1 = QLabel("Project version or id:")
+            widget_4_label_1.setMinimumWidth(160)
+            widget_4_label_1.setMaximumWidth(220)
+            widget_4_label_1.setFont(font)
+            widget_4_texte_1 = QLineEdit()
+            widget_4_texte_1.setMinimumWidth(280)
+            widget_4_texte_1.setFont(font)
+            layout_4.addWidget(widget_4_label_1)
+            layout_4.addWidget(widget_4_texte_1)
+            layout.addLayout(layout_4)
+            
+            layout_4 = QHBoxLayout()
+            widget_4_label_1 = QLabel("Project logo:")
+            widget_4_label_1.setAlignment(Qt.AlignLeft)
+            widget_4_label_1.setFont(font)
+            widget_4_pushb_1 = QPushButton("Select")
+            widget_4_pushb_1.setMinimumHeight(32)
+            widget_4_pushb_1.setMinimumWidth(84)
+            widget_4_pushb_1.setMaximumWidth(84)
+            widget_4_pushb_1.setFont(font)
+            widget_4_licon_1 = QLabel(self)
+            widget_4_licon_1.setPixmap(QIcon("img/floppy-disk.png").pixmap(42,42))
+            layout_4.addWidget(widget_4_label_1)
+            layout_4.addWidget(widget_4_pushb_1)
+            layout_4.addWidget(widget_4_licon_1)
+            layout.addLayout(layout_4)
+            
+            btn_1 = QPushButton("Convert")
             btn_1.setStyleSheet("" \
             + "QPushButton { border-radius: 3px;" \
             + "background: #012d8c;" \
@@ -362,7 +419,7 @@ try:
             
             btn_1.setMinimumWidth  = 100
             btn_1.setMinimumHeight = 26
-            layout.addWidget(btn_1)
+            
             
             self.progress_bar = QProgressBar()
             self.progress_bar.setMinimumWidth = 100
@@ -388,13 +445,39 @@ try:
             btn_2.setMinimumWidth  = 100
             btn_2.setMinimumHeight = 26
             
+            
+            btn_3 = QPushButton("HelpNDoc")
+            btn_3.setStyleSheet("" \
+            + "QPushButton { border-radius: 3px;" \
+            + "background: #012d8c;" \
+            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
+            + "font-family: Arial;" \
+            + "color: #f7ff03;" \
+            + "font-size: 11pt;" \
+            + "padding: 10px 20px 10px 20px;" \
+            + "text-decoration: none;" \
+            + "}" \
+            + "QPushButton::hover { background: #183b91;" \
+            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
+            + "text-decoration: none;}")
+            
+            btn_3.clicked.connect(self.btn_clicked_3)
+            
+            btn_3.setMinimumWidth  = 100
+            btn_3.setMinimumHeight = 26
+            
+            layout.addWidget(btn_1)
             layout.addWidget(btn_2)
             layout.addWidget(self.progress_bar)
+            layout.addWidget(btn_3)
             
             
             
             self.setWidgetResizable(False)
             self.setWidget(content_widget)
+        
+        def btn_clicked_3(self):
+            print("HelpNDoc")
         
         def btn_clicked_2(self):
             # ---------------------------------------------------------
@@ -906,6 +989,14 @@ try:
             self.setMinimumWidth(self.minimumWidth)
             self.setModal(True)
             self.show()
+        
+        # ------------------------------------------------------------------------
+        # customized actions on user application exit ...
+        # ------------------------------------------------------------------------
+        def closeEvent(self, event):
+            print("close application.")
+            event.accept()
+            sys.exit(EXIT_SUCCESS)
         
         # ------------------------------------------------------------------------
         # class member to get the widget item from list_widget_1 or list_widget_2.
