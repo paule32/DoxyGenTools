@@ -332,6 +332,19 @@ try:
         def __init__(self, name):
             super().__init__()
             
+            self.__button_style_css = "" \
+            + "QPushButton { border-radius: 3px;" \
+            + "background: #012d8c;" \
+            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
+            + "font-family: Arial;" \
+            + "color: #f7ff03;" \
+            + "font-size: 11pt;" \
+            + "padding: 10px 20px 10px 20px;" \
+            + "text-decoration: none;" \
+            + "}" \
+            + "QPushButton::hover { background: #183b91;" \
+            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
+            + "text-decoration: none;}"
             self.name = name
             
             self.init_ui()
@@ -344,7 +357,7 @@ try:
             font.setPointSize(10)
             
             widget_1_label_1 = QLabel("Provide some informations about the Project you are documenting")
-            widget_1_label_1.setMinimumWidth(580)
+            widget_1_label_1.setMinimumWidth(600)
             widget_1_label_1.setFont(font)
             layout.addWidget(widget_1_label_1)
             
@@ -401,19 +414,7 @@ try:
             layout.addLayout(layout_4)
             
             btn_1 = QPushButton("Convert")
-            btn_1.setStyleSheet("" \
-            + "QPushButton { border-radius: 3px;" \
-            + "background: #012d8c;" \
-            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
-            + "font-family: Arial;" \
-            + "color: #f7ff03;" \
-            + "font-size: 11pt;" \
-            + "padding: 10px 20px 10px 20px;" \
-            + "text-decoration: none;" \
-            + "}" \
-            + "QPushButton::hover { background: #183b91;" \
-            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
-            + "text-decoration: none;}")
+            btn_1.setStyleSheet(self.__button_style_css)
             
             btn_1.clicked.connect(self.btn_clicked_1)
             
@@ -426,19 +427,7 @@ try:
             self.progress_bar.setMinimumHeight = 24
             
             btn_2 = QPushButton("Compile")
-            btn_2.setStyleSheet("" \
-            + "QPushButton { border-radius: 3px;" \
-            + "background: #012d8c;" \
-            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
-            + "font-family: Arial;" \
-            + "color: #f7ff03;" \
-            + "font-size: 11pt;" \
-            + "padding: 10px 20px 10px 20px;" \
-            + "text-decoration: none;" \
-            + "}" \
-            + "QPushButton::hover { background: #183b91;" \
-            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
-            + "text-decoration: none;}")
+            btn_2.setStyleSheet(self.__button_style_css)
             
             btn_2.clicked.connect(self.btn_clicked_2)
             
@@ -447,19 +436,7 @@ try:
             
             
             btn_3 = QPushButton("HelpNDoc")
-            btn_3.setStyleSheet("" \
-            + "QPushButton { border-radius: 3px;" \
-            + "background: #012d8c;" \
-            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
-            + "font-family: Arial;" \
-            + "color: #f7ff03;" \
-            + "font-size: 11pt;" \
-            + "padding: 10px 20px 10px 20px;" \
-            + "text-decoration: none;" \
-            + "}" \
-            + "QPushButton::hover { background: #183b91;" \
-            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
-            + "text-decoration: none;}")
+            btn_3.setStyleSheet(self.__button_style_css)
             
             btn_3.clicked.connect(self.btn_clicked_3)
             
@@ -573,6 +550,20 @@ try:
             + "font-weight:620;border:none;outline:none;}"                        \
             + "QListView::icon{left:10px;}"                                       \
             + "QListView::text{left:10px;}"
+            
+            self.__button_style_css = "" \
+            + "QPushButton { border-radius: 3px;" \
+            + "background: #012d8c;" \
+            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
+            + "font-family: Arial;" \
+            + "color: #f7ff03;" \
+            + "font-size: 11pt;" \
+            + "padding: 10px 20px 10px 20px;" \
+            + "text-decoration: none;" \
+            + "}" \
+            + "QPushButton::hover { background: #183b91;" \
+            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
+            + "text-decoration: none;}"
             
             self.init_ui()
         
@@ -805,20 +796,7 @@ try:
             self.text_label_1_editfield_1.setPalette(self.text_label_palette_1)
             #
             text_label_1_button_1 = QPushButton("Select")
-            text_label_1_button_1.setStyleSheet("" \
-            + "QPushButton { border-radius: 3px;" \
-            + "background: #012d8c;" \
-            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
-            + "font-family: Arial;" \
-            + "color: #f7ff03;" \
-            + "font-size: 11pt;" \
-            + "padding: 10px 20px 10px 20px;" \
-            + "text-decoration: none;" \
-            + "}" \
-            + "QPushButton::hover { background: #183b91;" \
-            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
-            + "text-decoration: none;}")
-            
+            text_label_1_button_1.setStyleSheet(self.__button_style_css)
             text_label_1_button_1.clicked.connect(self.show_directory_dialog)
             
             text_label_1_button_1.setMinimumWidth(100)
