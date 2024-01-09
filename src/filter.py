@@ -326,9 +326,9 @@ try:
             self.setData(0, self.name)
     
     # ------------------------------------------------------------------------
-    # create a scroll view for the tabs on left side of application ...
+    # create a scroll view for the project tab on left side of application ...
     # ------------------------------------------------------------------------
-    class customScrollView(QScrollArea):
+    class customScrollView_1(QScrollArea):
         def __init__(self, name):
             super().__init__()
             
@@ -412,6 +412,63 @@ try:
             layout_4.addWidget(widget_4_pushb_1)
             layout_4.addWidget(widget_4_licon_1)
             layout.addLayout(layout_4)
+            
+            layout_5 = QHBoxLayout()
+            widget_5_frame_1 = QFrame()
+            widget_5_frame_1.setFrameShape(QFrame.HLine)
+            widget_5_frame_1.setFrameShadow(QFrame.Sunken)
+            layout_5.addWidget(widget_5_frame_1)
+            layout.addLayout(layout_5)
+            
+            layout_6 = QHBoxLayout()
+            widget_6_label_1 = QLabel("Source dir:")
+            widget_6_label_1.setMinimumWidth(120)
+            widget_6_label_1.setMaximumWidth(120)
+            widget_6_label_1.setFont(font)
+            widget_6_texte_1 = QLineEdit()
+            font.setBold(True)
+            widget_6_texte_1.setMinimumWidth(120)
+            widget_6_texte_1.setFont(font)
+            widget_6_texte_1.setText("E:\\temp\\src")
+            widget_6_pushb_1 = QPushButton("Select")
+            widget_6_pushb_1.setMinimumHeight(40)
+            widget_6_pushb_1.setMaximumHeight(40)
+            widget_6_pushb_1.setMinimumWidth(84)
+            widget_6_pushb_1.setMaximumWidth(84)
+            widget_6_pushb_1.setFont(font)
+            layout_6.addWidget(widget_6_label_1)
+            layout_6.addWidget(widget_6_texte_1)
+            layout_6.addWidget(widget_6_pushb_1)
+            layout.addLayout(layout_6)
+            
+            layout_7 = QHBoxLayout()
+            font.setBold(False)
+            widget_7_label_1 = QLabel("Destination dir:")
+            widget_7_label_1.setMinimumWidth(120)
+            widget_7_label_1.setMaximumWidth(120)
+            widget_7_label_1.setFont(font)
+            widget_7_texte_1 = QLineEdit()
+            font.setBold(True)
+            widget_7_texte_1.setMinimumWidth(180)
+            widget_7_texte_1.setFont(font)
+            widget_7_texte_1.setText("E:\\temp\\src\\html")
+            widget_7_pushb_1 = QPushButton("Select")
+            widget_7_pushb_1.setMinimumHeight(40)
+            widget_7_pushb_1.setMaximumHeight(40)
+            widget_7_pushb_1.setMinimumWidth(84)
+            widget_7_pushb_1.setMaximumWidth(84)
+            widget_7_pushb_1.setFont(font)
+            layout_7.addWidget(widget_7_label_1)
+            layout_7.addWidget(widget_7_texte_1)
+            layout_7.addWidget(widget_7_pushb_1)
+            layout.addLayout(layout_7)
+            
+            layout_8 = QHBoxLayout()
+            widget_8_frame_1 = QFrame()
+            widget_8_frame_1.setFrameShape(QFrame.HLine)
+            widget_8_frame_1.setFrameShadow(QFrame.Sunken)
+            layout_8.addWidget(widget_8_frame_1)
+            layout.addLayout(layout_8)
             
             btn_1 = QPushButton("Convert")
             btn_1.setStyleSheet(self.__button_style_css)
@@ -527,13 +584,82 @@ try:
                 convertFiles(file_name)
     
     # ------------------------------------------------------------------------
+    # create a scroll view for the mode tab on left side of application ...
+    # ------------------------------------------------------------------------
+    class customScrollView_2(QScrollArea):
+        def __init__(self, name):
+            super().__init__()
+            
+            self.name = name
+            self.init_ui()
+        
+        def init_ui(self):
+            content_widget = QWidget(self)
+            layout = QVBoxLayout(content_widget)
+            
+            font = QFont("Arial")
+            font.setPointSize(10)
+            
+            label_1 = QLabel(self.name)
+            layout.addWidget(label_1)
+            
+            self.setWidgetResizable(False)
+            self.setWidget(content_widget)
+    
+    # ------------------------------------------------------------------------
+    # create a scroll view for the output tab on left side of application ...
+    # ------------------------------------------------------------------------
+    class customScrollView_3(QScrollArea):
+        def __init__(self, name):
+            super().__init__()
+            
+            self.name = name
+            self.init_ui()
+        
+        def init_ui(self):
+            content_widget = QWidget(self)
+            layout = QVBoxLayout(content_widget)
+            
+            font = QFont("Arial")
+            font.setPointSize(10)
+            
+            label_1 = QLabel(self.name)
+            layout.addWidget(label_1)
+            
+            self.setWidgetResizable(False)
+            self.setWidget(content_widget)
+    
+    # ------------------------------------------------------------------------
+    # create a scroll view for the diagrams tab on left side of application ...
+    # ------------------------------------------------------------------------
+    class customScrollView_4(QScrollArea):
+        def __init__(self, name):
+            super().__init__()
+            
+            self.name = name
+            self.init_ui()
+        
+        def init_ui(self):
+            content_widget = QWidget(self)
+            layout = QVBoxLayout(content_widget)
+            
+            font = QFont("Arial")
+            font.setPointSize(10)
+            
+            label_1 = QLabel(self.name)
+            layout.addWidget(label_1)
+            
+            self.setWidgetResizable(False)
+            self.setWidget(content_widget)
+    
+    # ------------------------------------------------------------------------
     # after main was process, create the main application gui window ...
     # ------------------------------------------------------------------------
     class mainWindow(QDialog):
         def __init__(self):
             super().__init__()
             
-            self.minimumWidth = 820
+            self.minimumWidth = 880
             self.controlFont = "font-size:10pt;font-weight:bold;border-width:5px;"
             
             self.__error__internal_widget_error_1 = "" \
@@ -829,11 +955,11 @@ try:
             # ----------------------------------------
             # left register card ...
             # ----------------------------------------
-            tab_widget_1 = QTabWidget()
-            tab_widget_1.setFont(widget_font)
-            tab_widget_1.setMinimumHeight(380)
+            self.tab_widget_1 = QTabWidget()
+            self.tab_widget_1.setFont(widget_font)
+            self.tab_widget_1.setMinimumHeight(380)
             
-            tab_widget_1.setStyleSheet("" \
+            self.tab_widget_1.setStyleSheet("" \
             + "QTabWidget::pane    { border-top: 2px solid #C2C7CB;}" \
             + "QTabWidget::tab-bar { left: 5px;  }" \
             + "QTabBar::tab {" \
@@ -863,9 +989,9 @@ try:
             tab_2.setFont(widget_font)
             tab_3.setFont(widget_font)
             
-            tab_widget_1.addTab(tab_1, "Wizard")
-            tab_widget_1.addTab(tab_2, "Expert")
-            tab_widget_1.addTab(tab_3, "Run")
+            self.tab_widget_1.addTab(tab_1, "Wizard")
+            self.tab_widget_1.addTab(tab_2, "Expert")
+            self.tab_widget_1.addTab(tab_3, "Run")
             
             font = QFont("Arial", 10)
             font.setBold(True)
@@ -902,7 +1028,8 @@ try:
             for element in list_widget_1_elements:
                 list_item = customQListWidgetItem(element, list_widget_1)
                 list_item.setFont(widget_font)
-                
+            
+            list_widget_1.setCurrentRow(0)
             list_widget_1.itemClicked.connect(self.handle_item_click)
             list_layout_1.addWidget(list_widget_1)
             #
@@ -915,18 +1042,23 @@ try:
             
             
             
-            sv_1 = customScrollView("view1")
-            sv_2 = customScrollView("view2")
+            self.sv_1 = customScrollView_1("Project")
             
-            list_layout_1.addWidget(sv_1)
-            list_layout_2.addWidget(sv_2)
+            self.sv_2 = customScrollView_2("Mode");     self.sv_2.hide()
+            self.sv_3 = customScrollView_3("Output");   self.sv_3.hide()
+            self.sv_4 = customScrollView_4("Diagrams"); self.sv_4.hide()
+            
+            list_layout_1.addWidget(self.sv_1)
+            list_layout_1.addWidget(self.sv_2)
+            list_layout_1.addWidget(self.sv_3)
+            list_layout_1.addWidget(self.sv_4)
             
             
             
             # ----------------------------------------
             # middle area ...
             # ----------------------------------------
-            container_layout_2.addWidget(tab_widget_1)
+            container_layout_2.addWidget(self.tab_widget_1)
             
             
             # ----------------------------------------
@@ -934,7 +1066,7 @@ try:
             # ----------------------------------------
             status_bar = QStatusBar()
             status_bar.setStyleSheet("background-color:gray;color:white;font-size:9pt;")
-            status_bar.showMessage("Willkommen")
+            status_bar.showMessage("Welcome")
             
             
             # ----------------------------------------
@@ -947,7 +1079,6 @@ try:
             container.addItem(spacer_1)
             
             container.addWidget(container_widget_2)
-            
             container.addWidget(status_bar)
             
             
@@ -988,6 +1119,32 @@ try:
                 else:
                     print(self.__error__internal_widget_error_2)
                     sys.exit(EXIT_FAILURE)
+            
+            if item.data(0) == "Project":
+                tab_index = self.tab_widget_1.currentIndex
+                if tab_index == 0:
+                    self.sv_4.hide()
+                    self.sv_3.hide()
+                    self.sv_2.hide()
+                    self.sv_1.show()
+                elif tab_index == 1:
+                    print("nod")
+            elif item.data(0) == "Mode":
+                self.sv_4.hide()
+                self.sv_3.hide()
+                self.sv_1.hide()
+                self.sv_2.show()
+            elif item.data(0) == "Output":
+                self.sv_1.hide()
+                self.sv_2.hide()
+                self.sv_4.hide()
+                self.sv_3.show()
+            elif item.data(0) == "Diagrams":
+                self.sv_1.hide()
+                self.sv_2.hide()
+                self.sv_3.hide()
+                self.sv_4.show()
+            
             print(item.data(0))
         
         # ------------------------------------------------------------------------
