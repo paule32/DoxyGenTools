@@ -123,6 +123,11 @@ try:
     __app__error_level = "0"
     
     # ------------------------------------------------------------------------
+    # paule developer settings to save time ,,,
+    # ------------------------------------------------------------------------
+    paule32_debug = True
+    
+    # ------------------------------------------------------------------------
     # worker thread for the progress bar ...
     # ------------------------------------------------------------------------
     class WorkerThread(QThread):
@@ -586,12 +591,15 @@ try:
     # ------------------------------------------------------------------------
     # create a scroll view for the mode tab on left side of application ...
     # ------------------------------------------------------------------------
-    class customScrollView_2(QScrollArea):
+    class myCustomScrollArea(QScrollArea):
         def __init__(self, name):
             super().__init__()
             
             self.name = name
             self.init_ui()
+        
+        def setName(self, name):
+            self.name = name
         
         def init_ui(self):
             content_widget = QWidget(self)
@@ -605,430 +613,167 @@ try:
             
             self.setWidgetResizable(False)
             self.setWidget(content_widget)
+    
+    class customScrollView_2(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
     
     # ------------------------------------------------------------------------
     # create a scroll view for the output tab on left side of application ...
     # ------------------------------------------------------------------------
-    class customScrollView_3(QScrollArea):
+    class customScrollView_3(myCustomScrollArea):
         def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
+            super().__init__(name)
             self.init_ui()
-        
         def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
+            i = 1
     
     # ------------------------------------------------------------------------
     # create a scroll view for the diagrams tab on left side of application ...
     # ------------------------------------------------------------------------
-    class customScrollView_4(QScrollArea):
+    class customScrollView_4(myCustomScrollArea):
         def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_5(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_6(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_7(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_8(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_9(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_10(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_11(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_12(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_13(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_14(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_15(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_16(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_17(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_18(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_19(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_20(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_21(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_22(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    
+    class MyCustomClass():
+        def __init__(self, name, number):
             super().__init__()
             
-            self.name = name
-            self.init_ui()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_5(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_6(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_7(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_8(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_9(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_10(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_11(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_12(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_13(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_14(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_15(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_16(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_17(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_18(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_19(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_20(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_21(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
-    class customScrollView_22(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.init_ui()
-            self.hide()
-        
-        def init_ui(self):
-            content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
-            
-            font = QFont("Arial")
-            font.setPointSize(10)
-            
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(content_widget)
-    
+            if number == 1:
+                customScrollView_5()
     
     # ------------------------------------------------------------------------
     # after main was process, create the main application gui window ...
@@ -1382,7 +1127,7 @@ try:
             list_widget_1.setStyleSheet(self.__css__widget_item)
             list_widget_1.setMinimumHeight(300)
             list_widget_1.setMaximumWidth(200)
-            list_widget_1_elements = ["Project", "Mode", "Output", "Diagrams" ]
+            self.list_widget_1_elements = ["Project", "Mode", "Output", "Diagrams" ]
             #
             #
             list_layout_2 = QHBoxLayout(tab_2)
@@ -1393,17 +1138,17 @@ try:
             list_widget_2.setStyleSheet(self.__css__widget_item)
             list_widget_2.setMinimumHeight(300)
             list_widget_2.setMaximumWidth(200)
-            list_widget_2_elements = [                                       \
-                "Project", "Build", "Messages", "Input", "Source Browser",   \
-                "Index", "HTML", "LaTeX", "RTF", "Man", "XML", "DocBook",    \
-                "AutoGen", "SQLite3", "PerlMod", "Preprocessor", "External", \
+            self.list_widget_2_elements = [                                     \
+                "ExpProject", "Build", "Messages", "Input", "Source Browser",   \
+                "Index", "HTML", "LaTeX", "RTF", "Man", "XML", "DocBook",       \
+                "AutoGen", "SQLite3", "PerlMod", "Preprocessor", "External",    \
                 "Dot" ]
             
             self.list_widget_3 = QListWidget(tab_3)
             self.list_widget_3.setMinimumHeight(300)
             self.list_widget_3_elements = []
             
-            for element in list_widget_1_elements:
+            for element in self.list_widget_1_elements:
                 list_item = customQListWidgetItem(element, list_widget_1)
                 list_item.setFont(widget_font)
             
@@ -1411,7 +1156,7 @@ try:
             list_widget_1.itemClicked.connect(self.handle_item_click_1)
             list_layout_1.addWidget(list_widget_1)
             #
-            for element in list_widget_2_elements:
+            for element in self.list_widget_2_elements:
                 list_item = customQListWidgetItem(element, list_widget_2)
                 list_item.setFont(widget_font)
                 
@@ -1426,52 +1171,33 @@ try:
             self.sv_1_4 = customScrollView_4("Diagrams"); self.sv_1_4.hide()
             
             #tab: 1
-            self.sv_2_1  = customScrollView_5 ("ExpertProject")
-            self.sv_2_2  = customScrollView_6 ("Build");           self.sv_2_2.hide()
-            self.sv_2_3  = customScrollView_7 ("Messages");        self.sv_2_3.hide()
-            self.sv_2_4  = customScrollView_8 ("Input");           self.sv_2_4.hide()
-            self.sv_2_5  = customScrollView_9 ("Source Browser");  self.sv_2_5.hide()
-            self.sv_2_6  = customScrollView_10("Index");           self.sv_2_6.hide()
-            self.sv_2_7  = customScrollView_11("HTML");            self.sv_2_7.hide()
-            self.sv_2_8  = customScrollView_12("LaTeX");           self.sv_2_2.hide()
-            self.sv_2_9  = customScrollView_13("RTF");             self.sv_2_2.hide()
-            self.sv_2_10 = customScrollView_14("Man");             self.sv_2_2.hide()
-            self.sv_2_11 = customScrollView_15("XML");             self.sv_2_2.hide()
-            self.sv_2_12 = customScrollView_16("DocBook");         self.sv_2_2.hide()
-            self.sv_2_13 = customScrollView_17("AutiGen");         self.sv_2_2.hide()
-            self.sv_2_14 = customScrollView_18("SQLite3");         self.sv_2_2.hide()
-            self.sv_2_15 = customScrollView_19("PerlMod");         self.sv_2_2.hide()
-            self.sv_2_16 = customScrollView_20("Preoprocessor");   self.sv_2_2.hide()
-            self.sv_2_17 = customScrollView_21("External");        self.sv_2_2.hide()
-            self.sv_2_18 = customScrollView_22("Dot");             self.sv_2_2.hide()
+            tab1_classes = [ \
+                customScrollView_5 , customScrollView_6 , customScrollView_7 , customScrollView_8 , \
+                customScrollView_9 , customScrollView_10, customScrollView_11, customScrollView_12, \
+                customScrollView_13, customScrollView_14, customScrollView_15, customScrollView_16, \
+                customScrollView_17, customScrollView_18, customScrollView_19, customScrollView_20, \
+                customScrollView_21, customScrollView_22  ]
+            
+            tab1_class_objs = [ cls("name") for cls in tab1_classes ]
+            
+            for i in range(1, len(tab1_classes)):
+                s = "sv_2_" + str(i)
+                v1 = tab1_class_objs[i-1]
+                v1.setName(self.list_widget_2_elements[i])
+                setattr(self, s, v1)
+                if i > 1:
+                    v1.hide()
             
             # tab: 0
-            list_layout_1.addWidget(self.sv_1_1)
-            list_layout_1.addWidget(self.sv_1_2)
-            list_layout_1.addWidget(self.sv_1_3)
-            list_layout_1.addWidget(self.sv_1_4)
-            list_layout_1.addWidget(self.sv_1_4)
+            for i in range(1, 5):
+                s = "sv_1_" + str(i)
+                list_layout_1.addWidget(getattr(self, f"{s}"))
             
             # tab: 1
-            list_layout_2.addWidget(self.sv_2_1)
-            list_layout_2.addWidget(self.sv_2_2)
-            list_layout_2.addWidget(self.sv_2_3)
-            list_layout_2.addWidget(self.sv_2_4)
-            list_layout_2.addWidget(self.sv_2_5)
-            list_layout_2.addWidget(self.sv_2_6)
-            list_layout_2.addWidget(self.sv_2_7)
-            list_layout_2.addWidget(self.sv_2_8)
-            list_layout_2.addWidget(self.sv_2_9)
-            list_layout_2.addWidget(self.sv_2_10)
-            list_layout_2.addWidget(self.sv_2_11)
-            list_layout_2.addWidget(self.sv_2_12)
-            list_layout_2.addWidget(self.sv_2_13)
-            list_layout_2.addWidget(self.sv_2_14)
-            list_layout_2.addWidget(self.sv_2_15)
-            list_layout_2.addWidget(self.sv_2_16)
-            list_layout_2.addWidget(self.sv_2_17)
-            list_layout_2.addWidget(self.sv_2_18)
-            
+            for i in range(1, len(self.list_widget_2_elements)):
+                s = "sv_2_" + str(i)
+                list_layout_2.addWidget(getattr(self, f"{s}"))
+                        
             # ----------------------------------------
             # middle area ...
             # ----------------------------------------
@@ -1539,109 +1265,39 @@ try:
             
             tab_index = self.tab_widget_1.currentIndex()
             if tab_index == 0:
-                print("index: 0")
-                if item.data(0) == "Project":
-                    print("pro")
-                    self.sv_1_4.hide()
-                    self.sv_1_3.hide()
-                    self.sv_1_2.hide()
-                    self.sv_1_1.show()
-                elif item.data(0) == "Mode":
-                    self.sv_1_4.hide()
-                    self.sv_1_3.hide()
-                    self.sv_1_1.hide()
-                    self.sv_1_2.show()
-                elif item.data(0) == "Output":
-                    self.sv_1_1.hide()
-                    self.sv_1_2.hide()
-                    self.sv_1_4.hide()
-                    self.sv_1_3.show()
-                elif item.data(0) == "Diagrams":
-                    self.sv_1_1.hide()
-                    self.sv_1_2.hide()
-                    self.sv_1_3.hide()
-                    self.sv_1_4.show()
+                for i in range(1, len(self.list_widget_1_elements)):
+                    if item.data(0) == self.list_widget_1_elements[i-1]:
+                        self.hideTabItems_1()
+                        s = "sv_1_" + str(i)
+                        w = getattr(self, f"{s}")
+                        w.show()
+                        return
         
         def handle_item_click_2(self, item):
             tab_index = self.tab_widget_1.currentIndex()
-            if tab_index == 1:  # expert tab
-                if item.data(0) == "Project":
-                    self.hideTabItems_2()
-                    self.sv_2_1.show()
-                if item.data(0) == "Build":
-                    self.hideTabItems_2()
-                    self.sv_2_2.show()
-                if item.data(0) == "Messages":
-                    self.hideTabItems_2()
-                    self.sv_2_3.show()
-                if item.data(0) == "Input":
-                    self.hideTabItems_2()
-                    self.sv_2_4.show()
-                if item.data(0) == "Source Browser":
-                    self.hideTabItems_2()
-                    self.sv_2_5.show()
-                if item.data(0) == "Index":
-                    self.hideTabItems_2()
-                    self.sv_2_6.show()
-                if item.data(0) == "HTML":
-                    self.hideTabItems_2()
-                    self.sv_2_7.show()
-                if item.data(0) == "LaTeX":
-                    self.hideTabItems_2()
-                    self.sv_2_8.show()
-                if item.data(0) == "RTF":
-                    self.hideTabItems_2()
-                    self.sv_2_9.show()
-                if item.data(0) == "Man":
-                    self.hideTabItems_2()
-                    self.sv_2_10.show()
-                if item.data(0) == "XML":
-                    self.hideTabItems_2()
-                    self.sv_2_11.show()
-                if item.data(0) == "DocBook":
-                    self.hideTabItems_2()
-                    self.sv_2_12.show()
-                if item.data(0) == "AutoGen":
-                    self.hideTabItems_2()
-                    self.sv_2_13.show()
-                if item.data(0) == "SQLite3":
-                    self.hideTabItems_2()
-                    self.sv_2_14.show()
-                if item.data(0) == "PerlMod":
-                    self.hideTabItems_2()
-                    self.sv_2_15.show()
-                if item.data(0) == "Preprocessor":
-                    self.hideTabItems_2()
-                    self.sv_2_16.show()
-                if item.data(0) == "External":
-                    self.hideTabItems_2()
-                    self.sv_2_17.show()
-                if item.data(0) == "Dot":
-                    self.hideTabItems_2()
-                    self.sv_2_18.show()
-            
-            
-            print(item.data(0))
-            
-        def hideTabItems_2(self):
-            self.sv_2_1.hide()
-            self.sv_2_2.hide()
-            self.sv_2_3.hide()
-            self.sv_2_4.hide()
-            self.sv_2_5.hide()
-            self.sv_2_6.hide()
-            self.sv_2_7.hide()
-            self.sv_2_8.hide()
-            self.sv_2_9.hide()
-            self.sv_2_10.hide()
-            self.sv_2_11.hide()
-            self.sv_2_12.hide()
-            self.sv_2_13.hide()
-            self.sv_2_14.hide()
-            self.sv_2_15.hide()
-            self.sv_2_16.hide()
-            self.sv_2_17.hide()
-            self.sv_2_18.hide()
+            if tab_index == 1:
+                for i in range(1, len(self.list_widget_2_elements)):
+                    if item.data(0) == self.list_widget_2_elements[i-1]:
+                        self.hideTabItems_2(i)
+                        s = "sv_2_" + str(i)
+                        w = getattr(self, f"{s}")
+                        w.show()
+                        return
+        
+        def hideTabItems_1(self):
+            for i in range(1, 5):
+                s = "sv_1_" + str(i)
+                w = getattr(self, f"{s}")
+                w.hide()
+        
+        def hideTabItems_2(self, it):
+            for i in range(1, len(self.list_widget_2_elements)):
+                s = "sv_2_" + str(i)
+                w = getattr(self, f"{s}")
+                if i == it:
+                    w.show()
+                    continue
+                w.hide()
             
         # ------------------------------------------------------------------------
         # select the work space directory where the Doxyfile resides, and let the
@@ -1845,9 +1501,12 @@ try:
         # ---------------------------------------------------------
         if not doxy_env in os.environ:
             if isPythonWindows() == False:
-                print(_("error: " + f"{doxy_env}" \
-                + " is not set in your system settings."))
-                sys.exit(EXIT_FAILURE)
+                if paule32_debug == True:
+                    os.environ["DOXYGEN_PATH"] = "E:\\doxygen\\bin"
+                else:
+                    print("error: " + f"{doxy_env}" \
+                    + " is not set in your system settings.")
+                    sys.exit(EXIT_FAILURE)
             else:
                 if not isApplicationInit():
                     app = QApplication(sys.argv)
@@ -1864,11 +1523,16 @@ try:
         # ---------------------------------------------------------
         if not doxy_hhc in os.environ:
             if isPythonWindows() == False:
-                print(""                    \
-                + "error: " + f"{doxy_hhc}" \
-                + " is not set in your system settings.")
-                sys.exit(EXIT_FAILURE)
+                if paule32_debug == True:
+                    os.environ["DOXYHHC_PATH"] = "E:\\doxygen\\hhc"
+                else:
+                    print(""                    \
+                    + "error: " + f"{doxy_hhc}" \
+                    + " is not set in your system settings.")
+                    sys.exit(EXIT_FAILURE)
             else:
+                if paule32_debug == True:
+                    os.environ["DOXYGEN_PATH"] = "E:\\doxygen\\hhc"
                 if not isApplicationInit():
                     app = QApplication(sys.argv)
                 showApplicationError(""     \
