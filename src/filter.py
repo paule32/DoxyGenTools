@@ -48,6 +48,8 @@
 global EXIT_SUCCESS; EXIT_SUCCESS = 0
 global EXIT_FAILURE; EXIT_FAILURE = 1
 
+global paule32_debug
+
 try:
     import os            # operating system stuff
     import sys           # system specifies
@@ -607,20 +609,20 @@ try:
             self.font = QFont("Arial")
             self.font.setPointSize(10)
             
-            content_widget = QWidget(self)
-            content_widget.setMinimumHeight(self.height()-150)
-            content_widget.setMinimumWidth (self.width()-50)
-            content_widget.setFont(self.font)
+            self.content_widget = QWidget(self)
+            self.content_widget.setMinimumHeight(self.height()-150)
+            self.content_widget.setMinimumWidth (self.width()-50)
+            self.content_widget.setFont(self.font)
             
-            self.layout = QVBoxLayout(content_widget)
+            self.layout = QVBoxLayout(self.content_widget)
             self.layout.setAlignment(Qt.AlignTop)
             self.label_1 = QLabel(self.name)
             
             self.layout.addWidget(self.label_1)
-            content_widget.setLayout(self.layout)
+            self.content_widget.setLayout(self.layout)
             
             self.setWidgetResizable(False)
-            self.setWidget(content_widget)
+            self.setWidget(self.content_widget)
         
         def setName(self, name):
             self.name = name
@@ -772,14 +774,125 @@ try:
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            
+            label_1 = QLabel("Diagrams to generate:")
+            self.font.setBold(True);   label_1.setFont(self.font)
+            self.font.setBold(False)
+            
+            radio_button_1 = QRadioButton("No diagrams")
+            radio_button_1.setFont(self.font)
+            radio_button_2 = QRadioButton("Text only")
+            radio_button_2.setFont(self.font)
+            radio_button_3 = QRadioButton("Use built-in diagram generator")
+            radio_button_3.setFont(self.font)
+            radio_button_4 = QRadioButton("Use Dot-Tool from the GrappVz package")
+            radio_button_4.setFont(self.font)
+            
+            frame_1 = QFrame()
+            frame_1.setFrameShape (QFrame.HLine)
+            frame_1.setFrameShadow(QFrame.Sunken)
+            
+            self.layout.addWidget(label_1)
+            self.layout.addWidget(radio_button_1)
+            self.layout.addWidget(radio_button_2)
+            self.layout.addWidget(radio_button_3)
+            self.layout.addWidget(radio_button_4)
+            self.layout.addWidget(frame_1)
+            
+            label_2 = QLabel("Dot graphs to gnerate:")
+            self.font.setBold(True);   label_2.setFont(self.font)
+            self.font.setBold(False)
+            
+            check_box_10_1 = QCheckBox("Class graph")
+            check_box_10_1.setFont(self.font)
+            check_box_10_2 = QCheckBox("Colaboration diagram")
+            check_box_10_2.setFont(self.font)
+            check_box_10_3 = QCheckBox("Overall Class hiearchy")
+            check_box_10_3.setFont(self.font)
+            check_box_10_4 = QCheckBox("Include dependcy graphs")
+            check_box_10_4.setFont(self.font)
+            check_box_10_5 = QCheckBox("Included by dependcy graphs")
+            check_box_10_5.setFont(self.font)
+            check_box_10_6 = QCheckBox("Call graphs")
+            check_box_10_6.setFont(self.font)
+            check_box_10_7 = QCheckBox("Called-by graphs")
+            check_box_10_7.setFont(self.font)
+            
+            self.layout.addWidget(label_2)
+            self.layout.addWidget(check_box_10_1)
+            self.layout.addWidget(check_box_10_2)
+            self.layout.addWidget(check_box_10_3)
+            self.layout.addWidget(check_box_10_4)
+            self.layout.addWidget(check_box_10_5)
+            self.layout.addWidget(check_box_10_6)
+            self.layout.addWidget(check_box_10_7)
     
     class customScrollView_5(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1000)
+            
+            font_primary   = "Consolas"
+            font_secondary = "Courier New"
+            
+            self.font_a = QFont("Consolas"); self.font_a.setPointSize(10)
+            self.font_b = QFont("Arial");    self.font_a.setPointSize(10)
+            
+            self.font_a.setFamily(font_primary)
+            font_id = QFontDatabase.addApplicationFont(self.font_a.family())
+            if font_id != -1:
+                self.font_a.setFamily(font_primary)
+                self.font_a.setPointSize(10)
+            else:
+                self.font_a.setFamily(font_secondary)
+                self.font_a.setPointSize(10)
+            
+            label_1_elements = [
+                "DOXYFILE_ENCODING","PROJECT_NAME","PROJECT_NUMBER","PROJECT_BRUEF","PROJECT_LOGO",
+                "OUTPUT_DIRECTORY","CREATE_SUBDIRS","CREATE_SUBDIRS_LEVEL","ALLOW_UNICODE_NAMES","OUTPUT_LANGUAGE",
+                "BRIEF_MEMBER_DESC","REPEAT_BRIEF","ABBREVIATE_BRIEF","ALWAYS_DETAILED_SEC","INLINE_INHERITED_MEMB","FULL_PATH_NAMES",
+                "STRIP_FROM_PATH","STRIP_FROM_INC_PATH","SORT_NAMES","JAVADOC_AUTOBRIEF","JAVADOC_BANNER",
+                "QT_AUTOBRIEF","MULTILINE_CPP_IS_BRIEF","PYTHON_DOCSTRING","INHERITED_DOCS","SEPERATE_MEMBER_PAGES","TAG_SIZE","ALIASES",
+                "OPTIMIZE_OUTPUT_FOR_C","OPTIMIZE_OUTPUT_JAVA","OPTIMIZE_FOR_FORTRAN","OPTIMIZE_OUTPUT_VHCL","OPTIMIZE_OUTPUT_SLICE",
+                "EXTERNAL_MAPPING","MARKDOWN_SUPPORT","MARKDOWN_ID_STYLE","TOC_INCLUDE_HEADINGS","AUTOLINK_SUPPORT","BUILTIN_STL_SUPPORT",
+                "CPP_CLI_SUPPORT","SIP_SUPPORT","IDL_PROPERTY_SUPPORT","DESTRIBUTE_GROUP_DOC","GROUP_NESTED_COMPOUNDS","SUBGROUPING",
+                "INLINE_GROUPED_CLASSES","INLINE_SIMPLE_STRUCTS","TYPEDEF_HIDES_STRUCT","LOOKUP_CACHE_SIZE","NUM_PROC_THREADS","TIMESTAMP"
+            ]
+            
+            for i in range(0, len(label_1_elements)):
+                s1 = "label_1_" + str(i+1)
+                s2 = "editfield_1_" + str(i+1)
+                
+                lh_0 = QHBoxLayout()
+                vw_0 = QWidget()
+                vw_1 = QLabel(label_1_elements[i])
+                vw_1.setMinimumHeight(32)
+                vw_1.setFont(self.font_a)
+                vw_1.setMinimumWidth(200)
+                setattr(self, s1, vw_1)
+                
+                vw_2 = QLineEdit()
+                vw_2.setFont(self.font_b)
+                vw_2.font().setPointSize(10)
+                vw_2.setMinimumWidth(120)
+                vw_2.setMinimumHeight(21)
+                setattr(self, s2, vw_2)
+                
+                sp_1 = QFrame()
+                sp_1.setFrameShape(QFrame.HLine)
+                
+                lh_0.addWidget(vw_1)
+                lh_0.addWidget(vw_2)
+                lh_0.addWidget(sp_1)
+                
+                self.layout.addLayout(lh_0)
+            
+            # change font, because we use consolas earlier
+            #self.font.setFamily("Arial")
     
     class customScrollView_6(myCustomScrollArea):
         def __init__(self, name):
@@ -1285,7 +1398,7 @@ try:
             list_widget_2.setMinimumHeight(300)
             list_widget_2.setMaximumWidth(200)
             self.list_widget_2_elements = [                                     \
-                "ExpProject", "Build", "Messages", "Input", "Source Browser",   \
+                "Project", "Build", "Messages", "Input", "Source Browser",      \
                 "Index", "HTML", "LaTeX", "RTF", "Man", "XML", "DocBook",       \
                 "AutoGen", "SQLite3", "PerlMod", "Preprocessor", "External",    \
                 "Dot" ]
@@ -1643,12 +1756,15 @@ try:
                     + " is not set in your system settings.")
                     sys.exit(EXIT_FAILURE)
             else:
-                if not isApplicationInit():
-                    app = QApplication(sys.argv)
-                showApplicationError(_(""   \
-                + "error: " + f"{doxy_env}" \
-                + " is not set in your system settings."))
-                sys.exit(EXIT_FAILURE)
+                if paule32_debug == True:
+                    os.environ["DOXYGEN_PATH"] = "E:\\doxygen\\bin"
+                else:
+                    if not isApplicationInit():
+                        app = QApplication(sys.argv)
+                    showApplicationError(""     \
+                    + "error: " + f"{doxy_env}" \
+                    + " is not set in your system settings.")
+                    sys.exit(EXIT_FAILURE)
         else:
             doxy_path = os.environ[doxy_env]
         
@@ -1668,12 +1784,13 @@ try:
             else:
                 if paule32_debug == True:
                     os.environ["DOXYGEN_PATH"] = "E:\\doxygen\\hhc"
-                if not isApplicationInit():
-                    app = QApplication(sys.argv)
-                showApplicationError(""     \
-                + "error: " + f"{doxy_hhc}" \
-                + " is not set in your system settings.")
-                sys.exit(EXIT_FAILURE)
+                else:
+                    if not isApplicationInit():
+                        app = QApplication(sys.argv)
+                    showApplicationError(""     \
+                    + "error: " + f"{doxy_hhc}" \
+                    + " is not set in your system settings.")
+                    sys.exit(EXIT_FAILURE)
         else:
             hhc__path = os.environ[doxy_hhc]
         
@@ -1770,7 +1887,7 @@ try:
             + f"{doxyfile}" + "' does not exists. I will fix this by create a default file.")
             
             # !! TODO !!
-            sys.exit(EXIT_FAILURE)
+            #sys.exit(EXIT_FAILURE)
         
         # ---------------------------------------------------------
         # - open config file
