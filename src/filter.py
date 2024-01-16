@@ -475,6 +475,14 @@ try:
             layout_8.addWidget(widget_8_frame_1)
             layout.addLayout(layout_8)
             
+            layout_9 = QHBoxLayout()
+            widget_9_checkbutton_1 = QCheckBox("Scan recursive")
+            widget_9_checkbutton_1.setFont(font)
+            layout_9.addWidget(widget_9_checkbutton_1)
+            layout.addLayout(layout_9)
+            
+            
+            
             btn_1 = QPushButton("Convert")
             btn_1.setStyleSheet(self.__button_style_css)
             
@@ -596,30 +604,86 @@ try:
             super().__init__()
             
             self.name = name
-            self.init_ui()
-        
-        def setName(self, name):
-            self.name = name
-        
-        def init_ui(self):
+            self.font = QFont("Arial")
+            self.font.setPointSize(10)
+            
             content_widget = QWidget(self)
-            layout = QVBoxLayout(content_widget)
+            content_widget.setMinimumHeight(self.height()-150)
+            content_widget.setMinimumWidth (self.width()-50)
+            content_widget.setFont(self.font)
             
-            font = QFont("Arial")
-            font.setPointSize(10)
+            self.layout = QVBoxLayout(content_widget)
+            self.layout.setAlignment(Qt.AlignTop)
+            self.label_1 = QLabel(self.name)
             
-            label_1 = QLabel(self.name)
-            layout.addWidget(label_1)
+            self.layout.addWidget(self.label_1)
+            content_widget.setLayout(self.layout)
             
             self.setWidgetResizable(False)
             self.setWidget(content_widget)
+        
+        def setName(self, name):
+            self.name = name
+            self.label_1.setText(self.name)
     
     class customScrollView_2(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            
+            label_2 = QLabel("Select a desired extraction mode:")
+            self.font.setBold(True);   label_2.setFont(self.font)
+            self.font.setBold(False)
+            label_2.setMinimumHeight(30)
+            label_2.setMinimumWidth(200)
+            
+            radio_button_1 = QRadioButton("Documentet entries only")
+            radio_button_2 = QRadioButton("All entries")
+            check_box      = QCheckBox("Include cross referenced source code in the output:")
+            
+            radio_button_1.setFont(self.font)
+            radio_button_2.setFont(self.font)
+            check_box     .setFont(self.font)
+            
+            frame_1 = QFrame()
+            frame_1.setFrameShape (QFrame.HLine)
+            frame_1.setFrameShadow(QFrame.Sunken)
+            
+            self.layout.addWidget(label_2)
+            self.layout.addWidget(radio_button_1)
+            self.layout.addWidget(radio_button_2)
+            self.layout.addWidget(check_box)
+            self.layout.addWidget(frame_1)
+            
+            label_3 = QLabel("Select programming language to optimize the results for:")
+            self.font.setBold(True); label_3.setFont(self.font)
+            self.font.setBold(False)
+            
+            radio_button_3_1 = QRadioButton("Optimize for C++ output")
+            radio_button_3_1.setFont(self.font)
+            radio_button_3_2 = QRadioButton("Optimize for C++ / CLI output")
+            radio_button_3_2.setFont(self.font)
+            radio_button_3_3 = QRadioButton("Optimize for Java or C-Sharp / C# output")
+            radio_button_3_3.setFont(self.font)
+            radio_button_3_4 = QRadioButton("Optimize for C or PHP output")
+            radio_button_3_4.setFont(self.font)
+            radio_button_3_5 = QRadioButton("Optimize for Fortran output")
+            radio_button_3_5.setFont(self.font)
+            radio_button_3_6 = QRadioButton("Optimize for VHCL output")
+            radio_button_3_6.setFont(self.font)
+            radio_button_3_7 = QRadioButton("Optimize for SLICE output")
+            radio_button_3_7.setFont(self.font)
+            
+            self.layout.addWidget(label_3)
+            self.layout.addWidget(radio_button_3_1)
+            self.layout.addWidget(radio_button_3_2)
+            self.layout.addWidget(radio_button_3_3)
+            self.layout.addWidget(radio_button_3_4)
+            self.layout.addWidget(radio_button_3_5)
+            self.layout.addWidget(radio_button_3_6)
+            self.layout.addWidget(radio_button_3_7)
     
     # ------------------------------------------------------------------------
     # create a scroll view for the output tab on left side of application ...
@@ -629,7 +693,76 @@ try:
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            
+            label_1 = QLabel("Select the output format(s) to generate:")
+            self.font.setBold(True);   label_1.setFont(self.font)
+            self.font.setBold(False)
+            
+            # HTML
+            check_box_1 = QCheckBox("HTML")
+            self.font.setBold(True); check_box_1.setFont(self.font)
+            self.font.setBold(False)
+            #
+            radio_button_1 = QRadioButton("plain HTML")
+            radio_button_1.setFont(self.font)
+            radio_button_2 = QRadioButton("with navigation Panel")
+            radio_button_2.setFont(self.font)
+            radio_button_3 = QRadioButton("prepare for compressed HTML .chm")
+            radio_button_3.setFont(self.font)
+            check_box_2    = QCheckBox("with search function")
+            check_box_2.setFont(self.font)
+            
+            frame_1 = QFrame()
+            frame_1.setFrameShape (QFrame.HLine)
+            frame_1.setFrameShadow(QFrame.Sunken)
+            
+            self.layout.addWidget(label_1)
+            self.layout.addWidget(check_box_1)
+            self.layout.addWidget(radio_button_1)
+            self.layout.addWidget(radio_button_2)
+            self.layout.addWidget(radio_button_3)
+            self.layout.addWidget(check_box_2)
+            self.layout.addWidget(frame_1)
+            
+            
+            # LaTeX
+            check_box_2 = QCheckBox("LaTeX")
+            self.font.setBold(True); check_box_2.setFont(self.font)
+            self.font.setBold(False)
+            #
+            radio_button_4 = QRadioButton("an intermediate format for hypter-linked PDF")
+            radio_button_4.setFont(self.font)
+            radio_button_5 = QRadioButton("an intermediate format for PDF")
+            radio_button_5.setFont(self.font)
+            radio_button_6 = QRadioButton("an intermediate format for PostScript")
+            radio_button_6.setFont(self.font)
+            
+            frame_2 = QFrame()
+            frame_2.setFrameShape (QFrame.HLine)
+            frame_2.setFrameShadow(QFrame.Sunken)
+            
+            self.layout.addWidget(check_box_2)
+            self.layout.addWidget(radio_button_4)
+            self.layout.addWidget(radio_button_5)
+            self.layout.addWidget(radio_button_6)
+            self.layout.addWidget(frame_2)
+            
+            
+            # misc
+            check_box_3 = QCheckBox("Man pages")
+            check_box_3.setFont(self.font)
+            check_box_4 = QCheckBox("Rich Text Format - RTF")
+            check_box_4.setFont(self.font)
+            check_box_5 = QCheckBox("XML")
+            check_box_5.setFont(self.font)
+            check_box_6 = QCheckBox("DocBook")
+            check_box_6.setFont(self.font)
+            
+            self.layout.addWidget(check_box_3)
+            self.layout.addWidget(check_box_4)
+            self.layout.addWidget(check_box_5)
+            self.layout.addWidget(check_box_6)
     
     # ------------------------------------------------------------------------
     # create a scroll view for the diagrams tab on left side of application ...
@@ -767,6 +900,19 @@ try:
         def init_ui(self):
             i = 1
     
+    class customScrollView_23(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
+    
+    class customScrollView_24(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        def init_ui(self):
+            i = 1
     
     class MyCustomClass():
         def __init__(self, name, number):
@@ -1151,16 +1297,17 @@ try:
             for element in self.list_widget_1_elements:
                 list_item = customQListWidgetItem(element, list_widget_1)
                 list_item.setFont(widget_font)
-            
-            list_widget_1.setCurrentRow(0)
-            list_widget_1.itemClicked.connect(self.handle_item_click_1)
-            list_layout_1.addWidget(list_widget_1)
             #
             for element in self.list_widget_2_elements:
                 list_item = customQListWidgetItem(element, list_widget_2)
                 list_item.setFont(widget_font)
-                
-            list_widget_2.itemClicked.connect(self.handle_item_click_2)
+            
+            list_widget_1.setCurrentRow(0)
+            list_widget_1.itemClicked.connect(self.handle_item_click)
+            list_layout_1.addWidget(list_widget_1)
+            
+            list_widget_2.setCurrentRow(0)
+            list_widget_2.itemClicked.connect(self.handle_item_click)
             list_layout_2.addWidget(list_widget_2)
             
             
@@ -1180,24 +1327,21 @@ try:
             
             tab1_class_objs = [ cls("name") for cls in tab1_classes ]
             
-            for i in range(1, len(tab1_classes)):
-                s = "sv_2_" + str(i)
-                v1 = tab1_class_objs[i-1]
+            for i in range(0, len(tab1_classes)):
+                s = "sv_2_" + str(i+1)
+                v1 = tab1_class_objs[i]
                 v1.setName(self.list_widget_2_elements[i])
                 setattr(self, s, v1)
-                if i > 1:
-                    v1.hide()
+                list_layout_2.addWidget(getattr(self, f"{s}"))
+                v1.hide()
+            
+            self.sv_2_1.show()
             
             # tab: 0
             for i in range(1, 5):
                 s = "sv_1_" + str(i)
                 list_layout_1.addWidget(getattr(self, f"{s}"))
             
-            # tab: 1
-            for i in range(1, len(self.list_widget_2_elements)):
-                s = "sv_2_" + str(i)
-                list_layout_2.addWidget(getattr(self, f"{s}"))
-                        
             # ----------------------------------------
             # middle area ...
             # ----------------------------------------
@@ -1254,51 +1398,42 @@ try:
         # class member to get the widget item from list_widget_1 or list_widget_2.
         # The application script will stop, if an internal error occur ...
         # ------------------------------------------------------------------------
-        def handle_item_click_1(self, item):
-            if not item:
-                if isPythonWindows() == True:
-                    showApplicationError(self.__error__internal_widget_error_2)
-                    sys.exit(EXIT_FAILURE)
-                else:
-                    print(self.__error__internal_widget_error_2)
-                    sys.exit(EXIT_FAILURE)
-            
-            tab_index = self.tab_widget_1.currentIndex()
-            if tab_index == 0:
-                for i in range(1, len(self.list_widget_1_elements)):
-                    if item.data(0) == self.list_widget_1_elements[i-1]:
-                        self.hideTabItems_1()
-                        s = "sv_1_" + str(i)
-                        w = getattr(self, f"{s}")
-                        w.show()
-                        return
-        
-        def handle_item_click_2(self, item):
+        def handle_item_click(self, item):
             tab_index = self.tab_widget_1.currentIndex()
             if tab_index == 1:
-                for i in range(1, len(self.list_widget_2_elements)):
-                    if item.data(0) == self.list_widget_2_elements[i-1]:
+                for i in range(0, len(self.list_widget_2_elements)):
+                    if item.data(0) == self.list_widget_2_elements[i]:
+                        print("t: " + str(i) + ": " + self.list_widget_2_elements[i])
                         self.hideTabItems_2(i)
-                        s = "sv_2_" + str(i)
+                        s = "sv_2_" + str(i+1)
+                        w = getattr(self, f"{s}")
+                        w.show()
+                        break
+            elif tab_index == 0:
+                for i in range(0, len(self.list_widget_1_elements)):
+                    if item.data(0) == self.list_widget_1_elements[i]:
+                        self.hideTabItems_1(i)
+                        s = "sv_1_" + str(i+1)
                         w = getattr(self, f"{s}")
                         w.show()
                         return
         
-        def hideTabItems_1(self):
-            for i in range(1, 5):
-                s = "sv_1_" + str(i)
+        def hideTabItems_1(self, it):
+            for i in range(0, len(self.list_widget_1_elements)):
+                s = "sv_1_" + str(i+1)
                 w = getattr(self, f"{s}")
                 w.hide()
-        
-        def hideTabItems_2(self, it):
-            for i in range(1, len(self.list_widget_2_elements)):
-                s = "sv_2_" + str(i)
-                w = getattr(self, f"{s}")
                 if i == it:
                     w.show()
-                    continue
+        
+        def hideTabItems_2(self, it):
+            for i in range(0, len(self.list_widget_2_elements)):
+                s = "sv_2_" + str(i+1)
+                w = getattr(self, f"{s}")
                 w.hide()
-            
+                if i == it:
+                    w.show()
+        
         # ------------------------------------------------------------------------
         # select the work space directory where the Doxyfile resides, and let the
         # directory to be the root directory, if it not overwrite by config.ini
