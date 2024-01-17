@@ -609,6 +609,30 @@ try:
             self.font = QFont("Arial")
             self.font.setPointSize(10)
             
+            self.type_label        = 1
+            self.type_edit         = 2
+            self.type_spin         = 3
+            self.type_combo_box    = 4
+            self.type_check_box    = 5
+            self.type_push_button  = 6
+            self.type_radio_button = 7
+            
+            font_primary   = "Consolas"
+            font_secondary = "Courier New"
+            
+            self.font_a = QFont("Consolas"); self.font_a.setPointSize(11)
+            self.font_b = QFont("Arial");    self.font_a.setPointSize(10)
+            
+            self.font_a.setFamily(font_primary)
+            font_id = QFontDatabase.addApplicationFont(self.font_a.family())
+            if font_id != -1:
+                self.font_a.setFamily(font_primary)
+                self.font_a.setPointSize(11)
+            else:
+                self.font_a.setFamily(font_secondary)
+                self.font_a.setPointSize(11)
+            
+            
             self.content_widget = QWidget(self)
             self.content_widget.setMinimumHeight(self.height()-150)
             self.content_widget.setMinimumWidth (self.width()-50)
@@ -834,62 +858,108 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1000)
-            
-            font_primary   = "Consolas"
-            font_secondary = "Courier New"
-            
-            self.font_a = QFont("Consolas"); self.font_a.setPointSize(10)
-            self.font_b = QFont("Arial");    self.font_a.setPointSize(10)
-            
-            self.font_a.setFamily(font_primary)
-            font_id = QFontDatabase.addApplicationFont(self.font_a.family())
-            if font_id != -1:
-                self.font_a.setFamily(font_primary)
-                self.font_a.setPointSize(10)
-            else:
-                self.font_a.setFamily(font_secondary)
-                self.font_a.setPointSize(10)
+            self.content_widget.setMinimumHeight(2000)
             
             label_1_elements = [
-                "DOXYFILE_ENCODING","PROJECT_NAME","PROJECT_NUMBER","PROJECT_BRUEF","PROJECT_LOGO",
-                "OUTPUT_DIRECTORY","CREATE_SUBDIRS","CREATE_SUBDIRS_LEVEL","ALLOW_UNICODE_NAMES","OUTPUT_LANGUAGE",
-                "BRIEF_MEMBER_DESC","REPEAT_BRIEF","ABBREVIATE_BRIEF","ALWAYS_DETAILED_SEC","INLINE_INHERITED_MEMB","FULL_PATH_NAMES",
-                "STRIP_FROM_PATH","STRIP_FROM_INC_PATH","SORT_NAMES","JAVADOC_AUTOBRIEF","JAVADOC_BANNER",
-                "QT_AUTOBRIEF","MULTILINE_CPP_IS_BRIEF","PYTHON_DOCSTRING","INHERITED_DOCS","SEPERATE_MEMBER_PAGES","TAB_SIZE","ALIASES",
-                "OPTIMIZE_OUTPUT_FOR_C","OPTIMIZE_OUTPUT_JAVA","OPTIMIZE_FOR_FORTRAN","OPTIMIZE_OUTPUT_VHCL","OPTIMIZE_OUTPUT_SLICE",
-                "EXTERNAL_MAPPING","MARKDOWN_SUPPORT","MARKDOWN_ID_STYLE","TOC_INCLUDE_HEADINGS","AUTOLINK_SUPPORT","BUILTIN_STL_SUPPORT",
-                "CPP_CLI_SUPPORT","SIP_SUPPORT","IDL_PROPERTY_SUPPORT","DESTRIBUTE_GROUP_DOC","GROUP_NESTED_COMPOUNDS","SUBGROUPING",
-                "INLINE_GROUPED_CLASSES","INLINE_SIMPLE_STRUCTS","TYPEDEF_HIDES_STRUCT","LOOKUP_CACHE_SIZE","NUM_PROC_THREADS","TIMESTAMP"
+                ["DOXYFILE_ENCODING",      self.type_edit,       0],
+                ["PROJECT_NAME",           self.type_edit,       0],
+                ["PROJECT_NUMBER",         self.type_edit,       0],
+                ["PROJECT_BRUEF",          self.type_edit,       0],
+                ["PROJECT_LOGO",           self.type_edit,       1],
+                ["PROJECT_ICON",           self.type_edit,       1],
+                ["OUTPUT_DIRECTORY",       self.type_edit,       1],
+                ["CREATE_SUBDIRS",         self.type_check_box,  0],
+                ["CREATE_SUBDIRS_LEVEL",   self.type_spin,       0],
+                ["ALLOW_UNICODE_NAMES",    self.type_check_box,  0],
+                ["OUTPUT_LANGUAGE",        self.type_combo_box,  2, ["English","German","French","Spanish"]],
+                ["BRIEF_MEMBER_DESC",      self.type_check_box,  0],
+                ["REPEAT_BRIEF",           self.type_check_box,  0],
+                ["ABBREVIATE_BRIEF",       self.type_edit,       3],
+                ["ALWAYS_DETAILED_SEC",    self.type_check_box,  0],
+                ["INLINE_INHERITED_MEMB",  self.type_check_box,  0],
+                ["FULL_PATH_NAMES",        self.type_check_box,  0],
+                ["STRIP_FROM_PATH",        self.type_edit,       3],
+                ["STRIP_FROM_INC_PATH",    self.type_edit,       3],
+                ["SORT_NAMES",             self.type_check_box,  0],
+                ["JAVADOC_AUTOBRIEF",      self.type_check_box,  0],
+                ["JAVADOC_BANNER",         self.type_check_box,  0],
+                ["QT_AUTOBRIEF",           self.type_check_box,  0],
+                ["MULTILINE_CPP_IS_BRIEF", self.type_check_box,  0],
+                ["PYTHON_DOCSTRING",       self.type_check_box,  0],
+                ["INHERITED_DOCS",         self.type_check_box,  0],
+                ["SEPERATE_MEMBER_PAGES",  self.type_check_box,  0],
+                ["TAB_SIZE",               self.type_spin,       0],
+                ["ALIASES",                self.type_edit,       3],
+                ["OPTIMIZE_OUTPUT_FOR_C",  self.type_check_box,  0],
+                ["OPTIMIZE_OUTPUT_JAVA",   self.type_check_box,  0],
+                ["OPTIMIZE_FOR_FORTRAN",   self.type_check_box,  0],
+                ["OPTIMIZE_OUTPUT_VHCL",   self.type_check_box,  0],
+                ["OPTIMIZE_OUTPUT_SLICE",  self.type_check_box,  0],
+                ["EXTERNAL_MAPPING",       self.type_edit,       3],
+                ["MARKDOWN_SUPPORT",       self.type_check_box,  0],
+                ["MARKDOWN_ID_STYLE",      self.type_combo_box,  2, ["DOXYGEN", "CIT"]],
+                ["TOC_INCLUDE_HEADINGS",   self.type_spin,       0],
+                ["AUTOLINK_SUPPORT",       self.type_check_box,  0],
+                ["BUILTIN_STL_SUPPORT",    self.type_check_box,  0],
+                ["CPP_CLI_SUPPORT",        self.type_check_box,  0],
+                ["SIP_SUPPORT",            self.type_check_box,  0],
+                ["IDL_PROPERTY_SUPPORT",   self.type_check_box,  0],
+                ["DESTRIBUTE_GROUP_DOC",   self.type_check_box,  0],
+                ["GROUP_NESTED_COMPOUNDS", self.type_check_box,  0],
+                ["SUBGROUPING",            self.type_check_box,  0],
+                ["INLINE_GROUPED_CLASSES", self.type_check_box,  0],
+                ["INLINE_SIMPLE_STRUCTS",  self.type_check_box,  0],
+                ["TYPEDEF_HIDES_STRUCT",   self.type_check_box,  0],
+                ["LOOKUP_CACHE_SIZE",      self.type_spin,       0],
+                ["NUM_PROC_THREADS",       self.type_spin,       0],
+                ["TIMESTAMP",              self.type_combo_box,  2, ["NO","YES"]]
             ]
             
+            
+            
             for i in range(0, len(label_1_elements)):
-                s1 = "label_1_" + str(i+1)
-                s2 = "editfield_1_" + str(i+1)
                 
+                lv_0 = QVBoxLayout()
                 lh_0 = QHBoxLayout()
-                vw_0 = QWidget()
-                vw_1 = QLabel(label_1_elements[i])
-                vw_1.setMinimumHeight(32)
+                
+                vw_1 = QLabel(label_1_elements[i][0])
+                vw_1.setMinimumHeight(14)
                 vw_1.setFont(self.font_a)
                 vw_1.setMinimumWidth(200)
-                setattr(self, s1, vw_1)
-                
-                vw_2 = QLineEdit()
-                vw_2.setFont(self.font_b)
-                vw_2.font().setPointSize(10)
-                vw_2.setMinimumWidth(120)
-                vw_2.setMinimumHeight(21)
-                setattr(self, s2, vw_2)
-                
-                sp_1 = QFrame()
-                sp_1.setFrameShape(QFrame.HLine)
-                
                 lh_0.addWidget(vw_1)
-                lh_0.addWidget(vw_2)
-                lh_0.addWidget(sp_1)
                 
-                self.layout.addLayout(lh_0)
+                if label_1_elements[i][1] == self.type_edit:
+                    vw_2 = QLineEdit()
+                    vw_2.setMinimumHeight(21)
+                    vw_2.setFont(self.font_a)
+                    lh_0.addWidget(vw_2)
+                    
+                    if label_1_elements[i][2] == 3:
+                        vw_3 = QTextEdit()
+                        vw_3.setFont(self.font_a)
+                        vw_3.setMinimumHeight(52)
+                        lv_0.addWidget(vw_3)
+                        
+                elif label_1_elements[i][1] == self.type_check_box:
+                    vw_2 = QCheckBox()
+                    vw_2.setMinimumHeight(21)
+                    vw_2.setFont(self.font_a)
+                    lh_0.addWidget(vw_2)
+                    
+                elif label_1_elements[i][1] == self.type_combo_box:
+                    vw_2 = QComboBox()
+                    vw_2.setMinimumHeight(21)
+                    lh_0.addWidget(vw_2)
+                    
+                elif label_1_elements[i][1] == self.type_spin:
+                    vw_2 = QSpinBox()
+                    vw_2.setFont(self.font_a)
+                    vw_2.setMinimumHeight(21)
+                    lh_0.addWidget(vw_2)
+                
+                lv_0.addLayout(lh_0)
+                self.layout.addLayout(lv_0)
+            
             
             # change font, because we use consolas earlier
             #self.font.setFamily("Arial")
@@ -899,7 +969,11 @@ try:
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            
+            label_1_elements = [
+                "EXTRACT_ALL","EXTRACT_PRIVATE","EXTRACT_PRIV_VIRTUAL"
+            ]
     
     class customScrollView_7(myCustomScrollArea):
         def __init__(self, name):
