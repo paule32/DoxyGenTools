@@ -333,11 +333,131 @@ try:
             self.setData(0, self.name)
     
     # ------------------------------------------------------------------------
-    # create a scroll view for the project tab on left side of application ...
+    # create a scroll view for the mode tab on left side of application ...
     # ------------------------------------------------------------------------
-    class customScrollView_1(QScrollArea):
+    class myCustomScrollArea(QScrollArea):
         def __init__(self, name):
             super().__init__()
+            
+            self.name = name
+            self.font = QFont("Arial")
+            self.font.setPointSize(10)
+            
+            self.type_label        = 1
+            self.type_edit         = 2
+            self.type_spin         = 3
+            self.type_combo_box    = 4
+            self.type_check_box    = 5
+            self.type_push_button  = 6
+            self.type_radio_button = 7
+            
+            font_primary   = "Consolas"
+            font_secondary = "Courier New"
+            
+            self.font_a = QFont("Consolas"); self.font_a.setPointSize(11)
+            self.font_b = QFont("Arial");    self.font_a.setPointSize(10)
+            
+            self.font_a.setFamily(font_primary)
+            font_id = QFontDatabase.addApplicationFont(self.font_a.family())
+            if font_id != -1:
+                self.font_a.setFamily(font_primary)
+                self.font_a.setPointSize(11)
+            else:
+                self.font_a.setFamily(font_secondary)
+                self.font_a.setPointSize(11)
+            
+            
+            self.content_widget = QWidget(self)
+            self.content_widget.setMinimumHeight(self.height()-150)
+            self.content_widget.setMinimumWidth (self.width()-50)
+            self.content_widget.setFont(self.font)
+            
+            self.layout = QVBoxLayout(self.content_widget)
+            self.layout.setAlignment(Qt.AlignTop)
+            self.label_1 = QLabel(self.name)
+            
+            self.layout.addWidget(self.label_1)
+            self.content_widget.setLayout(self.layout)
+            
+            self.setWidgetResizable(False)
+            self.setWidget(self.content_widget)
+        
+        def setName(self, name):
+            self.name = name
+            self.label_1.setText(self.name)
+        
+        def setElementBold(self, w):
+            self.font.setBold(True); w.setFont(self.font)
+            self.font.setBold(False)
+            
+        def addPushButton(self, text, l = None):
+            w = QPushButton(text)
+            w.setFont(self.font_a)
+            w.font().setPointSize(14)
+            w.font().setBold(True)
+            w.setMinimumWidth(32)
+            w.setMinimumHeight(32)
+            if not l == None:
+                l.addWidget(w)
+            else:
+                self.layout.addWidget(w)
+            return w
+        
+        def addCheckBox(self, text, bold=False):
+            w = QCheckBox(text)
+            if bold == True:
+                self.setElementBold(w)
+            else:
+                w.setFont(self.font)
+            self.layout.addWidget(w)
+            return w
+        
+        def addRadioButton(self, text):
+            w = QRadioButton(text)
+            w.setFont(self.font)
+            self.layout.addWidget(w)
+            return w
+        
+        def addFrame(self, lh = None):
+            w = QFrame()
+            w.setFrameShape (QFrame.HLine)
+            w.setFrameShadow(QFrame.Sunken)
+            if not lh == None:
+                lh.addWidget(w)
+            else:
+                self.layout.addWidget(w)
+            return w
+        
+        def addLabel(self, text, bold=False, lh=None):
+            w = QLabel(text)
+            if bold == True:
+                self.setElementBold(w)
+            else:
+                w.setFont(self.font)
+            if not lh == None:
+                w.setFont(self.font_a)
+                lh.addWidget(w)
+            else:
+                self.layout.addWidget(w)
+            return w
+        
+        def addLineEdit(self, text = "", lh = None):
+            w = QLineEdit()
+            w.setText(text)
+            w.setMinimumHeight(21)
+            w.setFont(self.font_a)
+            if not lh == None:
+                lh.addWidget(w)
+            else:
+                self.layout.addWidget(w)
+            return w
+    
+    # ------------------------------------------------------------------------
+    # create a scroll view for the project tab on left side of application ...
+    # ------------------------------------------------------------------------
+    class customScrollView_1(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
             
             self.__button_style_css = "" \
             + "QPushButton { border-radius: 3px;" \
@@ -363,162 +483,161 @@ try:
             font = QFont("Arial")
             font.setPointSize(10)
             
-            widget_1_label_1 = QLabel("Provide some informations about the Project you are documenting")
-            widget_1_label_1.setMinimumWidth(600)
-            widget_1_label_1.setFont(font)
+            widget_1_label_1 = self.addLabel("Provide some informations about the Project you are documenting", True)
+            widget_1_label_1.setMinimumWidth(250)
             layout.addWidget(widget_1_label_1)
             
-            layout_2 = QHBoxLayout()
-            widget_2_label_1 = QLabel("Project name:")
-            widget_2_label_1.setMinimumWidth(160)
-            widget_2_label_1.setMaximumWidth(220)
-            widget_2_label_1.setFont(font)
-            widget_2_texte_1 = QLineEdit()
-            widget_2_texte_1.setMinimumWidth(280)
-            widget_2_texte_1.setFont(font)
-            layout_2.addWidget(widget_2_label_1)
-            layout_2.addWidget(widget_2_texte_1)
-            layout.addLayout(layout_2)
+            items = [
+                "Project name:",
+                "Project author:",
+                "Project version or id:"
+            ]
             
-            layout_3 = QHBoxLayout()
-            widget_3_label_1 = QLabel("Project author:")
-            widget_3_label_1.setMinimumWidth(160)
-            widget_3_label_1.setMaximumWidth(220)
-            widget_3_label_1.setFont(font)
-            widget_3_texte_1 = QLineEdit()
-            widget_3_texte_1.setMinimumWidth(280)
-            widget_3_texte_1.setFont(font)
-            layout_3.addWidget(widget_3_label_1)
-            layout_3.addWidget(widget_3_texte_1)
-            layout.addLayout(layout_3)
+            for i in range(0, len(items)):
+                w_layout = QHBoxLayout()
+                #
+                w_label  = self.addLabel(items[i], False, w_layout)
+                w_label.setMinimumWidth(160)
+                w_label.setFont(font)
+                #
+                w_edit = self.addLineEdit("",w_layout)
+                w_edit.setMinimumWidth(380)
+                w_edit.setFont(font)
+                #
+                w_layout.addWidget(w_label)
+                w_layout.addWidget(w_edit)
+                layout.addLayout(w_layout)
             
             layout_4 = QHBoxLayout()
-            widget_4_label_1 = QLabel("Project version or id:")
-            widget_4_label_1.setMinimumWidth(160)
-            widget_4_label_1.setMaximumWidth(220)
+            layout_4.setAlignment(Qt.AlignLeft)
+            widget_4_label_1 = self.addLabel("Project logo:", False, layout_4)
             widget_4_label_1.setFont(font)
-            widget_4_texte_1 = QLineEdit()
-            widget_4_texte_1.setMinimumWidth(280)
-            widget_4_texte_1.setFont(font)
+            widget_4_label_1.setMaximumWidth(160)
             layout_4.addWidget(widget_4_label_1)
-            layout_4.addWidget(widget_4_texte_1)
-            layout.addLayout(layout_4)
-            
-            layout_4 = QHBoxLayout()
-            widget_4_label_1 = QLabel("Project logo:")
-            widget_4_label_1.setAlignment(Qt.AlignLeft)
-            widget_4_label_1.setFont(font)
-            widget_4_pushb_1 = QPushButton("Select")
+            #
+            widget_4_pushb_1 = self.addPushButton("Select", layout_4)
             widget_4_pushb_1.setMinimumHeight(32)
             widget_4_pushb_1.setMinimumWidth(84)
-            widget_4_pushb_1.setMaximumWidth(84)
-            widget_4_pushb_1.setFont(font)
-            widget_4_licon_1 = QLabel(self)
+            widget_4_pushb_1.setMaximumWidth(84)  ; font.setBold(True)
+            widget_4_pushb_1.setFont(font)        ; font.setBold(False)
+            #
+            widget_4_licon_1 = self.addLabel("", False, layout_4)
             widget_4_licon_1.setPixmap(QIcon("img/floppy-disk.png").pixmap(42,42))
-            layout_4.addWidget(widget_4_label_1)
-            layout_4.addWidget(widget_4_pushb_1)
-            layout_4.addWidget(widget_4_licon_1)
+            #
             layout.addLayout(layout_4)
             
             layout_5 = QHBoxLayout()
-            widget_5_frame_1 = QFrame()
-            widget_5_frame_1.setFrameShape(QFrame.HLine)
-            widget_5_frame_1.setFrameShadow(QFrame.Sunken)
-            layout_5.addWidget(widget_5_frame_1)
+            layout_5.setAlignment(Qt.AlignLeft)
+            frame_5 = self.addFrame(layout_5)
+            frame_5.setMinimumWidth(560)
+            frame_5.setMaximumWidth(560)
+            layout_5.addWidget(frame_5)
+            #
             layout.addLayout(layout_5)
             
+            
             layout_6 = QHBoxLayout()
-            widget_6_label_1 = QLabel("Source dir:")
-            widget_6_label_1.setMinimumWidth(120)
-            widget_6_label_1.setMaximumWidth(120)
+            layout_6.setAlignment(Qt.AlignLeft)
+            widget_6_label_1 = self.addLabel("Source dir:", False, layout_6)
+            widget_6_label_1.setMinimumWidth(160)
+            widget_6_label_1.setMaximumWidth(160)
             widget_6_label_1.setFont(font)
-            widget_6_texte_1 = QLineEdit()
-            font.setBold(True)
-            widget_6_texte_1.setMinimumWidth(120)
-            widget_6_texte_1.setFont(font)
-            widget_6_texte_1.setText("E:\\temp\\src")
-            widget_6_pushb_1 = QPushButton("Select")
+            #
+            widget_6_edit_1  = self.addLineEdit("E:\\temp\\src", layout_6)
+            widget_6_edit_1.setMinimumWidth(300)
+            widget_6_edit_1.setMaximumWidth(300)
+            widget_6_edit_1.setFont(font)
+            #
+            widget_6_pushb_1 = self.addPushButton("Select", layout_6)
             widget_6_pushb_1.setMinimumHeight(40)
             widget_6_pushb_1.setMaximumHeight(40)
             widget_6_pushb_1.setMinimumWidth(84)
-            widget_6_pushb_1.setMaximumWidth(84)
-            widget_6_pushb_1.setFont(font)
+            widget_6_pushb_1.setMaximumWidth(84) ; font.setBold(True)
+            widget_6_pushb_1.setFont(font)       ; font.setBold(False)
+            #
             layout_6.addWidget(widget_6_label_1)
-            layout_6.addWidget(widget_6_texte_1)
+            layout_6.addWidget(widget_6_edit_1)
             layout_6.addWidget(widget_6_pushb_1)
+            #
             layout.addLayout(layout_6)
             
+            
             layout_7 = QHBoxLayout()
-            font.setBold(False)
-            widget_7_label_1 = QLabel("Destination dir:")
-            widget_7_label_1.setMinimumWidth(120)
-            widget_7_label_1.setMaximumWidth(120)
+            layout_7.setAlignment(Qt.AlignLeft)
+            widget_7_label_1 = self.addLabel("Destination dir:", False, layout_7)
+            widget_7_label_1.setMinimumWidth(160)
+            widget_7_label_1.setMaximumWidth(160)
             widget_7_label_1.setFont(font)
-            widget_7_texte_1 = QLineEdit()
-            font.setBold(True)
-            widget_7_texte_1.setMinimumWidth(180)
-            widget_7_texte_1.setFont(font)
-            widget_7_texte_1.setText("E:\\temp\\src\\html")
-            widget_7_pushb_1 = QPushButton("Select")
+            #
+            widget_7_edit_1  = self.addLineEdit("E:\\temp\\src\\html", layout_7)
+            widget_7_edit_1.setMinimumWidth(300)
+            widget_7_edit_1.setMaximumWidth(300)
+            widget_7_edit_1.setFont(font)
+            #
+            widget_7_pushb_1 = self.addPushButton("Select", layout_7)
             widget_7_pushb_1.setMinimumHeight(40)
             widget_7_pushb_1.setMaximumHeight(40)
             widget_7_pushb_1.setMinimumWidth(84)
-            widget_7_pushb_1.setMaximumWidth(84)
-            widget_7_pushb_1.setFont(font)
+            widget_7_pushb_1.setMaximumWidth(84) ; font.setBold(True)
+            widget_7_pushb_1.setFont(font)       ; font.setBold(False)
+            #
             layout_7.addWidget(widget_7_label_1)
-            layout_7.addWidget(widget_7_texte_1)
             layout_7.addWidget(widget_7_pushb_1)
+            #
             layout.addLayout(layout_7)
             
-            layout_8 = QHBoxLayout()
-            widget_8_frame_1 = QFrame()
-            widget_8_frame_1.setFrameShape(QFrame.HLine)
-            widget_8_frame_1.setFrameShadow(QFrame.Sunken)
-            layout_8.addWidget(widget_8_frame_1)
-            layout.addLayout(layout_8)
+            
+            layout_61 = QHBoxLayout()
+            layout_61.setAlignment(Qt.AlignLeft)
+            frame_61 = self.addFrame(layout_61)
+            frame_61.setMinimumWidth(560)
+            frame_61.setMaximumWidth(560)
+            layout_61.addWidget(frame_61)
+            #
+            layout.addLayout(layout_61)
+            
             
             layout_9 = QHBoxLayout()
-            widget_9_checkbutton_1 = QCheckBox("Scan recursive")
+            widget_9_checkbutton_1 = self.addCheckBox("Scan recursive")
             widget_9_checkbutton_1.setFont(font)
             layout_9.addWidget(widget_9_checkbutton_1)
             layout.addLayout(layout_9)
             
             
-            
-            btn_1 = QPushButton("Convert")
-            btn_1.setStyleSheet(self.__button_style_css)
-            
-            btn_1.clicked.connect(self.btn_clicked_1)
-            
-            btn_1.setMinimumWidth  = 100
-            btn_1.setMinimumHeight = 26
-            
-            
-            self.progress_bar = QProgressBar()
-            self.progress_bar.setMinimumWidth = 100
-            self.progress_bar.setMinimumHeight = 24
-            
-            btn_2 = QPushButton("Compile")
-            btn_2.setStyleSheet(self.__button_style_css)
-            
-            btn_2.clicked.connect(self.btn_clicked_2)
-            
-            btn_2.setMinimumWidth  = 100
-            btn_2.setMinimumHeight = 26
-            
-            
-            btn_3 = QPushButton("HelpNDoc")
-            btn_3.setStyleSheet(self.__button_style_css)
-            
-            btn_3.clicked.connect(self.btn_clicked_3)
-            
-            btn_3.setMinimumWidth  = 100
-            btn_3.setMinimumHeight = 26
-            
-            layout.addWidget(btn_1)
-            layout.addWidget(btn_2)
-            layout.addWidget(self.progress_bar)
-            layout.addWidget(btn_3)
+            #btn_1 = QPushButton("Convert")
+            #btn_1.setStyleSheet(self.__button_style_css)
+            #
+            #btn_1.clicked.connect(self.btn_clicked_1)
+            #
+            #btn_1.setMinimumWidth  = 100
+            #btn_1.setMinimumHeight = 26
+            #
+            #
+            #self.progress_bar = QProgressBar()
+            #self.progress_bar.setMinimumWidth = 100
+            #self.progress_bar.setMinimumHeight = 24
+            #
+            #btn_2 = QPushButton("Compile")
+            #btn_2.setStyleSheet(self.__button_style_css)
+            #
+            #btn_2.clicked.connect(self.btn_clicked_2)
+            #
+            #btn_2.setMinimumWidth  = 100
+            #btn_2.setMinimumHeight = 26
+            #
+            #
+            #btn_3 = QPushButton("HelpNDoc")
+            #btn_3.setStyleSheet(self.__button_style_css)
+            #
+            #btn_3.clicked.connect(self.btn_clicked_3)
+            #
+            #btn_3.setMinimumWidth  = 100
+            #btn_3.setMinimumHeight = 26
+            #
+            #layout.addWidget(btn_1)
+            #layout.addWidget(btn_2)
+            #layout.addWidget(self.progress_bar)
+            #layout.addWidget(btn_3)
             
             
             
@@ -598,60 +717,6 @@ try:
                 self.progress_bar.setValue(value)
                 convertFiles(file_name)
     
-    # ------------------------------------------------------------------------
-    # create a scroll view for the mode tab on left side of application ...
-    # ------------------------------------------------------------------------
-    class myCustomScrollArea(QScrollArea):
-        def __init__(self, name):
-            super().__init__()
-            
-            self.name = name
-            self.font = QFont("Arial")
-            self.font.setPointSize(10)
-            
-            self.type_label        = 1
-            self.type_edit         = 2
-            self.type_spin         = 3
-            self.type_combo_box    = 4
-            self.type_check_box    = 5
-            self.type_push_button  = 6
-            self.type_radio_button = 7
-            
-            font_primary   = "Consolas"
-            font_secondary = "Courier New"
-            
-            self.font_a = QFont("Consolas"); self.font_a.setPointSize(11)
-            self.font_b = QFont("Arial");    self.font_a.setPointSize(10)
-            
-            self.font_a.setFamily(font_primary)
-            font_id = QFontDatabase.addApplicationFont(self.font_a.family())
-            if font_id != -1:
-                self.font_a.setFamily(font_primary)
-                self.font_a.setPointSize(11)
-            else:
-                self.font_a.setFamily(font_secondary)
-                self.font_a.setPointSize(11)
-            
-            
-            self.content_widget = QWidget(self)
-            self.content_widget.setMinimumHeight(self.height()-150)
-            self.content_widget.setMinimumWidth (self.width()-50)
-            self.content_widget.setFont(self.font)
-            
-            self.layout = QVBoxLayout(self.content_widget)
-            self.layout.setAlignment(Qt.AlignTop)
-            self.label_1 = QLabel(self.name)
-            
-            self.layout.addWidget(self.label_1)
-            self.content_widget.setLayout(self.layout)
-            
-            self.setWidgetResizable(False)
-            self.setWidget(self.content_widget)
-        
-        def setName(self, name):
-            self.name = name
-            self.label_1.setText(self.name)
-    
     class customScrollView_2(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
@@ -659,57 +724,25 @@ try:
         def init_ui(self):
             self.label_1.hide()
             
-            label_2 = QLabel("Select a desired extraction mode:")
-            self.font.setBold(True);   label_2.setFont(self.font)
-            self.font.setBold(False)
+            label_2 = self.addLabel("Select a desired extraction mode:", True)
             label_2.setMinimumHeight(30)
             label_2.setMinimumWidth(200)
             
-            radio_button_1 = QRadioButton("Documentet entries only")
-            radio_button_2 = QRadioButton("All entries")
-            check_box      = QCheckBox("Include cross referenced source code in the output:")
+            self.addRadioButton("Documentet entries only")
+            self.addRadioButton("All entries")
+            self.addCheckBox("Include cross referenced source code in the output:")
             
-            radio_button_1.setFont(self.font)
-            radio_button_2.setFont(self.font)
-            check_box     .setFont(self.font)
+            self.addFrame()
             
-            frame_1 = QFrame()
-            frame_1.setFrameShape (QFrame.HLine)
-            frame_1.setFrameShadow(QFrame.Sunken)
+            self.addLabel("Select programming language to optimize the results for:", True)
             
-            self.layout.addWidget(label_2)
-            self.layout.addWidget(radio_button_1)
-            self.layout.addWidget(radio_button_2)
-            self.layout.addWidget(check_box)
-            self.layout.addWidget(frame_1)
-            
-            label_3 = QLabel("Select programming language to optimize the results for:")
-            self.font.setBold(True); label_3.setFont(self.font)
-            self.font.setBold(False)
-            
-            radio_button_3_1 = QRadioButton("Optimize for C++ output")
-            radio_button_3_1.setFont(self.font)
-            radio_button_3_2 = QRadioButton("Optimize for C++ / CLI output")
-            radio_button_3_2.setFont(self.font)
-            radio_button_3_3 = QRadioButton("Optimize for Java or C-Sharp / C# output")
-            radio_button_3_3.setFont(self.font)
-            radio_button_3_4 = QRadioButton("Optimize for C or PHP output")
-            radio_button_3_4.setFont(self.font)
-            radio_button_3_5 = QRadioButton("Optimize for Fortran output")
-            radio_button_3_5.setFont(self.font)
-            radio_button_3_6 = QRadioButton("Optimize for VHCL output")
-            radio_button_3_6.setFont(self.font)
-            radio_button_3_7 = QRadioButton("Optimize for SLICE output")
-            radio_button_3_7.setFont(self.font)
-            
-            self.layout.addWidget(label_3)
-            self.layout.addWidget(radio_button_3_1)
-            self.layout.addWidget(radio_button_3_2)
-            self.layout.addWidget(radio_button_3_3)
-            self.layout.addWidget(radio_button_3_4)
-            self.layout.addWidget(radio_button_3_5)
-            self.layout.addWidget(radio_button_3_6)
-            self.layout.addWidget(radio_button_3_7)
+            self.addRadioButton("Optimize for C++ output")
+            self.addRadioButton("Optimize for C++ / CLI output")
+            self.addRadioButton("Optimize for Java or C-Sharp / C# output")
+            self.addRadioButton("Optimize for C or PHP output")
+            self.addRadioButton("Optimize for Fortran output")
+            self.addRadioButton("Optimize for VHCL output")
+            self.addRadioButton("Optimize for SLICE output")
     
     # ------------------------------------------------------------------------
     # create a scroll view for the output tab on left side of application ...
@@ -721,74 +754,32 @@ try:
         def init_ui(self):
             self.label_1.hide()
             
-            label_1 = QLabel("Select the output format(s) to generate:")
-            self.font.setBold(True);   label_1.setFont(self.font)
-            self.font.setBold(False)
+            self.addLabel("Select the output format(s) to generate:", True)
             
             # HTML
-            check_box_1 = QCheckBox("HTML")
-            self.font.setBold(True); check_box_1.setFont(self.font)
-            self.font.setBold(False)
+            self.addCheckBox("HTML", True)
             #
-            radio_button_1 = QRadioButton("plain HTML")
-            radio_button_1.setFont(self.font)
-            radio_button_2 = QRadioButton("with navigation Panel")
-            radio_button_2.setFont(self.font)
-            radio_button_3 = QRadioButton("prepare for compressed HTML .chm")
-            radio_button_3.setFont(self.font)
-            check_box_2    = QCheckBox("with search function")
-            check_box_2.setFont(self.font)
+            self.addRadioButton("plain HTML")
+            self.addRadioButton("with navigation Panel")
+            self.addRadioButton("prepare for compressed HTML .chm")
+            self.addCheckBox("with search function")
             
-            frame_1 = QFrame()
-            frame_1.setFrameShape (QFrame.HLine)
-            frame_1.setFrameShadow(QFrame.Sunken)
-            
-            self.layout.addWidget(label_1)
-            self.layout.addWidget(check_box_1)
-            self.layout.addWidget(radio_button_1)
-            self.layout.addWidget(radio_button_2)
-            self.layout.addWidget(radio_button_3)
-            self.layout.addWidget(check_box_2)
-            self.layout.addWidget(frame_1)
-            
+            self.addFrame()
             
             # LaTeX
-            check_box_2 = QCheckBox("LaTeX")
-            self.font.setBold(True); check_box_2.setFont(self.font)
-            self.font.setBold(False)
+            self.addCheckBox("LaTeX", True)
             #
-            radio_button_4 = QRadioButton("an intermediate format for hypter-linked PDF")
-            radio_button_4.setFont(self.font)
-            radio_button_5 = QRadioButton("an intermediate format for PDF")
-            radio_button_5.setFont(self.font)
-            radio_button_6 = QRadioButton("an intermediate format for PostScript")
-            radio_button_6.setFont(self.font)
+            self.addRadioButton("an intermediate format for hypter-linked PDF")
+            self.addRadioButton("an intermediate format for PDF")
+            self.addRadioButton("an intermediate format for PostScript")
             
-            frame_2 = QFrame()
-            frame_2.setFrameShape (QFrame.HLine)
-            frame_2.setFrameShadow(QFrame.Sunken)
-            
-            self.layout.addWidget(check_box_2)
-            self.layout.addWidget(radio_button_4)
-            self.layout.addWidget(radio_button_5)
-            self.layout.addWidget(radio_button_6)
-            self.layout.addWidget(frame_2)
-            
+            self.addFrame()
             
             # misc
-            check_box_3 = QCheckBox("Man pages")
-            check_box_3.setFont(self.font)
-            check_box_4 = QCheckBox("Rich Text Format - RTF")
-            check_box_4.setFont(self.font)
-            check_box_5 = QCheckBox("XML")
-            check_box_5.setFont(self.font)
-            check_box_6 = QCheckBox("DocBook")
-            check_box_6.setFont(self.font)
-            
-            self.layout.addWidget(check_box_3)
-            self.layout.addWidget(check_box_4)
-            self.layout.addWidget(check_box_5)
-            self.layout.addWidget(check_box_6)
+            self.addCheckBox("Man pages")
+            self.addCheckBox("Rich Text Format - RTF")
+            self.addCheckBox("XML")
+            self.addCheckBox("DocBook")
     
     # ------------------------------------------------------------------------
     # create a scroll view for the diagrams tab on left side of application ...
@@ -800,57 +791,25 @@ try:
         def init_ui(self):
             self.label_1.hide()
             
-            label_1 = QLabel("Diagrams to generate:")
-            self.font.setBold(True);   label_1.setFont(self.font)
-            self.font.setBold(False)
+            self.addLabel("Diagrams to generate:", True)
             
-            radio_button_1 = QRadioButton("No diagrams")
-            radio_button_1.setFont(self.font)
-            radio_button_2 = QRadioButton("Text only")
-            radio_button_2.setFont(self.font)
-            radio_button_3 = QRadioButton("Use built-in diagram generator")
-            radio_button_3.setFont(self.font)
-            radio_button_4 = QRadioButton("Use Dot-Tool from the GrappVz package")
-            radio_button_4.setFont(self.font)
+            self.addRadioButton("No diagrams")
+            self.addRadioButton("Text only")
+            self.addRadioButton("Use built-in diagram generator")
+            self.addRadioButton("Use Dot-Tool from the GrappVz package")
             
-            frame_1 = QFrame()
-            frame_1.setFrameShape (QFrame.HLine)
-            frame_1.setFrameShadow(QFrame.Sunken)
+            self.addFrame()
             
-            self.layout.addWidget(label_1)
-            self.layout.addWidget(radio_button_1)
-            self.layout.addWidget(radio_button_2)
-            self.layout.addWidget(radio_button_3)
-            self.layout.addWidget(radio_button_4)
-            self.layout.addWidget(frame_1)
+            self.addLabel("Dot graphs to generate:", True)
             
-            label_2 = QLabel("Dot graphs to gnerate:")
-            self.font.setBold(True);   label_2.setFont(self.font)
-            self.font.setBold(False)
+            self.addCheckBox("Class graph")
+            self.addCheckBox("Colaboration diagram")
+            self.addCheckBox("Overall Class hiearchy")
+            self.addCheckBox("Include dependcy graphs")
+            self.addCheckBox("Included by dependcy graphs")
+            self.addCheckBox("Call graphs")
+            self.addCheckBox("Called-by graphs")
             
-            check_box_10_1 = QCheckBox("Class graph")
-            check_box_10_1.setFont(self.font)
-            check_box_10_2 = QCheckBox("Colaboration diagram")
-            check_box_10_2.setFont(self.font)
-            check_box_10_3 = QCheckBox("Overall Class hiearchy")
-            check_box_10_3.setFont(self.font)
-            check_box_10_4 = QCheckBox("Include dependcy graphs")
-            check_box_10_4.setFont(self.font)
-            check_box_10_5 = QCheckBox("Included by dependcy graphs")
-            check_box_10_5.setFont(self.font)
-            check_box_10_6 = QCheckBox("Call graphs")
-            check_box_10_6.setFont(self.font)
-            check_box_10_7 = QCheckBox("Called-by graphs")
-            check_box_10_7.setFont(self.font)
-            
-            self.layout.addWidget(label_2)
-            self.layout.addWidget(check_box_10_1)
-            self.layout.addWidget(check_box_10_2)
-            self.layout.addWidget(check_box_10_3)
-            self.layout.addWidget(check_box_10_4)
-            self.layout.addWidget(check_box_10_5)
-            self.layout.addWidget(check_box_10_6)
-            self.layout.addWidget(check_box_10_7)
     
     class customScrollView_5(myCustomScrollArea):
         def __init__(self, name):
@@ -922,19 +881,21 @@ try:
                 lv_0 = QVBoxLayout()
                 lh_0 = QHBoxLayout()
                 
-                vw_1 = QLabel(label_1_elements[i][0])
+                vw_1 = self.addLabel(label_1_elements[i][0],False,lh_0)
                 vw_1.setMinimumHeight(14)
-                vw_1.setFont(self.font_a)
                 vw_1.setMinimumWidth(200)
-                lh_0.addWidget(vw_1)
                 
                 if label_1_elements[i][1] == self.type_edit:
-                    vw_2 = QLineEdit()
-                    vw_2.setMinimumHeight(21)
-                    vw_2.setFont(self.font_a)
-                    lh_0.addWidget(vw_2)
-                    
-                    if label_1_elements[i][2] == 3:
+                    self.addLineEdit("")
+                                        
+                    if label_1_elements[i][2] == 1:
+                        self.addPushButton("+",lh_0)
+                        
+                    elif label_1_elements[i][2] == 3:
+                        self.addPushButton("+",lh_0)
+                        self.addPushButton("-",lh_0)
+                        self.addPushButton("R",lh_0)
+                        
                         vw_3 = QTextEdit()
                         vw_3.setFont(self.font_a)
                         vw_3.setMinimumHeight(52)
@@ -950,6 +911,12 @@ try:
                     vw_2 = QComboBox()
                     vw_2.setMinimumHeight(21)
                     lh_0.addWidget(vw_2)
+                    
+                    if label_1_elements[i][2] == 2:
+                        for j in range(0, len(label_1_elements[i][3])):
+                            vw_2.addItem(QIcon(
+                                label_1_elements[i][3][1]),
+                                label_1_elements[i][3][0])
                     
                 elif label_1_elements[i][1] == self.type_spin:
                     vw_2 = QSpinBox()
