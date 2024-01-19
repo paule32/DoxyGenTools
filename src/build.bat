@@ -61,7 +61,7 @@ for %%A in (en, de) do (
 :: ---------------------------------------------------------------------------
 cd %BASEDIR%
 echo|set /p="create Byte-Code...           ["
-python -m compileall filter.py >nul
+python -m compileall %BASEDIR%\filter.py >nul 2>&1
 if errorlevel 1 ( goto error_bytecode )
 echo  ok   ]
 
@@ -70,13 +70,27 @@ echo  ok   ]
 :: after pyinstaller success the executable resides in ./dist folder.
 :: ---------------------------------------------------------------------------
 echo|set /p="create ExEcutable...          ["
-pyinstaller filter.spec >nul 2>&1
+pyinstaller %BASEDIR%\filter.spec >nul 2>&1
 if errorlevel 1 (
     echo  fail ]
     goto error_executable
 )   else (
     echo  ok   ]
+    goto skc
+    echo|set /p="create Certificate...       ["
+    :: -----------------------------------------------------------------------
+    :: finally, try to sign the executable with a certificate, that we will
+    :: create with powershell, and the MS-SDK signtool.
+    :: this reqauire, that you have powershell access on modern Windows.
+    :: -----------------------------------------------------------------------
+    powershell.exe -executionpolicy remotesigned -File %BASEDIR%\gencert.cmd
+    if errorlevel 1 (
+        echo  ok   ]
+    )   else (
+        echo  fail ]
+    )
 )
+:skc
 
 :: ---------------------------------------------------------------------------
 :: no errors was detected - normal exit.

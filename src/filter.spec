@@ -9,18 +9,16 @@
 # commercial use ist not allowed.
 # ---------------------------------------------------------------------------
 
-icon_files = [
-    ( "img/flag_english.png", "flag_english" ),
-    ( "img/flag_german.png",  "flag_german" ),
-    ( "img/flag_french.png",  "flag_french" ),
-    ( "img/flag_spanish.png", "flag_spanish" )
-]
-
 a = Analysis(
     ['filter.py'],
     pathex=[],
-    binaries=icon_files,
-    datas=[],
+    binaries=[],
+    datas = [
+        # -------------------------------------------------------------------
+        # images, icons, etc..  <src, <dst>
+        # -------------------------------------------------------------------
+        ("img", "img")
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -28,25 +26,44 @@ a = Analysis(
     excludes=[],
     noarchive=False,
 )
+
+# ---------------------------------------------------------------------------
+# we love to display a loader splash screen image ...
+# ---------------------------------------------------------------------------
+splash = Splash("img/splash.png",
+    binaries=a.binaries,
+    datas=a.datas,
+    text_pos=(0, 0),
+    text_size=8,
+    text_color='black'
+)
+
 pyz = PYZ(a.pure)
 
 exe = EXE(
+    splash,
+    splash.binaries,
     pyz,
     a.scripts,
     a.binaries,
     a.datas,
     [],
-    name='filter',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    
+    # -----------------------------------------------------------------------
+    # internal version information file for the Windows executable ...
+    # -----------------------------------------------------------------------
+    console = False,
+    name    = "chmfilter",
+    version = "version.info"
 )

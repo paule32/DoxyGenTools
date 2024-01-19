@@ -49,6 +49,7 @@ global EXIT_SUCCESS; EXIT_SUCCESS = 0
 global EXIT_FAILURE; EXIT_FAILURE = 1
 
 global paule32_debug
+global basedir
 global tr
 
 try:
@@ -83,7 +84,12 @@ try:
     from PyQt5.QtCore    import *         # Qt5 core
     
     from functools       import partial   # callback functions
+
+    if getattr(sys, 'frozen', False):
+        import pyi_splash
     
+    basedir = os.path.dirname(__file__)
+
     # ------------------------------------------------------------------------
     # branding water marks ...
     # ------------------------------------------------------------------------
@@ -91,6 +97,16 @@ try:
     __authors__ = "paule32"
 
     __date__    = "2024-01-04"
+    
+    # ------------------------------------------------------------------------
+    # when the user start the application script under Windows 7 and higher:
+    # ------------------------------------------------------------------------
+    try:
+        from ctypes import windll  # Only exists on Windows.
+        myappid = 'kallup-nonprofit.doxygen.chmfilter.1'
+        windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    except ImportError:
+        pass
     
     # ------------------------------------------------------------------------
     # constants, and varibales that are used multiple times ...
@@ -557,7 +573,7 @@ try:
             widget_4_pushb_1.setFont(font)        ; font.setBold(False)
             #
             widget_4_licon_1 = self.addLabel("", False, layout_4)
-            widget_4_licon_1.setPixmap(QIcon("img/floppy-disk.png").pixmap(42,42))
+            widget_4_licon_1.setPixmap(QIcon(os.path.join(basedir,"img","floppy-disk.png")).pixmap(42,42))
             #
             layout.addLayout(layout_4)
             
@@ -912,12 +928,11 @@ try:
                     
                     if label_1_elements[i][2] == 4:
                         for j in range(0, len(label_1_elements[i][3])):
-                            img = ""                    \
-                            + "./img/flag_"             \
+                            img = "flag_"               \
                             + label_1_elements[i][3][j] \
                             + ".png".lower()
                             vw_2.insertItem(0, label_1_elements[i][3][j])
-                            vw_2.setItemIcon(0, QIcon(img))
+                            vw_2.setItemIcon(0, QIcon(os.path.join(basedir,"img",img)))
                     
                     elif label_1_elements[i][2] == 2:
                         for j in range(0, len(label_1_elements[i][3])):
@@ -1290,9 +1305,9 @@ try:
             toolbar.setContentsMargins(0,0,0,0)
             toolbar.setStyleSheet("background-color:gray;font-size:11pt;height:38px;")
             
-            toolbar_action_new  = QAction(QIcon("img/new-document.png"),"New Config.", self)
-            toolbar_action_open = QAction(QIcon("img/open-folder.png") ,"Open existing Config.", self)
-            toolbar_action_save = QAction(QIcon("img/floppy-disk.png") ,"Save current session.", self)
+            toolbar_action_new  = QAction(QIcon(os.path.join(basedir,"img","new-document.png")),"New Config.", self)
+            toolbar_action_open = QAction(QIcon(os.path.join(basedir,"img","open-folder.png")) ,"Open existing Config.", self)
+            toolbar_action_save = QAction(QIcon(os.path.join(basedir,"img","floppy-disk.png")) ,"Save current session.", self)
             
             toolbar_action_new .triggered.connect(self.menu_file_clicked_new)
             toolbar_action_open.triggered.connect(self.menu_file_clicked_open)
@@ -1743,6 +1758,10 @@ try:
             
             license_window = licenseWindow()
             license_window.show()
+            
+            if getattr(sys, 'frozen', False):
+                pyi_splash.close()
+            
             license_window.exec_()
             
             if license_window.returnCode == 1:
@@ -2253,11 +2272,11 @@ try:
         
         appWindow = mainWindow()
         appWindow.show()
-        appWindow.exec_()
+        result = appWindow.exec_()
         
         del appWindow  # free memory
         
-        result = app.exec_()
+        #result = app.exec_()
         sys.exit(result)
         
         # ---------------------------------------------------------
