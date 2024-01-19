@@ -49,6 +49,7 @@ global EXIT_SUCCESS; EXIT_SUCCESS = 0
 global EXIT_FAILURE; EXIT_FAILURE = 1
 
 global paule32_debug
+global tr
 
 try:
     import os            # operating system stuff
@@ -60,6 +61,7 @@ try:
     import platform      # Windows ?
     import keyboard
     import shutil        # shell utils
+    import pkgutil       # attached binary data utils
     
     import gettext       # localization
     import locale        # internal system locale
@@ -147,19 +149,34 @@ try:
             system_lang, _ = locale.getdefaultlocale()
             if   system_lang.lower() == __locale__enu:
                  if lang.lower() == __locale__enu[:2]:
-                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__enu[:2]])  # english
+                    tr = gettext.translation(
+                    __app__name,
+                    localedir=__locale__,
+                    languages=[__locale__enu[:2]])  # english
                  if lang.lower() == __locale__deu[:2]:
-                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__deu[:2]])  # german
+                    tr = gettext.translation(
+                    __app__name,
+                    localedir=__locale__,
+                    languages=[__locale__deu[:2]])  # german
             elif system_lang.lower() == __locale__deu:
                  if lang.lower() == __locale__enu[:2]:
-                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__enu[:2]])  # english
+                    tr = gettext.translation(
+                    __app__name,
+                    localedir=__locale__,
+                    languages=[__locale__enu[:2]])  # english
                  if lang.lower() == __locale__deu[:2]:
-                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__deu[:2]])  # german
+                    tr = gettext.translation(
+                    __app__name,
+                    localedir=__locale__,
+                    languages=[__locale__deu[:2]])  # german
             else:
-                    loca = gettext.translation(__app__name, localedir=__locale__, languages=[__locale__enu[:2]])  # fallback
+                    tr = gettext.translation(
+                    __app__name,
+                    localedir=__locale__,
+                    languages=[__locale__enu[:2]])  # fallback - english
             
-            loca.install()
-            return loca
+            tr.install()
+            return tr
         except Exception as ex:
             return
             
@@ -333,6 +350,31 @@ try:
             self.setData(0, self.name)
     
     # ------------------------------------------------------------------------
+    #
+    # ------------------------------------------------------------------------
+    class myLineEdit(QLineEdit):
+        def __init__(self, name=""):
+            super().__init__()
+            self.name = name
+            self.init_ui()
+        
+        def init_ui(self):
+            self.setText(self.name)
+            self.cssColor = "QLineEdit{background-color:white;}QLineEdit:hover{background-color:yellow;}"
+            self.setStyleSheet(self.cssColor)
+        
+    # ------------------------------------------------------------------------
+    #
+    # ------------------------------------------------------------------------
+    class myTextEdit(QTextEdit):
+        def __init__(self, name=""):
+            super().__init__()
+            self.name = name
+            self.cssColor = "QTextEdit{background-color:#bdbfbf;}QTextEdit:hover{background-color:yellow;}"
+            self.setStyleSheet(self.cssColor)
+            self.setText(self.name)
+    
+    # ------------------------------------------------------------------------
     # create a scroll view for the mode tab on left side of application ...
     # ------------------------------------------------------------------------
     class myCustomScrollArea(QScrollArea):
@@ -442,8 +484,7 @@ try:
             return w
         
         def addLineEdit(self, text = "", lh = None):
-            w = QLineEdit()
-            w.setText(text)
+            w = myLineEdit(text)
             w.setMinimumHeight(21)
             w.setFont(self.font_a)
             if not lh == None:
@@ -459,19 +500,7 @@ try:
         def __init__(self, name):
             super().__init__(name)
             
-            self.__button_style_css = "" \
-            + "QPushButton { border-radius: 3px;" \
-            + "background: #012d8c;" \
-            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
-            + "font-family: Arial;" \
-            + "color: #f7ff03;" \
-            + "font-size: 11pt;" \
-            + "padding: 10px 20px 10px 20px;" \
-            + "text-decoration: none;" \
-            + "}" \
-            + "QPushButton::hover { background: #183b91;" \
-            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
-            + "text-decoration: none;}"
+            self.__button_style_css = tr("__button_style_css")
             self.name = name
             
             self.init_ui()
@@ -479,13 +508,18 @@ try:
         def init_ui(self):
             content_widget = QWidget(self)
             layout = QVBoxLayout(content_widget)
+            layout.setAlignment(Qt.AlignLeft)
             
             font = QFont("Arial")
             font.setPointSize(10)
             
+            w_layout_0 = QHBoxLayout()
+            w_layout_0.setAlignment(Qt.AlignLeft)
             widget_1_label_1 = self.addLabel("Provide some informations about the Project you are documenting", True)
             widget_1_label_1.setMinimumWidth(250)
-            layout.addWidget(widget_1_label_1)
+            widget_1_label_1.setMaximumWidth(500)
+            w_layout_0.addWidget(widget_1_label_1)
+            layout.addLayout(w_layout_0)
             
             items = [
                 "Project name:",
@@ -495,13 +529,14 @@ try:
             
             for i in range(0, len(items)):
                 w_layout = QHBoxLayout()
+                w_layout.setAlignment(Qt.AlignLeft)
                 #
                 w_label  = self.addLabel(items[i], False, w_layout)
                 w_label.setMinimumWidth(160)
                 w_label.setFont(font)
                 #
                 w_edit = self.addLineEdit("",w_layout)
-                w_edit.setMinimumWidth(380)
+                w_edit.setMinimumWidth(300)
                 w_edit.setFont(font)
                 #
                 w_layout.addWidget(w_label)
@@ -598,48 +633,12 @@ try:
             
             
             layout_9 = QHBoxLayout()
+            layout_9.setAlignment(Qt.AlignLeft)
             widget_9_checkbutton_1 = self.addCheckBox("Scan recursive")
+            widget_9_checkbutton_1.setMaximumWidth(300)
             widget_9_checkbutton_1.setFont(font)
             layout_9.addWidget(widget_9_checkbutton_1)
             layout.addLayout(layout_9)
-            
-            
-            #btn_1 = QPushButton("Convert")
-            #btn_1.setStyleSheet(self.__button_style_css)
-            #
-            #btn_1.clicked.connect(self.btn_clicked_1)
-            #
-            #btn_1.setMinimumWidth  = 100
-            #btn_1.setMinimumHeight = 26
-            #
-            #
-            #self.progress_bar = QProgressBar()
-            #self.progress_bar.setMinimumWidth = 100
-            #self.progress_bar.setMinimumHeight = 24
-            #
-            #btn_2 = QPushButton("Compile")
-            #btn_2.setStyleSheet(self.__button_style_css)
-            #
-            #btn_2.clicked.connect(self.btn_clicked_2)
-            #
-            #btn_2.setMinimumWidth  = 100
-            #btn_2.setMinimumHeight = 26
-            #
-            #
-            #btn_3 = QPushButton("HelpNDoc")
-            #btn_3.setStyleSheet(self.__button_style_css)
-            #
-            #btn_3.clicked.connect(self.btn_clicked_3)
-            #
-            #btn_3.setMinimumWidth  = 100
-            #btn_3.setMinimumHeight = 26
-            #
-            #layout.addWidget(btn_1)
-            #layout.addWidget(btn_2)
-            #layout.addWidget(self.progress_bar)
-            #layout.addWidget(btn_3)
-            
-            
             
             self.setWidgetResizable(False)
             self.setWidget(content_widget)
@@ -830,7 +829,7 @@ try:
                 ["CREATE_SUBDIRS",         self.type_check_box,  0],
                 ["CREATE_SUBDIRS_LEVEL",   self.type_spin,       0],
                 ["ALLOW_UNICODE_NAMES",    self.type_check_box,  0],
-                ["OUTPUT_LANGUAGE",        self.type_combo_box,  2, ["English","German","French","Spanish"]],
+                ["OUTPUT_LANGUAGE",        self.type_combo_box,  4, ["English","German","French","Spanish"]],
                 ["BRIEF_MEMBER_DESC",      self.type_check_box,  0],
                 ["REPEAT_BRIEF",           self.type_check_box,  0],
                 ["ABBREVIATE_BRIEF",       self.type_edit,       3],
@@ -874,10 +873,7 @@ try:
                 ["TIMESTAMP",              self.type_combo_box,  2, ["NO","YES"]]
             ]
             
-            
-            
             for i in range(0, len(label_1_elements)):
-                
                 lv_0 = QVBoxLayout()
                 lh_0 = QHBoxLayout()
                 
@@ -886,7 +882,7 @@ try:
                 vw_1.setMinimumWidth(200)
                 
                 if label_1_elements[i][1] == self.type_edit:
-                    self.addLineEdit("")
+                    self.addLineEdit("",lh_0)
                                         
                     if label_1_elements[i][2] == 1:
                         self.addPushButton("+",lh_0)
@@ -896,7 +892,7 @@ try:
                         self.addPushButton("-",lh_0)
                         self.addPushButton("R",lh_0)
                         
-                        vw_3 = QTextEdit()
+                        vw_3 = myTextEdit()
                         vw_3.setFont(self.font_a)
                         vw_3.setMinimumHeight(52)
                         lv_0.addWidget(vw_3)
@@ -909,15 +905,24 @@ try:
                     
                 elif label_1_elements[i][1] == self.type_combo_box:
                     vw_2 = QComboBox()
-                    vw_2.setMinimumHeight(21)
+                    vw_2.setMinimumHeight(26)
+                    vw_2.setFont(self.font)
+                    vw_2.font().setPointSize(14)
                     lh_0.addWidget(vw_2)
                     
-                    if label_1_elements[i][2] == 2:
+                    if label_1_elements[i][2] == 4:
                         for j in range(0, len(label_1_elements[i][3])):
-                            vw_2.addItem(QIcon(
-                                label_1_elements[i][3][1]),
-                                label_1_elements[i][3][0])
+                            img = ""                    \
+                            + "./img/flag_"             \
+                            + label_1_elements[i][3][j] \
+                            + ".png".lower()
+                            vw_2.insertItem(0, label_1_elements[i][3][j])
+                            vw_2.setItemIcon(0, QIcon(img))
                     
+                    elif label_1_elements[i][2] == 2:
+                        for j in range(0, len(label_1_elements[i][3])):
+                            vw_2.addItem(label_1_elements[i][3][j])
+                
                 elif label_1_elements[i][1] == self.type_spin:
                     vw_2 = QSpinBox()
                     vw_2.setFont(self.font_a)
@@ -1068,6 +1073,16 @@ try:
         def init_ui(self):
             i = 1
     
+    class customScrollView_help(myCustomScrollArea):
+        def __init__(self, name):
+            super().__init__(name)
+            self.init_ui()
+        
+        def init_ui(self):
+            font = QFont("Arial")
+            font.setPointSize(11)
+            self.label_1.setFont(font)
+    
     class MyCustomClass():
         def __init__(self, name, number):
             super().__init__()
@@ -1092,27 +1107,8 @@ try:
                 + "internal error:\n"                  \
                 + "item label could not found."
             
-            self.__css__widget_item = ""                                          \
-            + "QListView::item{background-color:white;color:black;"               \
-            + "border:0px;padding-left:10px;padding-top:5px;padding-bottom:5px;}" \
-            + "QListView::item::selected{background-color:blue;color:yellow;"     \
-            + "font-weight:620;border:none;outline:none;}"                        \
-            + "QListView::icon{left:10px;}"                                       \
-            + "QListView::text{left:10px;}"
-            
-            self.__button_style_css = "" \
-            + "QPushButton { border-radius: 3px;" \
-            + "background: #012d8c;" \
-            + "background-image: linear-gradient(to bottom, #185d8c, #2980b9);" \
-            + "font-family: Arial;" \
-            + "color: #f7ff03;" \
-            + "font-size: 11pt;" \
-            + "padding: 10px 20px 10px 20px;" \
-            + "text-decoration: none;" \
-            + "}" \
-            + "QPushButton::hover { background: #183b91;" \
-            + "background-image: linear-gradient(to bottom, #183b91, #5145bf); "\
-            + "text-decoration: none;}"
+            self.__css__widget_item = tr("__css__widget_item")
+            self.__button_style_css = tr("__button_style_css")
             
             self.init_ui()
         
@@ -1129,22 +1125,13 @@ try:
             # ----------------------------------------
             # color for the menu items ...
             # ----------------------------------------
-            menu_item_style = ""          \
-            + "QMenuBar{"                 \
-            + "background-color:navy;"    \
-            + "padding:2px;margin:0px;"   \
-            + "color:yellow;"             \
-            + "font-size:11pt;"           \
-            + "font-weight:bold;}"        \
-            + "QMenuBar:item:selected {"  \
-            + "background-color:#3366CC;" \
-            + "color:white;}"
+            menu_item_style = tr("menu_item_style")
             
             # ----------------------------------------
             # create a new fresh menubar ...
             # ----------------------------------------
             menubar = QMenuBar()
-            menubar.setStyleSheet(menu_item_style)
+            menubar.setStyleSheet(_(menu_item_style))
             
             menu_file = menubar.addMenu("File")
             menu_edit = menubar.addMenu("Edit")
@@ -1169,10 +1156,7 @@ try:
             menu_file_exit   = QWidgetAction(menu_file)
             menu_file.setStyleSheet("color:white;font-weight:normal;font-style:italic")
             
-            menu_label_style = "" \
-            + "QLabel{background-color:navy;color:yellow;" \
-            + "font-weight:bold;font-size:11pt;padding:4px;margin:0px;}" \
-            + "QLabel:hover{background-color:green;color:yellow;}"
+            menu_label_style = tr("menu_label_style")
             
             menu_icon_1 = QIcon("")
             menu_icon_2 = QIcon("")
@@ -1382,27 +1366,7 @@ try:
             self.tab_widget_1.setFont(widget_font)
             self.tab_widget_1.setMinimumHeight(380)
             
-            self.tab_widget_1.setStyleSheet("" \
-            + "QTabWidget::pane    { border-top: 2px solid #C2C7CB;}" \
-            + "QTabWidget::tab-bar { left: 5px;  }" \
-            + "QTabBar::tab {" \
-            + "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1," \
-            + "stop: 0 #E1E1E1, stop: 0.4 #DDDDDD," \
-            + "stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);" \
-            + "border: 2px solid #C4C4C3;" \
-            + "border-bottom-color: #C2C7CB;" \
-            + "border-top-left-radius: 4px;" \
-            + "border-top-right-radius: 4px;" \
-            + "min-width: 20ex;" \
-            + "padding: 2px;}" \
-            + "QTabBar::tab:selected, QTabBar::tab:hover {" \
-            + "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"\
-            + "stop: 0 #fafafa, stop: 0.4 #f4f4f4,"\
-            + "stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);}" \
-            + "QTabBar::tab:selected {" \
-            + "border-color: #9B9B9B;" \
-            + "border-bottom-color: #C2C7CB;}" \
-            + "QTabBar::tab:!selected { margin-top: 2px; }")
+            self.tab_widget_1.setStyleSheet(tr("tab_widget_1"))
             
             tab_1 = QWidget()
             tab_2 = QWidget()
@@ -1501,6 +1465,9 @@ try:
             # ----------------------------------------
             container_layout_2.addWidget(self.tab_widget_1)
             
+            sv_help_layout = QVBoxLayout()
+            sv_help = customScrollView_help("Help")
+            
             
             # ----------------------------------------
             # the status bar is the last widget ...
@@ -1508,7 +1475,6 @@ try:
             status_bar = QStatusBar()
             status_bar.setStyleSheet("background-color:gray;color:white;font-size:9pt;")
             status_bar.showMessage("Welcome")
-            
             
             # ----------------------------------------
             # the main container for all widget's ...
@@ -1520,9 +1486,8 @@ try:
             container.addItem(spacer_1)
             
             container.addWidget(container_widget_2)
+            container.addWidget(sv_help)
             container.addWidget(status_bar)
-            
-            
             
             self.setLayout(container)
             
@@ -1650,6 +1615,7 @@ try:
             button2.clicked.connect(self.button2_clicked)
             
             textfield = QTextEdit(self)
+            textfield.setReadOnly(True)
             
             layout.addWidget(textfield)
             layout.addWidget(button1)
@@ -1750,9 +1716,9 @@ try:
             config.read(__app__config_ini)
             ini_lang = config.get("common", "language")
         
-        loca = handle_language(ini_lang)
-        if not loca == None:
-            _  = loca.gettext
+        tr = handle_language(ini_lang)
+        if not tr == None:
+            tr  = tr.gettext
         
         # ---------------------------------------------------------
         # combine the puzzle names, and folders ...
