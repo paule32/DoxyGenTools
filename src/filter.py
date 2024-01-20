@@ -390,6 +390,17 @@ try:
             self.cssColor = "QTextEdit{background-color:#bdbfbf;}QTextEdit:hover{background-color:yellow;}"
             self.setStyleSheet(self.cssColor)
             self.setText(self.name)
+        
+        def mousePressEvent(self, event):
+            self.anchor = self.anchorAt(event.pos())
+            if self.anchor:
+                QApplication.setOverrideCursor(Qt.PointingHandCursor)
+        
+        def mouseReleaseEvent(self, event):
+            if self.anchor:
+                QDesktopServices.openUrl(QUrl(self.anchor))
+                QApplication.setOverrideCursor(Qt.ArrowCursor)
+                self.anchor = None
     
     class myCustomLabel(QLabel):
         def __init__(self, text, helpID, helpText):
@@ -400,6 +411,17 @@ try:
         
         def enterEvent(self, event):
             sv_help.setText(self.helpText)
+        
+        def mousePressEvent(self, event):
+            self.anchor = self.anchorAt(event.pos())
+            if self.anchor:
+                QApplication.setOverrideCursor(Qt.PointingHandCursor)
+        
+        def mouseReleaseEvent(self, event):
+            if self.anchor:
+                QDesktopServices.openUrl(QUrl(self.anchor))
+                QApplication.setOverrideCursor(Qt.ArrowCursor)
+                self.anchor = None
     
     # ------------------------------------------------------------------------
     # create a scroll view for the mode tab on left side of application ...
@@ -859,14 +881,14 @@ try:
                 ["DOXYFILE_ENCODING",      self.type_edit,       100, 0],
                 ["PROJECT_NAME",           self.type_edit,       101, 0],
                 ["PROJECT_NUMBER",         self.type_edit,       102, 0],
-                ["PROJECT_BRUEF",          self.type_edit,       103, 0],
+                ["PROJECT_BRIEF",          self.type_edit,       103, 0],
                 ["PROJECT_LOGO",           self.type_edit,       104, 1],
                 ["PROJECT_ICON",           self.type_edit,       105, 1],
                 ["OUTPUT_DIRECTORY",       self.type_edit,       106, 1],
                 ["CREATE_SUBDIRS",         self.type_check_box,  107, 0],
                 ["CREATE_SUBDIRS_LEVEL",   self.type_spin,       108, 0],
                 ["ALLOW_UNICODE_NAMES",    self.type_check_box,  109, 0],
-                ["OUTPUT_LANGUAGE",        self.type_combo_box,  110, 4, ["English","German","French","Spanish"]],
+                ["OUTPUT_LANGUAGE",        self.type_combo_box,  110, 4, ["English","German","French","Spanish"] ],
                 ["BRIEF_MEMBER_DESC",      self.type_check_box,  111, 0],
                 ["REPEAT_BRIEF",           self.type_check_box,  112, 0],
                 ["ABBREVIATE_BRIEF",       self.type_edit,       113, 3],

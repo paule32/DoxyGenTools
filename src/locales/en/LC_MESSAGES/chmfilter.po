@@ -86,65 +86,128 @@ msgstr ""
 # help text - version: english ...
 # ---------------------------------------------------------------------------
 
-# help: 256
+# help: 257 - DOXYFILE_ENCODING
 msgid "h\01\01"
 msgstr ""
     "This tag specifies the encoding used for all characters in"
     "the configuration file that follow. The default is UTF-8 which"
     "is also the encoding used for all text before the first occurrence "
     "of this tag. Doxygen uses libiconv (or the iconv built into libc) "
-    "for the transcoding. See https://www.gnu.org/software/libiconv/ "
-    "for the list of possible encodings.\n"
+    "for the transcoding. See <a href=\"#\">"
+    "https://www.gnu.org/software/libiconv/</a> for the list of possible "
+    "encodings.\n"
     "\n"
     "The default value is: UTF-8."
 
-# help: 257
+# help: 258 - PROJECT_NAME
 msgid "h\02\01"
-msgstr "heues ffff"
+msgstr ""
+    "The <b><i>PROJECT_NAME</i></b> tag is a single word (or a sequence of words "
+    "surrounded by double-quotes, unless you are using Doxywizard) "
+    "that should identify the project for which the documentation is "
+    "generated. This name is used in the title of most generated pages "
+    "and in a few other places.\n"
+    "\n"
+    "The default value is: My Project."
 
-# help: 258
+# help: 259 - PROJECT_NUMBER
 msgid "h\03\01"
-msgstr "998822"
-
-# help: 259
-msgid "\03\01"
 msgstr ""
+    "The <b><i>PROJECT_NUMBER</i></b> tag can be used to enter a project or revision "
+    "number. This could be handy for archiving the generated documentation "
+    "or if some version control system is used."
 
-# help: 260
-msgid "\x04\x01"
+# help: 260 - PROJECT_BRIEF
+msgid "h\04\01"
 msgstr ""
+    "Using the <b><i>PROJECT_BRIEF</i></b> tag one can provide an optional one line "
+    "description for a project that appears at the top of each page "
+    "and should give viewer a quick idea about the purpose of the "
+    "project. Keep the description short."
 
-# help: 261
-msgid "\x05\x01"
+# help: 261 - PROJECT_LOGO
+msgid "h\05\01"
 msgstr ""
+    "With the <b><i>PROJECT_LOGO</i></b> tag one can specify a logo or an icon that "
+    "is included in the documentation. The maximum height of the logo "
+    "should not exceed 55 pixels and the maximum width should not exceed "
+    "200 pixels. Doxygen will copy the logo to the output directory."
 
-# help: 262
-msgid "\x06\x01"
+# help: 262 - PROJECT_ICON
+msgid "h\06\01"
 msgstr ""
+    "With the <b><i>PROJECT_ICON</i></b> tag one can specify an icon that is included "
+    "in the tabs when the HTML document is shown. Doxygen will copy the "
+    "logo to the output directory."
 
-# help: 263
-msgid "\x07\x01"
+# help: 263 - OUTPUT_DIRECTORY
+msgid "h\07\01"
 msgstr ""
+    "The <b><i>OUTPUT_DIRECTORY</i></b> tag is used to specify the (relative or absolute) "
+    "path into which the generated documentation will be written. If a "
+    "relative path is entered, it will be relative to the location where "
+    "doxygen was started. If left blank the current directory will be used."
 
-# help: 264
-msgid "\x08\x01"
+# help: 264 - CREATE_SUBDIRS
+msgid "h\08\01"
 msgstr ""
+    "If the <b><i>CREATE_SUBDIRS</i></b> tag is set to YES then doxygen will create up to "
+    "4096 sub-directories (in 2 levels) under the output directory of each "
+    "output format and will distribute the generated files over these directories. "
+    "Enabling this option can be useful when feeding doxygen a huge amount of "
+    "source files, where putting all generated files in the same directory would "
+    "otherwise causes performance problems for the file system. Adapt "
+    "CREATE_SUBDIRS_LEVEL to control the number of sub-directories.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 265
-msgid "\x09\x01"
+# help: 265 - CREATE_SUBDIRS_LEVEL
+msgid "h\09\01"
 msgstr ""
+    "Controls the number of sub-directories that will be created when <b><i>CREATE_SUBDIRS</b></i> "
+    "tag is set to YES. Level 0 represents 16 directories, and every level increment "
+    "doubles the number of directories, resulting in 4096 directories at level 8 "
+    "which is the default and also the maximum value. The sub-directories are organized "
+    "in 2 levels, the first level always has a fixed number of 16 directories.\n"
+    "\n"
+    "Minimum value: 0, maximum value: 8, default value: 8.\n"
+    "\n"
+    "This tag requires that the tag <b><i>CREATE_SUBDIRS</b></i> is set to <b><i>YES</b></i>."
 
-# help: 266
+# help: 266 - ALLOW_UNICODE_NAMES
 msgid "\x0a\x01"
 msgstr ""
-
-# help: 267
+    "If the <b><i>ALLOW_UNICODE_NAMES</b></i> tag is set to YES, doxygen will allow non-ASCII "
+    "characters to appear in the names of generated files. If set to NO, non-ASCII "
+    "characters will be escaped, for example _xE3_x81_x84 will be used for Unicode U+3044.\n"
+    "\n"
+    "The default value is: <b><i>NO</b></i>."
+    
+# help: 267 - OUTPUT_LANGUAGE
 msgid "\x0b\x01"
 msgstr ""
+    "The <b><i>OUTPUT_LANGUAGE</b></i> tag is used to specify the language in which all "
+    "documentation generated by doxygen is written. Doxygen will use this information to "
+    "generate all constant output in the proper language.\n"
+    "\n"
+    "Possible values are: Afrikaans, Arabic, Armenian, Brazilian, Bulgarian, Catalan, "
+    "Chinese, Chinese-Traditional, Croatian, Czech, Danish, Dutch, English (United States), "
+    "Esperanto, Farsi (Persian), Finnish, French, German, Greek, Hindi, Hungarian, Indonesian, "
+    "Italian, Japanese, Japanese-en (Japanese with English messages), Korean, Korean-en "
+    "(Korean with English messages), Latvian, Lithuanian, Macedonian, Norwegian, Persian "
+    "(Farsi), Polish, Portuguese, Romanian, Russian, Serbian, Serbian-Cyrillic, Slovak, "
+    "Slovene, Spanish, Swedish, Turkish, Ukrainian and Vietnamese.\n"
+    "\n"
+    "The default value is: <b><i>English</b></i>."
 
-# help: 268
+# help: 268 - BRIEF_MEMBER_DESC
 msgid "\x0c\x01"
 msgstr ""
+    "If the <b><i>BRIEF_MEMBER_DESC</b></i> tag is set to YES, doxygen will include brief "
+    "member descriptions after the members that are listed in the file and class documentation "
+    "(similar to Javadoc). Set to NO to disable this.\n"
+    "\n"
+    "The default value is: YES."
 
 # help: 269
 msgid "\x0d\x01"
