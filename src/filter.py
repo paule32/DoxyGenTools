@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # Datei:  filter.py
 # Author: Jens Kallup - paule32
@@ -390,6 +391,16 @@ try:
             self.setStyleSheet(self.cssColor)
             self.setText(self.name)
     
+    class myCustomLabel(QLabel):
+        def __init__(self, text, helpID, helpText):
+            super().__init__(text)
+            
+            self.helpID   = helpID
+            self.helpText = helpText
+        
+        def enterEvent(self, event):
+            sv_help.setText(self.helpText)
+    
     # ------------------------------------------------------------------------
     # create a scroll view for the mode tab on left side of application ...
     # ------------------------------------------------------------------------
@@ -481,6 +492,15 @@ try:
             w.setFrameShape (QFrame.HLine)
             w.setFrameShadow(QFrame.Sunken)
             if not lh == None:
+                lh.addWidget(w)
+            else:
+                self.layout.addWidget(w)
+            return w
+        
+        def addHelpLabel(self, text, helpID, helpText, lh=None):
+            w = myCustomLabel( text, helpID, helpText)
+            if not lh == None:
+                w.setFont(self.font_a)
                 lh.addWidget(w)
             else:
                 self.layout.addWidget(w)
@@ -835,75 +855,89 @@ try:
             self.content_widget.setMinimumHeight(2000)
             
             label_1_elements = [
-                ["DOXYFILE_ENCODING",      self.type_edit,       0],
-                ["PROJECT_NAME",           self.type_edit,       0],
-                ["PROJECT_NUMBER",         self.type_edit,       0],
-                ["PROJECT_BRUEF",          self.type_edit,       0],
-                ["PROJECT_LOGO",           self.type_edit,       1],
-                ["PROJECT_ICON",           self.type_edit,       1],
-                ["OUTPUT_DIRECTORY",       self.type_edit,       1],
-                ["CREATE_SUBDIRS",         self.type_check_box,  0],
-                ["CREATE_SUBDIRS_LEVEL",   self.type_spin,       0],
-                ["ALLOW_UNICODE_NAMES",    self.type_check_box,  0],
-                ["OUTPUT_LANGUAGE",        self.type_combo_box,  4, ["English","German","French","Spanish"]],
-                ["BRIEF_MEMBER_DESC",      self.type_check_box,  0],
-                ["REPEAT_BRIEF",           self.type_check_box,  0],
-                ["ABBREVIATE_BRIEF",       self.type_edit,       3],
-                ["ALWAYS_DETAILED_SEC",    self.type_check_box,  0],
-                ["INLINE_INHERITED_MEMB",  self.type_check_box,  0],
-                ["FULL_PATH_NAMES",        self.type_check_box,  0],
-                ["STRIP_FROM_PATH",        self.type_edit,       3],
-                ["STRIP_FROM_INC_PATH",    self.type_edit,       3],
-                ["SORT_NAMES",             self.type_check_box,  0],
-                ["JAVADOC_AUTOBRIEF",      self.type_check_box,  0],
-                ["JAVADOC_BANNER",         self.type_check_box,  0],
-                ["QT_AUTOBRIEF",           self.type_check_box,  0],
-                ["MULTILINE_CPP_IS_BRIEF", self.type_check_box,  0],
-                ["PYTHON_DOCSTRING",       self.type_check_box,  0],
-                ["INHERITED_DOCS",         self.type_check_box,  0],
-                ["SEPERATE_MEMBER_PAGES",  self.type_check_box,  0],
-                ["TAB_SIZE",               self.type_spin,       0],
-                ["ALIASES",                self.type_edit,       3],
-                ["OPTIMIZE_OUTPUT_FOR_C",  self.type_check_box,  0],
-                ["OPTIMIZE_OUTPUT_JAVA",   self.type_check_box,  0],
-                ["OPTIMIZE_FOR_FORTRAN",   self.type_check_box,  0],
-                ["OPTIMIZE_OUTPUT_VHCL",   self.type_check_box,  0],
-                ["OPTIMIZE_OUTPUT_SLICE",  self.type_check_box,  0],
-                ["EXTERNAL_MAPPING",       self.type_edit,       3],
-                ["MARKDOWN_SUPPORT",       self.type_check_box,  0],
-                ["MARKDOWN_ID_STYLE",      self.type_combo_box,  2, ["DOXYGEN", "CIT"]],
-                ["TOC_INCLUDE_HEADINGS",   self.type_spin,       0],
-                ["AUTOLINK_SUPPORT",       self.type_check_box,  0],
-                ["BUILTIN_STL_SUPPORT",    self.type_check_box,  0],
-                ["CPP_CLI_SUPPORT",        self.type_check_box,  0],
-                ["SIP_SUPPORT",            self.type_check_box,  0],
-                ["IDL_PROPERTY_SUPPORT",   self.type_check_box,  0],
-                ["DESTRIBUTE_GROUP_DOC",   self.type_check_box,  0],
-                ["GROUP_NESTED_COMPOUNDS", self.type_check_box,  0],
-                ["SUBGROUPING",            self.type_check_box,  0],
-                ["INLINE_GROUPED_CLASSES", self.type_check_box,  0],
-                ["INLINE_SIMPLE_STRUCTS",  self.type_check_box,  0],
-                ["TYPEDEF_HIDES_STRUCT",   self.type_check_box,  0],
-                ["LOOKUP_CACHE_SIZE",      self.type_spin,       0],
-                ["NUM_PROC_THREADS",       self.type_spin,       0],
-                ["TIMESTAMP",              self.type_combo_box,  2, ["NO","YES"]]
+                # <text>,                  <type 1>,             <help>, <type 2>,  <list 1>
+                ["DOXYFILE_ENCODING",      self.type_edit,       100, 0],
+                ["PROJECT_NAME",           self.type_edit,       101, 0],
+                ["PROJECT_NUMBER",         self.type_edit,       102, 0],
+                ["PROJECT_BRUEF",          self.type_edit,       103, 0],
+                ["PROJECT_LOGO",           self.type_edit,       104, 1],
+                ["PROJECT_ICON",           self.type_edit,       105, 1],
+                ["OUTPUT_DIRECTORY",       self.type_edit,       106, 1],
+                ["CREATE_SUBDIRS",         self.type_check_box,  107, 0],
+                ["CREATE_SUBDIRS_LEVEL",   self.type_spin,       108, 0],
+                ["ALLOW_UNICODE_NAMES",    self.type_check_box,  109, 0],
+                ["OUTPUT_LANGUAGE",        self.type_combo_box,  110, 4, ["English","German","French","Spanish"]],
+                ["BRIEF_MEMBER_DESC",      self.type_check_box,  111, 0],
+                ["REPEAT_BRIEF",           self.type_check_box,  112, 0],
+                ["ABBREVIATE_BRIEF",       self.type_edit,       113, 3],
+                ["ALWAYS_DETAILED_SEC",    self.type_check_box,  114, 0],
+                ["INLINE_INHERITED_MEMB",  self.type_check_box,  115, 0],
+                ["FULL_PATH_NAMES",        self.type_check_box,  116, 0],
+                ["STRIP_FROM_PATH",        self.type_edit,       117, 3],
+                ["STRIP_FROM_INC_PATH",    self.type_edit,       118, 3],
+                ["SORT_NAMES",             self.type_check_box,  119, 0],
+                ["JAVADOC_AUTOBRIEF",      self.type_check_box,  120, 0],
+                ["JAVADOC_BANNER",         self.type_check_box,  121, 0],
+                ["QT_AUTOBRIEF",           self.type_check_box,  122, 0],
+                ["MULTILINE_CPP_IS_BRIEF", self.type_check_box,  123, 0],
+                ["PYTHON_DOCSTRING",       self.type_check_box,  124, 0],
+                ["INHERITED_DOCS",         self.type_check_box,  125, 0],
+                ["SEPERATE_MEMBER_PAGES",  self.type_check_box,  126, 0],
+                ["TAB_SIZE",               self.type_spin,       127, 0],
+                ["ALIASES",                self.type_edit,       128, 3],
+                ["OPTIMIZE_OUTPUT_FOR_C",  self.type_check_box,  129, 0],
+                ["OPTIMIZE_OUTPUT_JAVA",   self.type_check_box,  130, 0],
+                ["OPTIMIZE_FOR_FORTRAN",   self.type_check_box,  131, 0],
+                ["OPTIMIZE_OUTPUT_VHCL",   self.type_check_box,  132, 0],
+                ["OPTIMIZE_OUTPUT_SLICE",  self.type_check_box,  133, 0],
+                ["EXTERNAL_MAPPING",       self.type_edit,       134, 3],
+                ["MARKDOWN_SUPPORT",       self.type_check_box,  135, 0],
+                ["MARKDOWN_ID_STYLE",      self.type_combo_box,  136, 2, ["DOXYGEN", "CIT"]],
+                ["TOC_INCLUDE_HEADINGS",   self.type_spin,       137, 0],
+                ["AUTOLINK_SUPPORT",       self.type_check_box,  138, 0],
+                ["BUILTIN_STL_SUPPORT",    self.type_check_box,  139, 0],
+                ["CPP_CLI_SUPPORT",        self.type_check_box,  140, 0],
+                ["SIP_SUPPORT",            self.type_check_box,  141, 0],
+                ["IDL_PROPERTY_SUPPORT",   self.type_check_box,  142, 0],
+                ["DESTRIBUTE_GROUP_DOC",   self.type_check_box,  143, 0],
+                ["GROUP_NESTED_COMPOUNDS", self.type_check_box,  144, 0],
+                ["SUBGROUPING",            self.type_check_box,  145, 0],
+                ["INLINE_GROUPED_CLASSES", self.type_check_box,  146, 0],
+                ["INLINE_SIMPLE_STRUCTS",  self.type_check_box,  147, 0],
+                ["TYPEDEF_HIDES_STRUCT",   self.type_check_box,  148, 0],
+                ["LOOKUP_CACHE_SIZE",      self.type_spin,       149, 0],
+                ["NUM_PROC_THREADS",       self.type_spin,       150, 0],
+                ["TIMESTAMP",              self.type_combo_box,  151, 2, ["NO","YES"]]
             ]
             
             for i in range(0, len(label_1_elements)):
                 lv_0 = QVBoxLayout()
                 lh_0 = QHBoxLayout()
                 
-                vw_1 = self.addLabel(label_1_elements[i][0],False,lh_0)
+                # -----------------------------------------
+                # the help string for a doxygen tag ...
+                # -----------------------------------------
+                helpID   = 256 + i + 1
+                
+                s = int.to_bytes(helpID,2,"little")
+                s = s.decode("utf-8")
+                
+                helpText = tr("h" + s)
+                vw_1 = self.addHelpLabel(   \
+                    label_1_elements[i][0], \
+                    helpID,                 \
+                    helpText,               \
+                    lh_0)
                 vw_1.setMinimumHeight(14)
                 vw_1.setMinimumWidth(200)
                 
                 if label_1_elements[i][1] == self.type_edit:
                     self.addLineEdit("",lh_0)
                                         
-                    if label_1_elements[i][2] == 1:
+                    if label_1_elements[i][3] == 1:
                         self.addPushButton("+",lh_0)
                         
-                    elif label_1_elements[i][2] == 3:
+                    elif label_1_elements[i][3] == 3:
                         self.addPushButton("+",lh_0)
                         self.addPushButton("-",lh_0)
                         self.addPushButton("R",lh_0)
@@ -926,17 +960,17 @@ try:
                     vw_2.font().setPointSize(14)
                     lh_0.addWidget(vw_2)
                     
-                    if label_1_elements[i][2] == 4:
-                        for j in range(0, len(label_1_elements[i][3])):
+                    if label_1_elements[i][3] == 4:
+                        for j in range(0, len(label_1_elements[i][4])):
                             img = "flag_"               \
-                            + label_1_elements[i][3][j] \
+                            + label_1_elements[i][4][j] \
                             + ".png".lower()
-                            vw_2.insertItem(0, label_1_elements[i][3][j])
+                            vw_2.insertItem(0, label_1_elements[i][4][j])
                             vw_2.setItemIcon(0, QIcon(os.path.join(basedir,"img",img)))
                     
-                    elif label_1_elements[i][2] == 2:
-                        for j in range(0, len(label_1_elements[i][3])):
-                            vw_2.addItem(label_1_elements[i][3][j])
+                    elif label_1_elements[i][3] == 2:
+                        for j in range(0, len(label_1_elements[i][4])):
+                            vw_2.addItem(label_1_elements[i][4][j])
                 
                 elif label_1_elements[i][1] == self.type_spin:
                     vw_2 = QSpinBox()
@@ -946,10 +980,12 @@ try:
                 
                 lv_0.addLayout(lh_0)
                 self.layout.addLayout(lv_0)
-            
-            
-            # change font, because we use consolas earlier
-            #self.font.setFamily("Arial")
+        
+        # ----------------------------------------------
+        # show help text when mouse move over the label
+        # ----------------------------------------------
+        def label_enter_event(self, text):
+            sv_help.setText(text)
     
     class customScrollView_6(myCustomScrollArea):
         def __init__(self, name):
@@ -1088,15 +1124,16 @@ try:
         def init_ui(self):
             i = 1
     
-    class customScrollView_help(myCustomScrollArea):
-        def __init__(self, name):
-            super().__init__(name)
-            self.init_ui()
-        
-        def init_ui(self):
+    class customScrollView_help(QTextEdit):
+        def __init__(self):
+            super().__init__()
+            
             font = QFont("Arial")
             font.setPointSize(11)
-            self.label_1.setFont(font)
+            
+            self.setFont(font)
+            self.setMinimumHeight(100)
+            self.setMaximumHeight(100)
     
     class MyCustomClass():
         def __init__(self, name, number):
@@ -1305,9 +1342,9 @@ try:
             toolbar.setContentsMargins(0,0,0,0)
             toolbar.setStyleSheet("background-color:gray;font-size:11pt;height:38px;")
             
-            toolbar_action_new  = QAction(QIcon(os.path.join(basedir,"img","new-document.png")),"New Config.", self)
-            toolbar_action_open = QAction(QIcon(os.path.join(basedir,"img","open-folder.png")) ,"Open existing Config.", self)
-            toolbar_action_save = QAction(QIcon(os.path.join(basedir,"img","floppy-disk.png")) ,"Save current session.", self)
+            toolbar_action_new  = QAction(QIcon(os.path.join(basedir,"img","new-document.png")),tr("New Config."), self)
+            toolbar_action_open = QAction(QIcon(os.path.join(basedir,"img","open-folder.png" )),tr("Open existing Config."), self)
+            toolbar_action_save = QAction(QIcon(os.path.join(basedir,"img","floppy-disk.png" )),tr("Save current session."), self)
             
             toolbar_action_new .triggered.connect(self.menu_file_clicked_new)
             toolbar_action_open.triggered.connect(self.menu_file_clicked_open)
@@ -1479,10 +1516,6 @@ try:
             # middle area ...
             # ----------------------------------------
             container_layout_2.addWidget(self.tab_widget_1)
-            
-            sv_help_layout = QVBoxLayout()
-            sv_help = customScrollView_help("Help")
-            
             
             # ----------------------------------------
             # the status bar is the last widget ...
@@ -2270,6 +2303,8 @@ try:
         if isApplicationInit() == False:
             app = QApplication(sys.argv)
         
+        sv_help = customScrollView_help()
+                
         appWindow = mainWindow()
         appWindow.show()
         result = appWindow.exec_()

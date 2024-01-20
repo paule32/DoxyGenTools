@@ -32,6 +32,7 @@ echo create directories...  [
 :: de => German
 :: ---------------------------------------------------------------------------
 for %%A in (en, de) do (
+    cd %BASEDIR%
     dir /A:D %BASEDIR%\locales  >nul 2>&1
     if errorlevel 0 (
         mkdir %BASEDIR%\locales >nul 2>&1
@@ -55,6 +56,7 @@ for %%A in (en, de) do (
         )
     )
 )
+echo ]
 :: ---------------------------------------------------------------------------
 :: Python can produce byte-code, and executable files to speed up the loading
 :: and for information hidding ...
@@ -64,7 +66,7 @@ echo|set /p="create Byte-Code...           ["
 python -m compileall %BASEDIR%\filter.py >nul 2>&1
 if errorlevel 1 ( goto error_bytecode )
 echo  ok   ]
-
+goto TheEnd
 :: ---------------------------------------------------------------------------
 :: to create Windows executables, you have to install pyinstaller seperatly.
 :: after pyinstaller success the executable resides in ./dist folder.

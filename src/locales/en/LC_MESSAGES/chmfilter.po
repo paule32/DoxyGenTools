@@ -81,3 +81,224 @@ msgstr ""
     "border-color:#9B9B9B;"
     "border-bottom-color:#C2C7CB;}"
     "QTabBar::tab:!selected{margin-top:2px;}"
+
+# ---------------------------------------------------------------------------
+# help text - version: english ...
+# ---------------------------------------------------------------------------
+
+# help: 256
+msgid "h\01\01"
+msgstr ""
+    "This tag specifies the encoding used for all characters in"
+    "the configuration file that follow. The default is UTF-8 which"
+    "is also the encoding used for all text before the first occurrence "
+    "of this tag. Doxygen uses libiconv (or the iconv built into libc) "
+    "for the transcoding. See https://www.gnu.org/software/libiconv/ "
+    "for the list of possible encodings.\n"
+    "\n"
+    "The default value is: UTF-8."
+
+# help: 257
+msgid "h\02\01"
+msgstr "heues ffff"
+
+# help: 258
+msgid "h\03\01"
+msgstr "998822"
+
+# help: 259
+msgid "\03\01"
+msgstr ""
+
+# help: 260
+msgid "\x04\x01"
+msgstr ""
+
+# help: 261
+msgid "\x05\x01"
+msgstr ""
+
+# help: 262
+msgid "\x06\x01"
+msgstr ""
+
+# help: 263
+msgid "\x07\x01"
+msgstr ""
+
+# help: 264
+msgid "\x08\x01"
+msgstr ""
+
+# help: 265
+msgid "\x09\x01"
+msgstr ""
+
+# help: 266
+msgid "\x0a\x01"
+msgstr ""
+
+# help: 267
+msgid "\x0b\x01"
+msgstr ""
+
+# help: 268
+msgid "\x0c\x01"
+msgstr ""
+
+# help: 269
+msgid "\x0d\x01"
+msgstr ""
+
+# help: 270
+msgid "\x0e\x01"
+msgstr ""
+
+# help: 271
+msgid "\x0f\x01"
+msgstr ""
+
+# help: 272
+msgid "\x10\x01"
+msgstr ""
+
+# help: 273
+msgid "\x11\x01"
+msgstr ""
+
+# help: 274
+msgid "\x12\x01"
+msgstr ""
+
+# help: 275
+msgid "\x13\x01"
+msgstr ""
+
+# help: 276
+msgid "\x14\x01"
+msgstr ""
+
+# help: 277
+msgid "\x15\x01"
+msgstr ""
+
+# help: 278
+msgid "\x16\x01"
+msgstr ""
+
+# help: 279
+msgid "\x17\x01"
+msgstr ""
+
+# help: 280
+msgid "\x18\x01"
+msgstr ""
+
+# help: 281
+msgid "\x19\x01"
+msgstr ""
+
+# help: 282
+msgid "\x1a\x01"
+msgstr ""
+
+# help: 283
+msgid "\x1b\x01"
+msgstr ""
+
+# help: 284
+msgid "\x1c\x01"
+msgstr ""
+
+# help: 285
+msgid "\x1d\x01"
+msgstr ""
+
+# help: 286
+msgid "\x1e\x01"
+msgstr ""
+
+# help: 287
+msgid "\x1f\x01"
+msgstr ""
+
+# help: 288
+msgid "\x20\x01"
+msgstr ""
+
+# help: 289
+msgid "\x21\x01"
+msgstr ""
+
+# help: 290
+msgid "\x22\x01"
+msgstr ""
+
+# help: 291
+msgid "\x23\x01"
+msgstr ""
+
+# help: 292
+msgid "\x24\x01"
+msgstr ""
+
+# help: 293
+msgid "\x25\x01"
+msgstr ""
+
+# help: 294
+msgid "\x26\x01"
+msgstr ""
+
+# help: 295
+msgid "\x27\x01"
+msgstr ""
+
+# help: 296
+msgid "\x28\x01"
+msgstr ""
+
+# help: 297
+msgid "\x29\x01"
+msgstr ""
+
+# help: 298
+msgid "\x2a\x01"
+msgstr ""
+
+# help: 299
+msgid "\x2b\x01"
+msgstr ""
+
+# help: 300
+msgid "\x2c\x01"
+msgstr ""
+
+# help: 301
+msgid "\x2d\x01"
+msgstr ""
+
+# help: 302
+msgid "\x2e\x01"
+msgstr ""
+
+# help: 303
+msgid "\x2f\x01"
+msgstr ""
+
+# help: 304
+msgid "\x30\x01"
+msgstr ""
+
+# help: 305
+msgid "\x31\x01"
+msgstr ""
+
+# help: 306
+msgid "\x32\x01"
+msgstr ""
+
+# help: 307
+msgid "\x33\x01"
+msgstr ""
+
