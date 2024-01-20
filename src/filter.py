@@ -64,6 +64,7 @@ try:
     import keyboard
     import shutil        # shell utils
     import pkgutil       # attached binary data utils
+    import json          # json lists
     
     import gettext       # localization
     import locale        # internal system locale
@@ -876,6 +877,7 @@ try:
             self.label_1.hide()
             self.content_widget.setMinimumHeight(2000)
             
+            supported_langs  = tr("supported_langs")
             label_1_elements = [
                 # <text>,                  <type 1>,             <help>, <type 2>,  <list 1>
                 ["DOXYFILE_ENCODING",      self.type_edit,       100, 0],
@@ -888,7 +890,7 @@ try:
                 ["CREATE_SUBDIRS",         self.type_check_box,  107, 0],
                 ["CREATE_SUBDIRS_LEVEL",   self.type_spin,       108, 0],
                 ["ALLOW_UNICODE_NAMES",    self.type_check_box,  109, 0],
-                ["OUTPUT_LANGUAGE",        self.type_combo_box,  110, 4, ["English","German","French","Spanish"] ],
+                ["OUTPUT_LANGUAGE",        self.type_combo_box,  110, 4, [] ],
                 ["BRIEF_MEMBER_DESC",      self.type_check_box,  111, 0],
                 ["REPEAT_BRIEF",           self.type_check_box,  112, 0],
                 ["ABBREVIATE_BRIEF",       self.type_edit,       113, 3],
@@ -941,10 +943,12 @@ try:
                 # -----------------------------------------
                 helpID   = 256 + i + 1
                 
-                s = int.to_bytes(helpID,2,"little")
-                s = s.decode("utf-8")
                 
-                helpText = tr("h" + s)
+                #s = int.to_bytes(helpID,2,"little")
+                #s = s.decode("utf-8")
+                #s = s.replace("\\","")
+                
+                helpText = tr(f"h{helpID:04X}")
                 vw_1 = self.addHelpLabel(   \
                     label_1_elements[i][0], \
                     helpID,                 \
@@ -983,7 +987,9 @@ try:
                     lh_0.addWidget(vw_2)
                     
                     if label_1_elements[i][3] == 4:
-                        for j in range(0, len(label_1_elements[i][4])):
+                        data = json.loads(supported_langs)
+                        label_1_elements[i][4] = data
+                        for j in range(0, len(data)):
                             img = "flag_"               \
                             + label_1_elements[i][4][j] \
                             + ".png".lower()

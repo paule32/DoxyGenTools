@@ -83,11 +83,24 @@ msgstr ""
     "QTabBar::tab:!selected{margin-top:2px;}"
 
 # ---------------------------------------------------------------------------
+# supported languages by doxygen 1.10.0 ...
+# ---------------------------------------------------------------------------
+msgid "supported_langs"
+msgstr ""
+    "[\"Afrikaans\",\"Arabic\",\"Armenian\",\"Brazilian\",\"Bulgarian\",\"Catalan\","
+    "\"Chinese\",\"Chinese-Traditional\",\"Croatian\",\"Czech\",\"Danish\",\"Dutch\",\"English (United States)\","
+    "\"Esperanto\",\"Farsi (Persian)\",\"Finnish\",\"French\",\"German\",\"Greek\",\"Hindi\",\"Hungarian\",\"Indonesian\","
+    "\"Italian\", \"Japanese\",\"Japanese-en (Japanese with English messages)\",\"Korean\",\"Korean-en\","
+    "\"(Korean with English messages)\",\"Latvian\",\"Lithuanian\",\"Macedonian\",\"Norwegian\","
+    "\"Persian (Farsi)\",\"Polish\",\"Portuguese\",\"Romanian\",\"Russian\",\"Serbian\",\"Serbian-Cyrillic\",\"Slovak\","
+    "\"Slovene\",\"Spanish\",\"Swedish\",\"Turkish\",\"Ukrainian\",\"Vietnamese\"]"
+
+# ---------------------------------------------------------------------------
 # help text - version: english ...
 # ---------------------------------------------------------------------------
 
 # help: 257 - DOXYFILE_ENCODING
-msgid "h\01\01"
+msgid "h0101"
 msgstr ""
     "This tag specifies the encoding used for all characters in"
     "the configuration file that follow. The default is UTF-8 which"
@@ -100,7 +113,7 @@ msgstr ""
     "The default value is: UTF-8."
 
 # help: 258 - PROJECT_NAME
-msgid "h\02\01"
+msgid "h0102"
 msgstr ""
     "The <b><i>PROJECT_NAME</i></b> tag is a single word (or a sequence of words "
     "surrounded by double-quotes, unless you are using Doxywizard) "
@@ -111,14 +124,14 @@ msgstr ""
     "The default value is: My Project."
 
 # help: 259 - PROJECT_NUMBER
-msgid "h\03\01"
+msgid "h0103"
 msgstr ""
     "The <b><i>PROJECT_NUMBER</i></b> tag can be used to enter a project or revision "
     "number. This could be handy for archiving the generated documentation "
     "or if some version control system is used."
 
 # help: 260 - PROJECT_BRIEF
-msgid "h\04\01"
+msgid "h0104"
 msgstr ""
     "Using the <b><i>PROJECT_BRIEF</i></b> tag one can provide an optional one line "
     "description for a project that appears at the top of each page "
@@ -126,7 +139,7 @@ msgstr ""
     "project. Keep the description short."
 
 # help: 261 - PROJECT_LOGO
-msgid "h\05\01"
+msgid "h0105"
 msgstr ""
     "With the <b><i>PROJECT_LOGO</i></b> tag one can specify a logo or an icon that "
     "is included in the documentation. The maximum height of the logo "
@@ -134,14 +147,14 @@ msgstr ""
     "200 pixels. Doxygen will copy the logo to the output directory."
 
 # help: 262 - PROJECT_ICON
-msgid "h\06\01"
+msgid "h0106"
 msgstr ""
     "With the <b><i>PROJECT_ICON</i></b> tag one can specify an icon that is included "
     "in the tabs when the HTML document is shown. Doxygen will copy the "
     "logo to the output directory."
 
 # help: 263 - OUTPUT_DIRECTORY
-msgid "h\07\01"
+msgid "h0107"
 msgstr ""
     "The <b><i>OUTPUT_DIRECTORY</i></b> tag is used to specify the (relative or absolute) "
     "path into which the generated documentation will be written. If a "
@@ -149,7 +162,7 @@ msgstr ""
     "doxygen was started. If left blank the current directory will be used."
 
 # help: 264 - CREATE_SUBDIRS
-msgid "h\08\01"
+msgid "h0108"
 msgstr ""
     "If the <b><i>CREATE_SUBDIRS</i></b> tag is set to YES then doxygen will create up to "
     "4096 sub-directories (in 2 levels) under the output directory of each "
@@ -157,12 +170,12 @@ msgstr ""
     "Enabling this option can be useful when feeding doxygen a huge amount of "
     "source files, where putting all generated files in the same directory would "
     "otherwise causes performance problems for the file system. Adapt "
-    "CREATE_SUBDIRS_LEVEL to control the number of sub-directories.\n"
+    "<b><i>CREATE_SUBDIRS_LEVEL</b></i> to control the number of sub-directories.\n"
     "\n"
     "The default value is: NO."
 
 # help: 265 - CREATE_SUBDIRS_LEVEL
-msgid "h\09\01"
+msgid "h0109"
 msgstr ""
     "Controls the number of sub-directories that will be created when <b><i>CREATE_SUBDIRS</b></i> "
     "tag is set to YES. Level 0 represents 16 directories, and every level increment "
@@ -175,7 +188,7 @@ msgstr ""
     "This tag requires that the tag <b><i>CREATE_SUBDIRS</b></i> is set to <b><i>YES</b></i>."
 
 # help: 266 - ALLOW_UNICODE_NAMES
-msgid "\x0a\x01"
+msgid "h010A"
 msgstr ""
     "If the <b><i>ALLOW_UNICODE_NAMES</b></i> tag is set to YES, doxygen will allow non-ASCII "
     "characters to appear in the names of generated files. If set to NO, non-ASCII "
@@ -184,7 +197,7 @@ msgstr ""
     "The default value is: <b><i>NO</b></i>."
     
 # help: 267 - OUTPUT_LANGUAGE
-msgid "\x0b\x01"
+msgid "h010B"
 msgstr ""
     "The <b><i>OUTPUT_LANGUAGE</b></i> tag is used to specify the language in which all "
     "documentation generated by doxygen is written. Doxygen will use this information to "
@@ -201,7 +214,7 @@ msgstr ""
     "The default value is: <b><i>English</b></i>."
 
 # help: 268 - BRIEF_MEMBER_DESC
-msgid "\x0c\x01"
+msgid "h0c01"
 msgstr ""
     "If the <b><i>BRIEF_MEMBER_DESC</b></i> tag is set to YES, doxygen will include brief "
     "member descriptions after the members that are listed in the file and class documentation "
