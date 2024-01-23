@@ -83,213 +83,588 @@ msgstr ""
     "QTabBar::tab:!selected{margin-top:2px;}"
 
 # ---------------------------------------------------------------------------
+# supported languages by doxygen 1.10.0 ...
+# ---------------------------------------------------------------------------
+msgid "supported_langs"
+msgstr ""
+    "[\"Afrikaans\",\"Arabic\",\"Armenian\",\"Brazilian\",\"Bulgarian\",\"Catalan\","
+    "\"Chinese\",\"Chinese-Traditional\",\"Croatian\",\"Czech\",\"Danish\",\"Dutch\",\"English (United States)\","
+    "\"Esperanto\",\"Farsi (Persian)\",\"Finnish\",\"French\",\"German\",\"Greek\",\"Hindi\",\"Hungarian\",\"Indonesian\","
+    "\"Italian\", \"Japanese\",\"Japanese-en (Japanese with English messages)\",\"Korean\",\"Korean-en\","
+    "\"(Korean with English messages)\",\"Latvian\",\"Lithuanian\",\"Macedonian\",\"Norwegian\","
+    "\"Persian (Farsi)\",\"Polish\",\"Portuguese\",\"Romanian\",\"Russian\",\"Serbian\",\"Serbian-Cyrillic\",\"Slovak\","
+    "\"Slovene\",\"Spanish\",\"Swedish\",\"Turkish\",\"Ukrainian\",\"Vietnamese\"]"
+
+# ---------------------------------------------------------------------------
 # help text - version: english ...
 # ---------------------------------------------------------------------------
-# help: 256
-msgid "\00\01"
-msgstr "neues"
 
-# help: 257
-msgid "\01\01"
-msgstr "heues ffff"
-
-# help: 258
-msgid "\02\01"
+# help: 257 - DOXYFILE_ENCODING
+msgid "h0101"
 msgstr ""
+    "This tag specifies the encoding used for all characters in"
+    "the configuration file that follow. The default is UTF-8 which"
+    "is also the encoding used for all text before the first occurrence "
+    "of this tag. Doxygen uses libiconv (or the iconv built into libc) "
+    "for the transcoding. See <a href=\"#\">"
+    "https://www.gnu.org/software/libiconv/</a> for the list of possible "
+    "encodings.\n"
+    "\n"
+    "The default value is: UTF-8."
 
-# help: 259
-msgid "\03\01"
+# help: 258 - PROJECT_NAME
+msgid "h0102"
 msgstr ""
+    "The <b><i>PROJECT_NAME</i></b> tag is a single word (or a sequence of words "
+    "surrounded by double-quotes, unless you are using Doxywizard) "
+    "that should identify the project for which the documentation is "
+    "generated. This name is used in the title of most generated pages "
+    "and in a few other places.\n"
+    "\n"
+    "The default value is: My Project."
 
-# help: 260
-msgid "\x04\x01"
+# help: 259 - PROJECT_NUMBER
+msgid "h0103"
 msgstr ""
+    "The <b><i>PROJECT_NUMBER</i></b> tag can be used to enter a project or revision "
+    "number. This could be handy for archiving the generated documentation "
+    "or if some version control system is used."
 
-# help: 261
-msgid "\x05\x01"
+# help: 260 - PROJECT_BRIEF
+msgid "h0104"
 msgstr ""
+    "Using the <b><i>PROJECT_BRIEF</i></b> tag one can provide an optional one line "
+    "description for a project that appears at the top of each page "
+    "and should give viewer a quick idea about the purpose of the "
+    "project. Keep the description short."
 
-# help: 262
-msgid "\x06\x01"
+# help: 261 - PROJECT_LOGO
+msgid "h0105"
 msgstr ""
+    "With the <b><i>PROJECT_LOGO</i></b> tag one can specify a logo or an icon that "
+    "is included in the documentation. The maximum height of the logo "
+    "should not exceed 55 pixels and the maximum width should not exceed "
+    "200 pixels. Doxygen will copy the logo to the output directory."
 
-# help: 263
-msgid "\x07\x01"
+# help: 262 - PROJECT_ICON
+msgid "h0106"
 msgstr ""
+    "With the <b><i>PROJECT_ICON</i></b> tag one can specify an icon that is included "
+    "in the tabs when the HTML document is shown. Doxygen will copy the "
+    "logo to the output directory."
 
-# help: 264
-msgid "\x08\x01"
+# help: 263 - OUTPUT_DIRECTORY
+msgid "h0107"
 msgstr ""
+    "The <b><i>OUTPUT_DIRECTORY</i></b> tag is used to specify the (relative or absolute) "
+    "path into which the generated documentation will be written. If a "
+    "relative path is entered, it will be relative to the location where "
+    "doxygen was started. If left blank the current directory will be used."
 
-# help: 265
-msgid "\x09\x01"
+# help: 264 - CREATE_SUBDIRS
+msgid "h0108"
 msgstr ""
+    "If the <b><i>CREATE_SUBDIRS</i></b> tag is set to YES then doxygen will create up to "
+    "4096 sub-directories (in 2 levels) under the output directory of each "
+    "output format and will distribute the generated files over these directories. "
+    "Enabling this option can be useful when feeding doxygen a huge amount of "
+    "source files, where putting all generated files in the same directory would "
+    "otherwise causes performance problems for the file system. Adapt "
+    "<b><i>CREATE_SUBDIRS_LEVEL</b></i> to control the number of sub-directories.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 266
-msgid "\x0a\x01"
+# help: 265 - CREATE_SUBDIRS_LEVEL
+msgid "h0109"
 msgstr ""
+    "Controls the number of sub-directories that will be created when <b><i>CREATE_SUBDIRS</b></i> "
+    "tag is set to YES. Level 0 represents 16 directories, and every level increment "
+    "doubles the number of directories, resulting in 4096 directories at level 8 "
+    "which is the default and also the maximum value. The sub-directories are organized "
+    "in 2 levels, the first level always has a fixed number of 16 directories.\n"
+    "\n"
+    "Minimum value: 0, maximum value: 8, default value: 8.\n"
+    "\n"
+    "This tag requires that the tag <b><i>CREATE_SUBDIRS</b></i> is set to <b><i>YES</b></i>."
 
-# help: 267
-msgid "\x0b\x01"
+# help: 266 - ALLOW_UNICODE_NAMES
+msgid "h010A"
 msgstr ""
+    "If the <b><i>ALLOW_UNICODE_NAMES</b></i> tag is set to YES, doxygen will allow non-ASCII "
+    "characters to appear in the names of generated files. If set to NO, non-ASCII "
+    "characters will be escaped, for example _xE3_x81_x84 will be used for Unicode U+3044.\n"
+    "\n"
+    "The default value is: <b><i>NO</b></i>."
+    
+# help: 267 - OUTPUT_LANGUAGE
+msgid "h010B"
+msgstr ""
+    "The <b><i>OUTPUT_LANGUAGE</b></i> tag is used to specify the language in which all "
+    "documentation generated by doxygen is written. Doxygen will use this information to "
+    "generate all constant output in the proper language.\n"
+    "\n\n"
+    "Possible values are: Afrikaans, Arabic, Armenian, Brazilian, Bulgarian, Catalan, "
+    "Chinese, Chinese-Traditional, Croatian, Czech, Danish, Dutch, English (United States), "
+    "Esperanto, Farsi (Persian), Finnish, French, German, Greek, Hindi, Hungarian, Indonesian, "
+    "Italian, Japanese, Japanese-en (Japanese with English messages), Korean, Korean-en "
+    "(Korean with English messages), Latvian, Lithuanian, Macedonian, Norwegian, Persian "
+    "(Farsi), Polish, Portuguese, Romanian, Russian, Serbian, Serbian-Cyrillic, Slovak, "
+    "Slovene, Spanish, Swedish, Turkish, Ukrainian and Vietnamese.\n"
+    "\n\n"
+    "The default value is: <b><i>English</b></i>."
 
-# help: 268
-msgid "\x0c\x01"
+# help: 268 - BRIEF_MEMBER_DESC
+msgid "h010C"
 msgstr ""
+    "If the <b><i>BRIEF_MEMBER_DESC</b></i> tag is set to YES, doxygen will include brief "
+    "member descriptions after the members that are listed in the file and class documentation "
+    "(similar to Javadoc). Set to NO to disable this.\n"
+    "\n\n"
+    "The default value is: YES."
 
-# help: 269
-msgid "\x0d\x01"
+# help: 269 - REPEAT_BRIEF
+msgid "h010D"
 msgstr ""
+    "If the <b><i>REPEAT_BRIEF</b></i> tag is set to YES, doxygen will prepend the brief description "
+    "of a member or function before the detailed description "
+    "Note: If both <b><i>HIDE_UNDOC_MEMBERS</b></i> and <b><i>BRIEF_MEMBER_DESC</b></i> are set to NO, the brief "
+    "descriptions will be completely suppressed.\n"
+    "\n"
+    "The default value is: YES."
 
-# help: 270
-msgid "\x0e\x01"
+# help: 270 - ABBREVIATE_BRIEF
+msgid "h010E"
 msgstr ""
+    "This tag implements a quasi-intelligent brief description abbreviator that "
+    "is used to form the text in various listings. Each string in this list, if "
+    "found as the leading text of the brief description, will be stripped from "
+    "the text and the result, after processing the whole list, is used as the "
+    "annotated text. Otherwise, the brief description is used as-is. If left "
+    "blank, the following values are used ($name is automatically replaced with "
+    "the name of the entity):\n"
+    "The $name class, The $name widget, The $name file, is, provides, specifies, "
+    "contains, represents, a, an and the."
 
-# help: 271
-msgid "\x0f\x01"
+# help: 271 - ALWAYS_DETAILED_SEC
+msgid "h010F"
 msgstr ""
+    "If the <b><i>ALWAYS_DETAILED_SEC</b></i> and <b><i>REPEAT_BRIEF</b></i> "
+    "tags are both set to YES then doxygen will generate a detailed section "
+    "even if there is only a brief description.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 272
-msgid "\x10\x01"
+# help: 272 - INLINE_INHERITED_MEMB
+msgid "h0110"
 msgstr ""
+    "If the <b><i>INLINE_INHERITED_MEMB</b></i> tag is set to YES, doxygen will show all "
+    "inherited members of a class in the documentation of that class as if "
+    "those members were ordinary class members. Constructors, destructors "
+    "and assignment operators of the base classes will not be shown.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 273
-msgid "\x11\x01"
+# help: 273 - FULL_PATH_NAMES
+msgid "h0111"
 msgstr ""
+    "If the <b><i>FULL_PATH_NAMES</b></i> tag is set to YES, doxygen will prepend the full "
+    "path before files name in the file list and in the header files. If set "
+    "to NO the shortest path that makes the file name unique will be used.\n"
+    "\n"
+    "The default value is: YES."
 
-# help: 274
-msgid "\x12\x01"
+# help: 274 - STRIP_FROM_PATH
+msgid "h0112"
 msgstr ""
+    "The <b><i>STRIP_FROM_PATH</b></i> tag can be used to strip a user-defined part of the "
+    "path. Stripping is only done if one of the specified strings matches the "
+    "left-hand part of the path. The tag can be used to show relative paths "
+    "in the file list. If left blank the directory from which doxygen is run "
+    "is used as the path to strip.\n"
+    "Note that you can specify absolute paths here, but also relative paths, "
+    "which will be relative from the directory where doxygen is started.\n"
+    "\n"
+    "This tag requires that the tag <b><i>FULL_PATH_NAMES</b></i> is set to YES."
 
-# help: 275
-msgid "\x13\x01"
+# help: 275 - STRIP_FROM_INC_PATH
+msgid "h0113"
 msgstr ""
+    "The <b><i>STRIP_FROM_INC_PATH</b></i> tag can be used to strip a user-defined part "
+    "of the path mentioned in the documentation of a class, which tells the "
+    "reader which header file to include in order to use a class. If left blank "
+    "only the name of the header file containing the class definition is used. "
+    "Otherwise one should specify the list of include paths that are normally "
+    "passed to the compiler using the -I flag."
 
-# help: 276
-msgid "\x14\x01"
+# help: 276 - SHORT_NAMES
+msgid "h0114"
 msgstr ""
+    "If the <b><i>SHORT_NAMES</b></i> tag is set to YES, doxygen will generate much shorter "
+    "(but less readable) file names. This can be useful is your file systems "
+    "doesn't support long names like on DOS, Mac, or CD-ROM.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 277
-msgid "\x15\x01"
+# help: 277 - JAVADOC_AUTOBRIEF
+msgid "h0115"
 msgstr ""
+    "If the <b><i>JAVADOC_AUTOBRIEF</b></i> tag is set to YES then doxygen will interpret "
+    "the first line (until the first dot) of a Javadoc-style comment as the "
+    "brief description. If set to NO, the Javadoc-style will behave just like "
+    "regular Qt-style comments (thus requiring an explicit \\brief command for "
+    "a brief description.)\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 278
-msgid "\x16\x01"
+# help: 278 - JAVADOC_BANNER
+msgid "h0116"
 msgstr ""
+    "If the <b><i>JAVADOC_BANNER</b></i> tag is set to YES then doxygen will interpret a "
+    "line such as\n\n"
+    "\t/***************\n"
+    "as being the beginning of a Javadoc-style comment \"banner\". If set to "
+    "NO, the Javadoc-style will behave just like regular comments and it "
+    "will not be interpreted by doxygen.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 279
-msgid "\x17\x01"
+# help: 279 - QT_AUTOBRIEF
+msgid "h0117"
 msgstr ""
+    "If the <b><i>QT_AUTOBRIEF</b></i> tag is set to YES then doxygen will interpret the "
+    "first line (until the first dot) of a Qt-style comment as the brief "
+    "description. If set to NO, the Qt-style will behave just like regular "
+    "Qt-style comments (thus requiring an explicit \\brief command for a "
+    "brief description.)\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 280
-msgid "\x18\x01"
+# help: 280 - MULTILINE_CPP_IS_BRIEF
+msgid "h0118"
 msgstr ""
+    "The <b><i>MULTILINE_CPP_IS_BRIEF</b></i> tag can be set to YES to make doxygen treat "
+    "a multi-line C++ special comment block (i.e. a block of //! or /// "
+    "comments) as a brief description. This used to be the default behavior. "
+    "The new default is to treat a multi-line C++ comment block as a detailed "
+    "description. Set this tag to YES if you prefer the old behavior instead.\n"
+    "Note that setting this tag to YES also means that rational rose comments "
+    "are not recognized any more.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 281
-msgid "\x19\x01"
+# help: 281 - PYTHON_DOCSTRING
+msgid "h0119"
 msgstr ""
+    "By default Python docstrings are displayed as preformatted text and "
+    "doxygen's special commands cannot be used. By setting <b><i>PYTHON_DOCSTRING</b></i> "
+    "to NO the doxygen's special commands can be used and the contents of "
+    "the docstring documentation blocks is shown as doxygen documentation.\n"
+    "\n"
+    "The default value is: YES."
 
-# help: 282
-msgid "\x1a\x01"
+# help: 282 - INHERIT_DOCS
+msgid "h011A"
 msgstr ""
+    "If the <b><i>INHERIT_DOCS</b></i> tag is set to YES then an undocumented member "
+    "inherits the documentation from any documented member that it re-"
+    "implements.\n"
+    "\n"
+    "The default value is: YES."
 
-# help: 283
-msgid "\x1b\x01"
+# help: 283 - SEPARATE_MEMBER_PAGES
+msgid "h011B"
 msgstr ""
+    "If the <b><i>SEPARATE_MEMBER_PAGES</b></i> tag is set to YES then doxygen will "
+    "produce a new page for each member. If set to NO, the documentation "
+    "of a member will be part of the file/class/namespace that contains it.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 284
-msgid "\x1c\x01"
+# help: 284 - TAB_SIZE
+msgid "h011C"
 msgstr ""
+    "The <b><i>TAB_SIZE</b></i> tag can be used to set the number of spaces in a tab.\n"
+    "Doxygen uses this value to replace tabs by spaces in code fragments.\n"
+    "\n"
+    "Minimum value: 1, maximum value: 16, default value: 4."
 
-# help: 285
-msgid "\x1d\x01"
+# help: 285 - ALIASES
+msgid "h011D"
 msgstr ""
+    "This tag can be used to specify a number of aliases that act as "
+    "commands in the documentation. An alias has the form:\n"
+    "\tname=value\n\n"
+    "For example adding\n"
+    "\tsideeffect=\@par Side Effects:\^\^\"\n\n"
+    "will allow you to put the command \\sideeffect (or \@sideeffect) in "
+    "the documentation, which will result in a user-defined paragraph "
+    "with heading \"Side Effects:\". Note that you cannot put \\n \'s in "
+    "the value part of an alias to insert newlines (in the resulting "
+    "output). You can put \^\^ in the value part of an alias to insert "
+    "a newline as if a physical newline was in the original file.\n"
+    "When you need a literal { or } or , in the value part of an alias "
+    "you have to escape them by means of a backslash, this can lead to "
+    "conflicts with the commands \\{ and \\} for these it is advised to "
+    "use the version @{ and @} or use a double escape (\\\\{ and \\\\})"
 
-# help: 286
-msgid "\x1e\x01"
+# help: 286 - OPTIMIZE_OUTPUT_FOR_C
+msgid "h011E"
 msgstr ""
+    "Set the <b><i>OPTIMIZE_OUTPUT_FOR_C</b></i> tag to YES if your project consists "
+    "of C sources only. Doxygen will then generate output that is more "
+    "tailored for C. For instance, some of the names that are used will "
+    "be different. The list of all members will be omitted, etc.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 287
-msgid "\x1f\x01"
+# help: 287 - OPTIMIZE_OUTPUT_JAVA
+msgid "h011F"
 msgstr ""
+    "Set the <b><i>OPTIMIZE_OUTPUT_JAVA</b></i> tag to YES if your project consists of "
+    "Java or Python sources only. Doxygen will then generate output that "
+    "is more tailored for that language. For instance, namespaces will be "
+    "presented as packages, qualified scopes will look different, etc.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 288
-msgid "\x20\x01"
+# help: 288 - OPTIMIZE_FOR_FORTRAN
+msgid "h0120"
 msgstr ""
+    "Set the <b><i>OPTIMIZE_FOR_FORTRAN</b></i> tag to YES if your project consists of "
+    "Fortran sources. Doxygen will then generate output that is tailored "
+    "for Fortran.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 289
-msgid "\x21\x01"
+# help: 289 - OPTIMIZE_OUTPUT_VHDL
+msgid "h0121"
 msgstr ""
+    "Set the <b><i>OPTIMIZE_OUTPUT_VHDL</b></i> tag to YES if your project consists of "
+    "VHDL sources. Doxygen will then generate output that is tailored for "
+    "VHDL.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 290
-msgid "\x22\x01"
+# help: 290 - OPTIMIZE_OUTPUT_SLICE
+msgid "h0122"
 msgstr ""
+    "Set the <b><i>OPTIMIZE_OUTPUT_SLICE</b></i> tag to YES if your project consists of "
+    "Slice sources only. Doxygen will then generate output that is more "
+    "tailored for that language. For instance, namespaces will be presented "
+    "as modules, types will be separated into more groups, etc.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 291
-msgid "\x23\x01"
+# help: 291 - EXTENSION_MAPPING
+msgid "h0123"
 msgstr ""
+    "Doxygen selects the parser to use depending on the extension of the "
+    "files it parses. With this tag you can assign which parser to use for "
+    "a given extension. Doxygen has a built-in mapping, but you can override "
+    "or extend it using this tag. The format is ext=language, where ext is a "
+    "file extension, and language is one of the parsers supported by doxygen: "
+    "IDL, Java, JavaScript, Csharp (C#), C, C++, Lex, D, PHP, md (Markdown), "
+    "Objective-C, Python, Slice, VHDL, Fortran (fixed format Fortran: FortranFixed, "
+    "free formatted Fortran: FortranFree, unknown formatted Fortran: Fortran. "
+    "In the later case the parser tries to guess whether the code is fixed or "
+    "free formatted code, this is the default for Fortran type files). For "
+    "instance to make doxygen treat .inc files as Fortran files (default is PHP), "
+    "and .f files as C (default is Fortran), use: inc=Fortran f=C.\n"
+    "Note: For files without extension you can use no_extension as a placeholder.\n"
+    "Note that for custom extensions you also need to set FILE_PATTERNS otherwise "
+    "the files are not read by doxygen. When specifying no_extension you should add \* "
+    "to the FILE_PATTERNS.\n"
+    "\n"
+    "Note see also the list of default file extension mappings."
 
-# help: 292
-msgid "\x24\x01"
+# help: 292 - MARKDOWN_SUPPORT
+msgid "h0124"
 msgstr ""
+    "If the <b><i>MARKDOWN_SUPPORT</b></i> tag is enabled then doxygen pre-processes all comments "
+    "according to the Markdown format, which allows for more readable documentation. "
+    "See <a href="#">https://daringfireball.net/projects/markdown/</a> for details. "
+    "The output of markdown processing is further processed by doxygen, so you can "
+    "mix doxygen, HTML, and XML commands with Markdown formatting. Disable only in "
+    "case of backward compatibilities issues.\n"
+    "\n"
+    "The default value is: YES."
 
-# help: 293
-msgid "\x25\x01"
+# help: 293 - TOC_INCLUDE_HEADINGS
+msgid "h0125"
 msgstr ""
+    "When the <b><i>TOC_INCLUDE_HEADINGS</b></i> tag is set to a non-zero value, all headings up "
+    "to that level are automatically included in the table of contents, even if they "
+    "do not have an id attribute.\n"
+    "Note: This feature currently applies only to Markdown headings.\n"
+    "\n"
+    "Minimum value: 0, maximum value: 99, default value: 5.\n"
+    "\n"
+    "This tag requires that the tag MARKDOWN_SUPPORT is set to YES."
 
-# help: 294
-msgid "\x26\x01"
+# help: 294 - MARKDOWN_ID_STYLE
+msgid "h0126"
 msgstr ""
+    "The <b><i>MARKDOWN_ID_STYLE</b></i> tag can be used to specify the algorithm used to generate "
+    "identifiers for the Markdown headings. Note: Every identifier is unique.\n"
+    "\n"
+    "Possible values are: DOXYGEN use a fixed 'autotoc_md' string followed by a sequence "
+    "number starting at 0 and GITHUB use the lower case version of title with any "
+    "whitespace replaced by \'\-\' and punctuation characters removed.\n"
+    "\n"
+    "The default value is: DOXYGEN.\n"
+    "\n"
+    "This tag requires that the tag MARKDOWN_SUPPORT is set to YES."
 
-# help: 295
-msgid "\x27\x01"
+# help: 295 - AUTOLINK_SUPPORT
+msgid "h0127"
 msgstr ""
+    "When enabled doxygen tries to link words that correspond to documented classes, "
+    "or namespaces to their corresponding documentation. Such a link can be prevented "
+    "in individual cases by putting a % sign in front of the word or globally by setting "
+    "<b><i>AUTOLINK_SUPPORT</b></i> to NO.\n"
+    "\n"
+    "The default value is: YES."
 
 # help: 296
-msgid "\x28\x01"
+msgid "h0128"
 msgstr ""
+    "If you use STL classes (i.e. std::string, std::vector, etc.) but do not want to "
+    "include (a tag file for) the STL sources as input, then you should set this tag "
+    "to YES in order to let doxygen match functions declarations and definitions whose "
+    "arguments contain STL classes (e.g. func(std::string); versus func(std::string) "
+    "{}). This also make the inheritance and collaboration diagrams that involve STL "
+    "classes more complete and accurate.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 297
-msgid "\x29\x01"
+# help: 297 - CPP_CLI_SUPPORT
+msgid "h0129"
 msgstr ""
+    "If you use Microsoft's C++/CLI language, you should set this option to YES to "
+    "enable parsing support.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 298
-msgid "\x2a\x01"
+# help: 298 - SIP_SUPPORT
+msgid "h012A"
 msgstr ""
+    "Set the <b><i>SIP_SUPPORT</b></i> tag to YES if your project consists of sip sources only. "
+    "Doxygen will parse them like normal C++ but will assume all classes use public "
+    "instead of private inheritance when no explicit protection keyword is present.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 299
-msgid "\x2b\x01"
+# help: 299 - IDL_PROPERTY_SUPPORT
+msgid "h012B"
 msgstr ""
+    "For Microsoft's IDL there are propget and propput attributes to indicate getter "
+    "and setter methods for a property. Setting this option to YES will make doxygen "
+    "to replace the get and set methods by a property in the documentation.\n"
+    "This will only work if the methods are indeed getting or setting a simple type.\n"
+    "If this is not the case, or you want to show the methods anyway, you should set "
+    "this option to NO.\n"
+    "\n"
+    "The default value is: YES."
 
-# help: 300
-msgid "\x2c\x01"
+# help: 300 - DISTRIBUTE_GROUP_DOC
+msgid "h012C"
 msgstr ""
+    "If member grouping is used in the documentation and the <b><i>DISTRIBUTE_GROUP_DOC</b></i> tag "
+    "is set to YES then doxygen will reuse the documentation of the first member in the "
+    "group (if any) for the other members of the group. By default all members of a "
+    "group must be documented explicitly.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 301
-msgid "\x2d\x01"
+# help: 301 - GROUP_NESTED_COMPOUNDS
+msgid "h012D"
 msgstr ""
+    "If one adds a struct or class to a group and this option is enabled, then also any "
+    "nested class or struct is added to the same group. By default this option is disabled "
+    "and one has to add nested compounds explicitly via \\ingroup .\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 302
-msgid "\x2e\x01"
+# help: 302 - SUBGROUPING
+msgid "h012E"
 msgstr ""
+    "Set the <b><i>SUBGROUPING</b></i> tag to YES to allow class member groups of the same type (for "
+    "instance a group of public functions) to be put as a subgroup of that type (e.g. "
+    "under the Public Functions section). Set it to NO to prevent subgrouping. Alternatively, "
+    "this can be done per class using the \\nosubgrouping command.\n"
+    "\n"
+    "The default value is: YES."
 
-# help: 303
-msgid "\x2f\x01"
+# help: 303 - INLINE_GROUPED_CLASSES
+msgid "h012F"
 msgstr ""
+    "When the <b><i>INLINE_GROUPED_CLASSES</b></i> tag is set to YES, classes, structs and unions are "
+    "shown inside the group in which they are included (e.g. using \\ingroup ) instead of "
+    "on a separate page (for HTML and Man pages) or section (for LaTeX and RTF).\n"
+    "Note that this feature does not work in combination with SEPARATE_MEMBER_PAGES.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 304
-msgid "\x30\x01"
+# help: 304 INLINE_SIMPLE_STRUCTS
+msgid "h0130"
 msgstr ""
+    "When the <b><i>INLINE_SIMPLE_STRUCTS</b></i> tag is set to YES, structs, classes, and unions with "
+    "only public data fields or simple typedef fields will be shown inline in the "
+    "documentation of the scope in which they are defined (i.e. file, namespace, or group "
+    "documentation), provided this scope is documented. If set to NO, structs, classes, "
+    "and unions are shown on a separate page (for HTML and Man pages) or section (for "
+    "LaTeX and RTF).\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 305
-msgid "\x31\x01"
+# help: 305 - TYPEDEF_HIDES_STRUCT
+msgid "h0131"
 msgstr ""
+    "When <b><i>TYPEDEF_HIDES_STRUCT</b></i> tag is enabled, a typedef of a struct, union, or enum is "
+    "documented as struct, union, or enum with the name of the typedef. So typedef struct "
+    "TypeS {} TypeT, will appear in the documentation as a struct with name TypeT. When "
+    "disabled the typedef will appear as a member of a file, namespace, or class. And the "
+    "struct will be named TypeS. This can typically be useful for C code in case the coding "
+    "convention dictates that all compound types are typedef'ed and only the typedef is "
+    "referenced, never the tag name.\n"
+    "\n"
+    "The default value is: NO."
 
-# help: 306
-msgid "\x32\x01"
+# help: 306 - LOOKUP_CACHE_SIZE
+msgid "h0132"
 msgstr ""
+    "The size of the symbol lookup cache can be set using LOOKUP_CACHE_SIZE. This cache is "
+    "used to resolve symbols given their name and scope. Since this can be an expensive "
+    "process and often the same symbol appears multiple times in the code, doxygen keeps a "
+    "cache of pre-resolved symbols. If the cache is too small doxygen will become slower. "
+    "If the cache is too large, memory is wasted. The cache size is given by this formula: "
+    "2^(16+LOOKUP_CACHE_SIZE). The valid range is 0..9, the default is 0, corresponding to "
+    "a cache size of 2^16=65536 symbols. At the end of a run doxygen will report the cache "
+    "usage and suggest the optimal cache size from a speed point of view.\n"
+    "\n"
+    "Minimum value: 0, maximum value: 9, default value: 0."
 
-# help: 307
-msgid "\x33\x01"
+# help: 307 - NUM_PROC_THREADS
+msgid "h0133"
 msgstr ""
+    "The <b><i>NUM_PROC_THREADS</b></i> specifies the number of threads doxygen is allowed to use during "
+    "processing. When set to 0 doxygen will based this on the number of cores available in "
+    "the system. You can set it explicitly to a value larger than 0 to get more control over "
+    "the balance between CPU load and processing speed. At this moment only the input "
+    "processing can be done using multiple threads. Since this is still an experimental "
+    "feature the default is set to 1, which effectively disables parallel processing. "
+    "Please report any issues you encounter. Generating dot graphs in parallel is controlled "
+    "by the DOT_NUM_THREADS setting.\n"
+    "\n"
+    "Minimum value: 0, maximum value: 32, default value: 1."
 
+# help: 307 - TIMESTAMP
+msgid "h0134"
+msgstr ""
+    "If the <b><i>TIMESTAMP</b></i> tag is set different from NO then each generated page will contain "
+    "the date or date and time when the page was generated. Setting this to NO can help "
+    "when comparing the output of multiple runs.\n"
+    "\n"
+    "Possible values are: YES, NO, DATETIME and DATE.\n"
+    "\n"
+    "The default value is: NO."

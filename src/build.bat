@@ -31,7 +31,7 @@ echo create directories...  [
 :: en => English
 :: de => German
 :: ---------------------------------------------------------------------------
-for %%A in (en, de) do (
+for %%A in (en_us, de_de) do (
     cd %BASEDIR%
     dir /A:D %BASEDIR%\locales  >nul 2>&1
     if errorlevel 0 (
