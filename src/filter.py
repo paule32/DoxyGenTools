@@ -165,33 +165,37 @@ try:
     def handle_language(lang):
         try:
             system_lang, _ = locale.getdefaultlocale()
-            if   system_lang.lower() == __locale__enu:
-                 if lang.lower() == __locale__enu[:2]:
+            print("loca: " + system_lang)
+            print("lalo: " + __locale__enu)
+            print("lang: " + lang)
+            if system_lang.lower() == __locale__enu:
+                if lang.lower() == __locale__enu:
                     tr = gettext.translation(
                     __app__name,
                     localedir=__locale__,
-                    languages=[__locale__enu[:2]])  # english
-                 if lang.lower() == __locale__deu[:2]:
+                    languages=[__locale__enu])  # english
+                elif lang.lower() == __locale__deu:
                     tr = gettext.translation(
                     __app__name,
                     localedir=__locale__,
-                    languages=[__locale__deu[:2]])  # german
+                    languages=[__locale__deu])  # german
             elif system_lang.lower() == __locale__deu:
-                 if lang.lower() == __locale__enu[:2]:
+                if lang.lower() == __locale__deu:
                     tr = gettext.translation(
                     __app__name,
                     localedir=__locale__,
-                    languages=[__locale__enu[:2]])  # english
-                 if lang.lower() == __locale__deu[:2]:
+                    languages=[__locale__deu])  # english
+                elif lang.lower() == __locale__enu:
                     tr = gettext.translation(
                     __app__name,
                     localedir=__locale__,
-                    languages=[__locale__deu[:2]])  # german
+                    languages=[__locale__enu])  # german
             else:
-                    tr = gettext.translation(
-                    __app__name,
-                    localedir=__locale__,
-                    languages=[__locale__enu[:2]])  # fallback - english
+                print("ennnn")
+                tr = gettext.translation(
+                __app__name,
+                localedir=__locale__,
+                languages=[__locale__enu])  # fallback - english
             
             tr.install()
             return tr
@@ -878,6 +882,7 @@ try:
             self.content_widget.setMinimumHeight(2000)
             
             supported_langs  = tr("supported_langs")
+            print(tr("supported_langs"))
             label_1_elements = [
                 # <text>,                  <type 1>,             <help>, <type 2>,  <list 1>
                 ["DOXYFILE_ENCODING",      self.type_edit,       100, 0],
@@ -1702,15 +1707,7 @@ try:
             # ---------------------------------------------------------
             # get license to front, before the start shot ...
             # ---------------------------------------------------------
-            file_lic = os.getcwd() + "/LICENSE"
-            if not os.path.exists(file_lic):
-                showApplicationError("no license - aborted.")
-                sys.exit(EXIT_FAILURE)
-            
-            with open(file_lic, 'r') as file:
-                content = file.read()
-                file.close()
-                textfield.setPlainText(content)
+            textfield.setPlainText(tr("LICENSE"))
         
         def button1_clicked(self):
             self.returnCode = 0
@@ -1786,7 +1783,7 @@ try:
                 + "language = en\n"
                 output_file.write(content)
                 output_file.close()
-                ini_lang = "en" # default is english; en
+                ini_lang = "en_us" # default is english; en
         else:
             config = configparser.ConfigParser()
             config.read(__app__config_ini)
@@ -1803,6 +1800,7 @@ try:
             + f"{ini_lang}"    + "/LC_MESSAGES/" \
             + f"{__app__name}" + ".po"
         
+        print("po: " + po_file_name)
         if not os.path.exists(convertPath(po_file_name)):
             if isPythonWindows() == True:
                 showApplicationInformation(__error__locales_error)
