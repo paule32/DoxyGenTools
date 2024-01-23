@@ -48,6 +48,15 @@ for %%A in (en, de) do (
                 echo|set /p="locales compiled => "
                 %EX% "%PO%" -o %APP%.mo %APP%.po
                 if errorlevel 0 (
+                    echo|set /p="[ ok   ], "
+                )   else (
+                    echo|set /p="[ fail ], "
+                )
+                echo|set /p="lexicon compiled => "
+                %EX% "%PO%" -o ^
+                %BASEDIR%\locales\%%A\LC_MESSAGES\lexica.mo ^
+                %BASEDIR%\locales\%%A\LC_MESSAGES\lexica.po >nul 2>&1
+                if errorlevel 0 (
                     echo [ ok   ]
                 )   else (
                     echo [ fail ],
