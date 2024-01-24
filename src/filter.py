@@ -463,6 +463,8 @@ try:
                 self.font_a.setPointSize(11)
             
             
+            self.supported_langs= tr("supported_langs")
+            
             self.content_widget = QWidget(self)
             self.content_widget.setMinimumHeight(self.height()-150)
             self.content_widget.setMinimumWidth (self.width()-50)
@@ -555,6 +557,79 @@ try:
             else:
                 self.layout.addWidget(w)
             return w
+        
+        def addElements(self, elements, hid):
+            for i in range(0, len(elements)):
+                lv_0 = QVBoxLayout()
+                lh_0 = QHBoxLayout()
+                
+                # -----------------------------------------
+                # the help string for a doxygen tag ...
+                # -----------------------------------------
+                helpID   = hid + i + 1
+                helpText = tr(f"h{helpID:04X}")
+                
+                vw_1 = self.addHelpLabel(   \
+                    elements[i][0], \
+                    helpID,         \
+                    helpText,       \
+                    lh_0)
+                vw_1.setMinimumHeight(14)
+                vw_1.setMinimumWidth(200)
+                
+                if elements[i][1] == self.type_edit:
+                    self.addLineEdit("",lh_0)
+                                        
+                    if elements[i][3] == 1:
+                        self.addPushButton("+",lh_0)
+                        
+                    elif elements[i][3] == 3:
+                        self.addPushButton("+",lh_0)
+                        self.addPushButton("-",lh_0)
+                        self.addPushButton("R",lh_0)
+                        
+                        vw_3 = myTextEdit()
+                        vw_3.setFont(self.font_a)
+                        vw_3.setMinimumHeight(96)
+                        vw_3.setMaximumHeight(96)
+                        lv_0.addWidget(vw_3)
+                        
+                elif elements[i][1] == self.type_check_box:
+                    vw_2 = QCheckBox()
+                    vw_2.setMinimumHeight(21)
+                    vw_2.setFont(self.font_a)
+                    vw_2.setChecked(elements[i][4])
+                    lh_0.addWidget(vw_2)
+                    
+                elif elements[i][1] == self.type_combo_box:
+                    vw_2 = QComboBox()
+                    vw_2.setMinimumHeight(26)
+                    vw_2.setFont(self.font)
+                    vw_2.font().setPointSize(14)
+                    lh_0.addWidget(vw_2)
+                    
+                    if elements[i][3] == 4:
+                        data = json.loads(self.supported_langs)
+                        elements[i][4] = data
+                        for j in range(0, len(data)):
+                            img = "flag_"       \
+                            + elements[i][4][j] \
+                            + ".png".lower()
+                            vw_2.insertItem(0, elements[i][4][j])
+                            vw_2.setItemIcon(0, QIcon(os.path.join(basedir,"img",img)))
+                    
+                    elif elements[i][3] == 2:
+                        for j in range(0, len(elements[i][4])):
+                            vw_2.addItem(elements[i][4][j])
+                
+                elif elements[i][1] == self.type_spin:
+                    vw_2 = QSpinBox()
+                    vw_2.setFont(self.font_a)
+                    vw_2.setMinimumHeight(21)
+                    lh_0.addWidget(vw_2)
+                
+                lv_0.addLayout(lh_0)
+                self.layout.addLayout(lv_0)
     
     # ------------------------------------------------------------------------
     # create a scroll view for the project tab on left side of application ...
@@ -881,138 +956,62 @@ try:
             self.label_1.hide()
             self.content_widget.setMinimumHeight(2000)
             
-            supported_langs  = tr("supported_langs")
-            print(tr("supported_langs"))
             label_1_elements = [
                 # <text>,                  <type 1>,             <help>, <type 2>,  <list 1>
                 ["DOXYFILE_ENCODING",      self.type_edit,       100, 0],
-                ["PROJECT_NAME",           self.type_edit,       101, 0],
+                ["PROJECT_NAME",           self.type_edit,       101, 0, "My Project"],
                 ["PROJECT_NUMBER",         self.type_edit,       102, 0],
                 ["PROJECT_BRIEF",          self.type_edit,       103, 0],
                 ["PROJECT_LOGO",           self.type_edit,       104, 1],
                 ["PROJECT_ICON",           self.type_edit,       105, 1],
                 ["OUTPUT_DIRECTORY",       self.type_edit,       106, 1],
-                ["CREATE_SUBDIRS",         self.type_check_box,  107, 0],
+                ["CREATE_SUBDIRS",         self.type_check_box,  107, 0, True],
                 ["CREATE_SUBDIRS_LEVEL",   self.type_spin,       108, 0],
-                ["ALLOW_UNICODE_NAMES",    self.type_check_box,  109, 0],
+                ["ALLOW_UNICODE_NAMES",    self.type_check_box,  109, 0, False],
                 ["OUTPUT_LANGUAGE",        self.type_combo_box,  110, 4, [] ],
-                ["BRIEF_MEMBER_DESC",      self.type_check_box,  111, 0],
-                ["REPEAT_BRIEF",           self.type_check_box,  112, 0],
+                ["BRIEF_MEMBER_DESC",      self.type_check_box,  111, 0, True],
+                ["REPEAT_BRIEF",           self.type_check_box,  112, 0, True],
                 ["ABBREVIATE_BRIEF",       self.type_edit,       113, 3],
-                ["ALWAYS_DETAILED_SEC",    self.type_check_box,  114, 0],
-                ["INLINE_INHERITED_MEMB",  self.type_check_box,  115, 0],
-                ["FULL_PATH_NAMES",        self.type_check_box,  116, 0],
+                ["ALWAYS_DETAILED_SEC",    self.type_check_box,  114, 0, True],
+                ["INLINE_INHERITED_MEMB",  self.type_check_box,  115, 0, True],
+                ["FULL_PATH_NAMES",        self.type_check_box,  116, 0, True],
                 ["STRIP_FROM_PATH",        self.type_edit,       117, 3],
                 ["STRIP_FROM_INC_PATH",    self.type_edit,       118, 3],
-                ["SORT_NAMES",             self.type_check_box,  119, 0],
-                ["JAVADOC_AUTOBRIEF",      self.type_check_box,  120, 0],
-                ["JAVADOC_BANNER",         self.type_check_box,  121, 0],
-                ["QT_AUTOBRIEF",           self.type_check_box,  122, 0],
-                ["MULTILINE_CPP_IS_BRIEF", self.type_check_box,  123, 0],
-                ["PYTHON_DOCSTRING",       self.type_check_box,  124, 0],
-                ["INHERITED_DOCS",         self.type_check_box,  125, 0],
-                ["SEPERATE_MEMBER_PAGES",  self.type_check_box,  126, 0],
+                ["SHORT_NAMES",            self.type_check_box,  119, 0, False],
+                ["JAVADOC_AUTOBRIEF",      self.type_check_box,  120, 0, True ],
+                ["JAVADOC_BANNER",         self.type_check_box,  121, 0, False],
+                ["QT_AUTOBRIEF",           self.type_check_box,  122, 0, False],
+                ["MULTILINE_CPP_IS_BRIEF", self.type_check_box,  123, 0, False],
+                ["PYTHON_DOCSTRING",       self.type_check_box,  124, 0, True ],
+                ["INHERITED_DOCS",         self.type_check_box,  125, 0, True ],
+                ["SEPERATE_MEMBER_PAGES",  self.type_check_box,  126, 0, False],
                 ["TAB_SIZE",               self.type_spin,       127, 0],
                 ["ALIASES",                self.type_edit,       128, 3],
-                ["OPTIMIZE_OUTPUT_FOR_C",  self.type_check_box,  129, 0],
-                ["OPTIMIZE_OUTPUT_JAVA",   self.type_check_box,  130, 0],
-                ["OPTIMIZE_FOR_FORTRAN",   self.type_check_box,  131, 0],
-                ["OPTIMIZE_OUTPUT_VHCL",   self.type_check_box,  132, 0],
-                ["OPTIMIZE_OUTPUT_SLICE",  self.type_check_box,  133, 0],
+                ["OPTIMIZE_OUTPUT_FOR_C",  self.type_check_box,  129, 0, True ],
+                ["OPTIMIZE_OUTPUT_JAVA",   self.type_check_box,  130, 0, False],
+                ["OPTIMIZE_FOR_FORTRAN",   self.type_check_box,  131, 0, False],
+                ["OPTIMIZE_OUTPUT_VHCL",   self.type_check_box,  132, 0, False],
+                ["OPTIMIZE_OUTPUT_SLICE",  self.type_check_box,  133, 0, False],
                 ["EXTERNAL_MAPPING",       self.type_edit,       134, 3],
-                ["MARKDOWN_SUPPORT",       self.type_check_box,  135, 0],
+                ["MARKDOWN_SUPPORT",       self.type_check_box,  135, 0, True ],
                 ["MARKDOWN_ID_STYLE",      self.type_combo_box,  136, 2, ["DOXYGEN", "CIT"]],
                 ["TOC_INCLUDE_HEADINGS",   self.type_spin,       137, 0],
-                ["AUTOLINK_SUPPORT",       self.type_check_box,  138, 0],
-                ["BUILTIN_STL_SUPPORT",    self.type_check_box,  139, 0],
-                ["CPP_CLI_SUPPORT",        self.type_check_box,  140, 0],
-                ["SIP_SUPPORT",            self.type_check_box,  141, 0],
-                ["IDL_PROPERTY_SUPPORT",   self.type_check_box,  142, 0],
-                ["DESTRIBUTE_GROUP_DOC",   self.type_check_box,  143, 0],
-                ["GROUP_NESTED_COMPOUNDS", self.type_check_box,  144, 0],
-                ["SUBGROUPING",            self.type_check_box,  145, 0],
-                ["INLINE_GROUPED_CLASSES", self.type_check_box,  146, 0],
-                ["INLINE_SIMPLE_STRUCTS",  self.type_check_box,  147, 0],
-                ["TYPEDEF_HIDES_STRUCT",   self.type_check_box,  148, 0],
+                ["AUTOLINK_SUPPORT",       self.type_check_box,  138, 0, True ],
+                ["BUILTIN_STL_SUPPORT",    self.type_check_box,  139, 0, True ],
+                ["CPP_CLI_SUPPORT",        self.type_check_box,  140, 0, True ],
+                ["SIP_SUPPORT",            self.type_check_box,  141, 0, False],
+                ["IDL_PROPERTY_SUPPORT",   self.type_check_box,  142, 0, True ],
+                ["DESTRIBUTE_GROUP_DOC",   self.type_check_box,  143, 0, False],
+                ["GROUP_NESTED_COMPOUNDS", self.type_check_box,  144, 0, False],
+                ["SUBGROUPING",            self.type_check_box,  145, 0, True ],
+                ["INLINE_GROUPED_CLASSES", self.type_check_box,  146, 0, False],
+                ["INLINE_SIMPLE_STRUCTS",  self.type_check_box,  147, 0, False],
+                ["TYPEDEF_HIDES_STRUCT",   self.type_check_box,  148, 0, False],
                 ["LOOKUP_CACHE_SIZE",      self.type_spin,       149, 0],
                 ["NUM_PROC_THREADS",       self.type_spin,       150, 0],
                 ["TIMESTAMP",              self.type_combo_box,  151, 2, ["NO","YES"]]
             ]
-            
-            for i in range(0, len(label_1_elements)):
-                lv_0 = QVBoxLayout()
-                lh_0 = QHBoxLayout()
-                
-                # -----------------------------------------
-                # the help string for a doxygen tag ...
-                # -----------------------------------------
-                helpID   = 256 + i + 1
-                
-                
-                #s = int.to_bytes(helpID,2,"little")
-                #s = s.decode("utf-8")
-                #s = s.replace("\\","")
-                
-                helpText = tr(f"h{helpID:04X}")
-                vw_1 = self.addHelpLabel(   \
-                    label_1_elements[i][0], \
-                    helpID,                 \
-                    helpText,               \
-                    lh_0)
-                vw_1.setMinimumHeight(14)
-                vw_1.setMinimumWidth(200)
-                
-                if label_1_elements[i][1] == self.type_edit:
-                    self.addLineEdit("",lh_0)
-                                        
-                    if label_1_elements[i][3] == 1:
-                        self.addPushButton("+",lh_0)
-                        
-                    elif label_1_elements[i][3] == 3:
-                        self.addPushButton("+",lh_0)
-                        self.addPushButton("-",lh_0)
-                        self.addPushButton("R",lh_0)
-                        
-                        vw_3 = myTextEdit()
-                        vw_3.setFont(self.font_a)
-                        vw_3.setMinimumHeight(52)
-                        lv_0.addWidget(vw_3)
-                        
-                elif label_1_elements[i][1] == self.type_check_box:
-                    vw_2 = QCheckBox()
-                    vw_2.setMinimumHeight(21)
-                    vw_2.setFont(self.font_a)
-                    lh_0.addWidget(vw_2)
-                    
-                elif label_1_elements[i][1] == self.type_combo_box:
-                    vw_2 = QComboBox()
-                    vw_2.setMinimumHeight(26)
-                    vw_2.setFont(self.font)
-                    vw_2.font().setPointSize(14)
-                    lh_0.addWidget(vw_2)
-                    
-                    if label_1_elements[i][3] == 4:
-                        data = json.loads(supported_langs)
-                        label_1_elements[i][4] = data
-                        for j in range(0, len(data)):
-                            img = "flag_"               \
-                            + label_1_elements[i][4][j] \
-                            + ".png".lower()
-                            vw_2.insertItem(0, label_1_elements[i][4][j])
-                            vw_2.setItemIcon(0, QIcon(os.path.join(basedir,"img",img)))
-                    
-                    elif label_1_elements[i][3] == 2:
-                        for j in range(0, len(label_1_elements[i][4])):
-                            vw_2.addItem(label_1_elements[i][4][j])
-                
-                elif label_1_elements[i][1] == self.type_spin:
-                    vw_2 = QSpinBox()
-                    vw_2.setFont(self.font_a)
-                    vw_2.setMinimumHeight(21)
-                    lh_0.addWidget(vw_2)
-                
-                lv_0.addLayout(lh_0)
-                self.layout.addLayout(lv_0)
+            self.addElements(label_1_elements, 0x0100)
         
         # ----------------------------------------------
         # show help text when mouse move over the label
@@ -1026,10 +1025,60 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
             
             label_1_elements = [
-                "EXTRACT_ALL","EXTRACT_PRIVATE","EXTRACT_PRIV_VIRTUAL"
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["EXTRACT_PRIVATE",          self.type_check_box, 0x201, 0, False ],
+                ["EXTRACT_PRIV_VIRTUAL",     self.type_check_box, 0x202, 0, False ],
+                ["EXTRACT_PACKAGE",          self.type_check_box, 0x203, 0, False ],
+                ["EXTRACT_STATIC",           self.type_check_box, 0x204, 0, True  ],
+                ["EXTRACT_LOCAL_CLASSES",    self.type_check_box, 0x205, 0, True  ],
+                ["EXTRACT_LOCAL_METHODS",    self.type_check_box, 0x206, 0, True  ],
+                ["EXTRACT_ANON_NSPACES",     self.type_check_box, 0x207, 0, True  ],
+                ["RECURSIVE_UNNAMED_PARAMS", self.type_check_box, 0x208, 0, True  ],
+                ["HIDE_UNDOC_MEMBERS",       self.type_check_box, 0x209, 0, False ],
+                ["HIDE_UNDOC_CLASSES",       self.type_check_box, 0x20A, 0, False ],
+                ["HIDE_FRIEND_COMPOUNDS",    self.type_check_box, 0x20B, 0, False ],
+                ["HIDE_IN_BODY_DOCS",        self.type_check_box, 0x20C, 0, False ],
+                ["INTERNAL_DOCS",            self.type_check_box, 0x20D, 0, True  ],
+                
+                ["CASE_SENSE_NAMES",         self.type_combo_box, 0x20E, 2, ["SYSTEM", "NO", "YES"] ],
+                
+                ["HIDE_SCOPE_NAMES",         self.type_check_box, 0x20E, 0, False ],
+                ["HIDE_COMPOUND_REFERENCE",  self.type_check_box, 0x20F, 0, False ],
+                
+                ["SHOW_HEADERFILE",          self.type_check_box, 0x210, 0, True  ],
+                ["SHOW_INCLUDE_FILES",       self.type_check_box, 0x210, 0, True  ],
+                
+                ["SHOW_GROUPED_MEMB_INC",    self.type_check_box, 0x210, 0, False ],
+                ["FORCE_LOCAL_INCLUDES",     self.type_check_box, 0x210, 0, False ],
+                ["INLINE_INFO",              self.type_check_box, 0x210, 0, False ],
+                ["SORT_MEMBER_DOCS",         self.type_check_box, 0x210, 0, False ],
+                ["SORT_BRIEF_DOCS",          self.type_check_box, 0x210, 0, False ],
+                ["SORT_MEMBERS_CTORS_1ST",   self.type_check_box, 0x210, 0, False ],
+                
+                ["SORT_GROUP_NAMES",         self.type_check_box, 0x210, 0, False ],
+                ["SORT_BY_SCOPE_NAME",       self.type_check_box, 0x210, 0, False ],
+                ["STRICT_PROTO_MATCHING",    self.type_check_box, 0x210, 0, False ],
+                
+                ["GENERATE_TODOLIST",        self.type_check_box, 0x210, 0, False ],
+                ["GENERATE_TESTLIST",        self.type_check_box, 0x210, 0, False ],
+                ["GENERATE_BUGLIST",         self.type_check_box, 0x210, 0, False ],
+                ["GENERATE_DEPRECATEDLIST",  self.type_check_box, 0x210, 0, False ],
+                
+                ["ENABLED_SECTIONS",         self.type_edit,      0x210, 3 ],
+                ["MAX_INITIALIZER_LINES",    self.type_spin,      0x210, 0 ],
+                
+                ["SHOW_USED_FILES",          self.type_check_box, 0x210, 0, True  ],
+                ["SHOW_FILES",               self.type_check_box, 0x210, 0, True  ],
+                ["SHOW_NAMESPACES",          self.type_check_box, 0x210, 0, True  ],
+                
+                ["FILE_VERSION_FILTER",      self.type_edit,      0x210, 1 ],
+                ["LAYOUT_FILE",              self.type_edit,      0x210, 1 ],
+                ["CITE_BIB_FILES",           self.type_edit,      0x210, 3 ]
             ]
+            self.addElements(label_1_elements, 0x0200)
     
     class customScrollView_7(myCustomScrollArea):
         def __init__(self, name):
