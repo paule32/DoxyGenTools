@@ -1085,126 +1085,266 @@ try:
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(400)
+            
+            label_1_elements = [
+                ["QUIET",                    self.type_check_box, 0x300, 0, True  ],
+                ["WARNINGS",                 self.type_check_box, 0x200, 0, True  ],
+                
+                ["WARN_IF_UNDOCUMENTED",     self.type_check_box, 0x200, 0, False ],
+                ["WARN_IF_DOC_ERROR",        self.type_check_box, 0x200, 0, True  ],
+                ["WARN_IF_INCOMPLETE_DOC",   self.type_check_box, 0x200, 0, True  ],
+                
+                ["WARN_NO_PARAMDOC",         self.type_check_box, 0x200, 0, False ],
+                ["WARN_IF_UNDOC_ENUM_VAL",   self.type_check_box, 0x200, 0, False ],
+                
+                ["WARN_AS_ERROR",            self.type_spin,      0x200, 0 ],
+                
+                ["WARN_FORMAT",              self.type_edit,      0x200, 0 ],
+                ["WARN_LINE_FORMAT",         self.type_edit,      0x200, 0 ],
+                ["WARN_LOGFILE",             self.type_edit,      0x200, 1 ]
+            ]
+            self.addElements(label_1_elements, 0x0300)
     
     class customScrollView_8(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1700)
+            
+            label_1_elements = [
+                ["INPUT",                  self.type_edit,      0x400, 3],
+                ["INPUT_ENCODING",         self.type_edit,      0x400, 0],
+                ["INPUT_FILE_ENCODING",    self.type_edit,      0x400, 1],
+                ["FILE_PATTERNS",          self.type_edit,      0x400, 3],
+                ["RECURSIVE",              self.type_check_box, 0x400, 0, True  ],
+                ["EXCLUDE",                self.type_edit,      0x400, 3],
+                ["EXCLUDE_SYMLINKS",       self.type_check_box, 0x400, 0, False ],
+                ["EXCLUDE_PATTERNS",       self.type_edit,      0x400, 3],
+                ["EXCLUDE_SYMBOLS",        self.type_edit,      0x400, 3],
+                ["EXAMPLE_PATH",           self.type_edit,      0x400, 3],
+                ["EXAMPLE_PATTERNS",       self.type_edit,      0x400, 3],
+                ["EXAMPLE_RECURSIVE",      self.type_edit,      0x400, 0, False ],
+                ["IMAGE_PATH",             self.type_edit,      0x400, 3],
+                ["INPUT_FILTER",           self.type_edit,      0x400, 1],
+                ["FILTER_PATTERNS",        self.type_edit,      0x400, 3],
+                ["FILTER_SOURCE_FILES",    self.type_check_box, 0x400, 0, False ],
+                ["FILTER_SOURCE_PATTERNS", self.type_edit,      0x400, 3],
+                ["USE_MDFILE_AS_MAINPAGE", self.type_edit,      0x400, 0],
+                ["FORTRAN_COMMENT_AFTER",  self.type_spin,      0x400, 0]
+            ]
+            self.addElements(label_1_elements, 0x0400)
     
     class customScrollView_9(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0500)
     
     class customScrollView_10(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0600)
     
     class customScrollView_11(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0700)
     
     class customScrollView_12(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0800)
     
     class customScrollView_13(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0900)
     
     class customScrollView_14(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0A00)
     
     class customScrollView_15(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0B00)
     
     class customScrollView_16(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0C00)
     
     class customScrollView_17(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0D00)
     
     class customScrollView_18(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0E00)
     
     class customScrollView_19(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x0F00)
     
     class customScrollView_20(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x1000)
     
     class customScrollView_21(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x1100)
     
     class customScrollView_22(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x1200)
     
     class customScrollView_23(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x1300)
     
     class customScrollView_24(myCustomScrollArea):
         def __init__(self, name):
             super().__init__(name)
             self.init_ui()
         def init_ui(self):
-            i = 1
+            self.label_1.hide()
+            self.content_widget.setMinimumHeight(1400)
+            
+            label_1_elements = [
+                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+            ]
+            self.addElements(label_1_elements, 0x1400)
     
     class customScrollView_help(QTextEdit):
         def __init__(self):
