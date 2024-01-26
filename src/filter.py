@@ -959,56 +959,75 @@ try:
             label_1_elements = [
                 # <text>,                  <type 1>,             <help>, <type 2>,  <list 1>
                 ["DOXYFILE_ENCODING",      self.type_edit,       100, 0],
+                
                 ["PROJECT_NAME",           self.type_edit,       101, 0, "My Project"],
                 ["PROJECT_NUMBER",         self.type_edit,       102, 0],
                 ["PROJECT_BRIEF",          self.type_edit,       103, 0],
                 ["PROJECT_LOGO",           self.type_edit,       104, 1],
                 ["PROJECT_ICON",           self.type_edit,       105, 1],
+                
                 ["OUTPUT_DIRECTORY",       self.type_edit,       106, 1],
                 ["CREATE_SUBDIRS",         self.type_check_box,  107, 0, True],
                 ["CREATE_SUBDIRS_LEVEL",   self.type_spin,       108, 0],
+                
                 ["ALLOW_UNICODE_NAMES",    self.type_check_box,  109, 0, False],
                 ["OUTPUT_LANGUAGE",        self.type_combo_box,  110, 4, [] ],
+                
                 ["BRIEF_MEMBER_DESC",      self.type_check_box,  111, 0, True],
                 ["REPEAT_BRIEF",           self.type_check_box,  112, 0, True],
                 ["ABBREVIATE_BRIEF",       self.type_edit,       113, 3],
                 ["ALWAYS_DETAILED_SEC",    self.type_check_box,  114, 0, True],
                 ["INLINE_INHERITED_MEMB",  self.type_check_box,  115, 0, True],
+                
                 ["FULL_PATH_NAMES",        self.type_check_box,  116, 0, True],
                 ["STRIP_FROM_PATH",        self.type_edit,       117, 3],
                 ["STRIP_FROM_INC_PATH",    self.type_edit,       118, 3],
+                
                 ["SHORT_NAMES",            self.type_check_box,  119, 0, False],
+                
                 ["JAVADOC_AUTOBRIEF",      self.type_check_box,  120, 0, True ],
                 ["JAVADOC_BANNER",         self.type_check_box,  121, 0, False],
+                
                 ["QT_AUTOBRIEF",           self.type_check_box,  122, 0, False],
+                
                 ["MULTILINE_CPP_IS_BRIEF", self.type_check_box,  123, 0, False],
                 ["PYTHON_DOCSTRING",       self.type_check_box,  124, 0, True ],
                 ["INHERITED_DOCS",         self.type_check_box,  125, 0, True ],
                 ["SEPERATE_MEMBER_PAGES",  self.type_check_box,  126, 0, False],
+                
                 ["TAB_SIZE",               self.type_spin,       127, 0],
                 ["ALIASES",                self.type_edit,       128, 3],
+                
                 ["OPTIMIZE_OUTPUT_FOR_C",  self.type_check_box,  129, 0, True ],
                 ["OPTIMIZE_OUTPUT_JAVA",   self.type_check_box,  130, 0, False],
                 ["OPTIMIZE_FOR_FORTRAN",   self.type_check_box,  131, 0, False],
                 ["OPTIMIZE_OUTPUT_VHCL",   self.type_check_box,  132, 0, False],
                 ["OPTIMIZE_OUTPUT_SLICE",  self.type_check_box,  133, 0, False],
+                
                 ["EXTERNAL_MAPPING",       self.type_edit,       134, 3],
+                
                 ["MARKDOWN_SUPPORT",       self.type_check_box,  135, 0, True ],
                 ["MARKDOWN_ID_STYLE",      self.type_combo_box,  136, 2, ["DOXYGEN", "CIT"]],
+                
                 ["TOC_INCLUDE_HEADINGS",   self.type_spin,       137, 0],
                 ["AUTOLINK_SUPPORT",       self.type_check_box,  138, 0, True ],
+                
                 ["BUILTIN_STL_SUPPORT",    self.type_check_box,  139, 0, True ],
                 ["CPP_CLI_SUPPORT",        self.type_check_box,  140, 0, True ],
                 ["SIP_SUPPORT",            self.type_check_box,  141, 0, False],
                 ["IDL_PROPERTY_SUPPORT",   self.type_check_box,  142, 0, True ],
+                
                 ["DESTRIBUTE_GROUP_DOC",   self.type_check_box,  143, 0, False],
                 ["GROUP_NESTED_COMPOUNDS", self.type_check_box,  144, 0, False],
                 ["SUBGROUPING",            self.type_check_box,  145, 0, True ],
+                
                 ["INLINE_GROUPED_CLASSES", self.type_check_box,  146, 0, False],
                 ["INLINE_SIMPLE_STRUCTS",  self.type_check_box,  147, 0, False],
                 ["TYPEDEF_HIDES_STRUCT",   self.type_check_box,  148, 0, False],
+                
                 ["LOOKUP_CACHE_SIZE",      self.type_spin,       149, 0],
                 ["NUM_PROC_THREADS",       self.type_spin,       150, 0],
+                
                 ["TIMESTAMP",              self.type_combo_box,  151, 2, ["NO","YES"]]
             ]
             self.addElements(label_1_elements, 0x0100)
@@ -1144,10 +1163,25 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(560)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["SOURCE_BROWSER",          self.type_check_box, 0x500, 0, True  ],
+                ["INLINE_SOURCES",          self.type_check_box, 0x200, 0, False ],
+                ["STRIP_CODE_COMMENTS",     self.type_check_box, 0x200, 0, False ],
+                
+                ["REFERENCED_BY_RELATION",  self.type_check_box, 0x200, 0, True  ],
+                ["REFERENCES_RELATION",     self.type_check_box, 0x200, 0, True  ],
+                ["REFERENCES_LINK_SOURCE",  self.type_check_box, 0x200, 0, True  ],
+                
+                ["SOURCE_TOOLTIPS",         self.type_check_box, 0x200, 0, True  ],
+                ["USE_HTAGS",               self.type_check_box, 0x200, 0, False ],
+                ["VERBATIM_HEADERS",        self.type_check_box, 0x200, 0, True  ],
+                
+                ["CLANG_ASSISTED_PARSING",  self.type_check_box, 0x200, 0, False ],
+                ["CLANG_ADD_INC_PATHS",     self.type_check_box, 0x200, 0, False ],
+                ["CLANG_OPTIONS",           self.type_edit     , 0x200, 3 ],
+                ["CLANG_DATABASE_PATH",     self.type_edit     , 0x200, 1 ]
             ]
             self.addElements(label_1_elements, 0x0500)
     
@@ -1157,10 +1191,11 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["ALPHABETICAL_INDEX", self.type_check_box, 0x600, 0, True ],
+                ["IGNORE_PREFIX",      self.type_edit,      0x601, 3 ]
             ]
             self.addElements(label_1_elements, 0x0600)
     
@@ -1170,10 +1205,88 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(2380)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_HTML",          self.type_check_box, 0x200, 0, True  ],
+                ["HTML_OUTPUT",            self.type_edit,      0x200, 1 ],
+                ["HTML_FILE_EXTENSION",    self.type_edit,      0x200, 0 ],
+                
+                ["HTML_HEADER",            self.type_edit,      0x200, 1 ],
+                ["HTML_FOOTER",            self.type_edit,      0x200, 1 ],
+                
+                ["HTML_STYLESHEET",        self.type_edit,      0x200, 1 ],
+                ["HTML_EXTRA_STYLESHEET",  self.type_edit,      0x200, 3 ],
+                ["HTML_EXTRA_FILES",       self.type_edit,      0x200, 3 ],
+                
+                ["HTML_COLORSTYLE",        self.type_combo_box, 0x200, 2, [ "LIGHT", "DARK", "AUTO_LIGHT", "AUTO_DARK", "TOOGLE" ] ],
+                ["HTML_COLORSTYLE_HUE",    self.type_spin,      0x200, 0 ],
+                ["HTML_COLORSTYLE_SAT",    self.type_spin,      0x200, 0 ],
+                ["HTML_COLORSTYLE_GAMMA",  self.type_spin,      0x200, 0 ],
+                ["HTML_DYNAMIC_MENUS",     self.type_check_box, 0x200, 0, True  ],
+                ["HTML_DYNAMIC_SECTIONS",  self.type_check_box, 0x200, 0, False ],
+                
+                ["HTML_CODE_FOLDING",      self.type_check_box, 0x200, 0, True  ],
+                ["HTML_COPY_CLIPBOARD",    self.type_check_box, 0x200, 0, True  ],
+                ["HTML_PROJECT_COOKIE",    self.type_edit,      0x200, 0 ],
+                ["HTML_INDEX_NUM_ENTRIES", self.type_spin,      0x200, 0 ],
+                
+                ["GENERATE_DOCSET",        self.type_check_box, 0x200, 0, False ],
+                ["DOCSET_FEEDNAME",        self.type_edit,      0x200, 0 ],
+                ["DOCSET_FEEDURL",         self.type_edit,      0x200, 0 ],
+                ["DOCSET_BUNDLE_ID",       self.type_edit,      0x200, 0 ],
+                ["DOCSET_PUBLISHER_ID",    self.type_edit,      0x200, 0 ],
+                ["DOCSET_PUBLISHER_NAME",  self.type_edit,      0x200, 0 ],
+                
+                ["GENERATE_HTMLHELP",      self.type_check_box, 0x200, 0, True  ],
+                ["CHM_FILE",               self.type_edit,      0x200, 1 ],
+                ["HHC_LOCATION",           self.type_edit,      0x200, 1 ],
+                ["GENERATE_CHI",           self.type_check_box, 0x200, 0, False ],
+                ["CHM_INDEX_ENCODING",     self.type_edit,      0x200, 0 ],
+                ["BINARY_TOC",             self.type_check_box, 0x200, 0, False ],
+                ["TOC_EXPAND",             self.type_check_box, 0x200, 0, False ],
+                ["SITEMAP_URL",            self.type_edit,      0x200, 0 ],
+                
+                ["GENERATE_QHP",           self.type_check_box, 0x200, 0, False ],
+                ["QCH_FILE",               self.type_edit,      0x200, 1 ],
+                ["QHP_VIRTUAL_FOLDER",     self.type_edit,      0x200, 0 ],
+                ["QHP_CUST_FILTER_NAME",   self.type_edit,      0x200, 0 ],
+                ["QHP_CUST_FILTER_ATTRS",  self.type_edit,      0x200, 0 ],
+                ["QHP_SECT_FILTER_ATTRS",  self.type_edit,      0x200, 0 ],
+                ["QHG_LOCATION",           self.type_edit,      0x200, 1 ],
+                
+                ["GENERATE_ECLIPSEHELP",   self.type_check_box, 0x200, 0, False ],
+                ["ECLIPSE_DOC_ID",         self.type_edit,      0x200, 0 ],
+                ["DISABLE_INDEX",          self.type_check_box, 0x200, 0, False ],
+                
+                ["GENERATE_TREEVIEW",      self.type_check_box, 0x200, 0, True  ],
+                ["FULL_SIDEBAR",           self.type_check_box, 0x200, 0, False ],
+                
+                ["ENUM_VALUES_PER_LINE",   self.type_spin,      0x200, 0 ],
+                ["TREEVIEW_WIDTH",         self.type_spin,      0x200, 0 ],
+                
+                ["EXT_LINKS_IN_WINDOW",    self.type_check_box, 0x200, 0, False ],
+                ["OBFUSCATE_EMAILS",       self.type_check_box, 0x200, 0, True  ],
+                
+                ["HTML_FORMULA_FORMAT",    self.type_combo_box, 0x200, 2, [ "png", "svg" ] ],
+                ["FORMULA_FONTSIZE",       self.type_spin,      0x200, 0 ],
+                ["FORMULA_MACROFILE",      self.type_edit,      0x200, 1 ],
+                
+                ["USE_MATHJAX",            self.type_check_box, 0x200, 0, False ],
+                ["MATHJAX_VERSION",        self.type_combo_box, 0x200, 2, [ "MathJax_2", "MathJax_3" ] ],
+                ["MATHJAX_FORMAT",         self.type_combo_box, 0x200, 2, [ "HTML + CSS", "NativeXML", "chtml", "SVG" ] ],
+                
+                ["MATHJAX_RELPATH",        self.type_edit,      0x200, 1 ],
+                ["MATHJAX_EXTENSIONS",     self.type_edit,      0x200, 3 ],
+                ["MATHJAX_CODEFILE",       self.type_edit,      0x200, 0 ],
+                
+                ["SEARCHENGINE",           self.type_check_box, 0x200, 0, False ],
+                ["SERVER_BASED_SEARCH",    self.type_check_box, 0x200, 0, False ],
+                ["EXTERNAL_SEARCH",        self.type_check_box, 0x200, 0, False ],
+                ["SEARCHENGINE_URL",       self.type_edit,      0x200, 0 ],
+                ["SEARCHDATA_FILE",        self.type_edit,      0x200, 1 ],
+                ["EXTERNAL_SEARCH_ID",     self.type_edit,      0x200, 0 ],
+                ["EXTRA_SEARCH_MAPPINGS",  self.type_edit,      0x200, 3 ]
             ]
             self.addElements(label_1_elements, 0x0700)
     
@@ -1183,10 +1296,26 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(1000)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_LATEX",          self.type_check_box, 0x200, 0, False ],
+                ["LATEX_OUTPUT",            self.type_edit,      0x200, 1 ],
+                ["LATEX_CMD_NAMET",         self.type_edit,      0x200, 1 ],
+                ["LATEX_MAKEINDEX_CMDT",    self.type_edit,      0x200, 0 ],
+                ["COMPACT_LATEX",           self.type_check_box, 0x200, 0, False ],
+                ["PAPER_TYPE",              self.type_combo_box, 0x200, 2, [ "a4", "letter", "executive" ] ],
+                ["EXTRA_PACKAGES",          self.type_edit,      0x200, 3 ],
+                ["LATEX_HEADER",            self.type_edit,      0x200, 1 ],
+                ["LATEX_FOOTER",            self.type_edit,      0x200, 1 ],
+                ["LATEX_EXTRA_STYLESHEET",  self.type_edit,      0x200, 3 ],
+                ["LATEX_EXTRA_FILES",       self.type_edit,      0x200, 3 ],
+                ["PDF_HYPERLINKS",          self.type_check_box, 0x200, 0, True  ],
+                ["USE_PDFLATEX",            self.type_check_box, 0x200, 0, True  ],
+                ["LATEX_BATCHMODE",         self.type_combo_box, 0x200, 2, [ "NO", "YWS", "BATCH", "NON-STOP", "SCROLL", "ERROR_STOP" ] ],
+                ["LATEX_HIDE_INDICES",      self.type_check_box, 0x200, 0, False ],
+                ["LATEX_BIB_STYLE",         self.type_edit,      0x200, 0 ],
+                ["LATEX_EMOJI_DIRECTORY",   self.type_edit,      0x200, 1 ]
             ]
             self.addElements(label_1_elements, 0x0800)
     
