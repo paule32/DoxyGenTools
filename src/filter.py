@@ -123,8 +123,7 @@ try:
         + "start aborted."
     
     __error__locales_error = "" \
-        + "no locales file for this application.\n" \
-        + "use default: english"
+        + "no locales file for this application."
     
     # ------------------------------------------------------------------------
     # global used locales constants ...
@@ -165,9 +164,6 @@ try:
     def handle_language(lang):
         try:
             system_lang, _ = locale.getdefaultlocale()
-            print("loca: " + system_lang)
-            print("lalo: " + __locale__enu)
-            print("lang: " + lang)
             if system_lang.lower() == __locale__enu:
                 if lang.lower() == __locale__enu:
                     tr = gettext.translation(
@@ -1325,10 +1321,15 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_RTF",         self.type_check_box, 0x200, 0, False ],
+                ["RTF_OUTPUT",           self.type_edit,      0x200, 1 ],
+                ["COMPACT_RTF",          self.type_check_box, 0x200, 0, False ],
+                ["RTF_HYPERLINKS",       self.type_check_box, 0x200, 0, False ],
+                ["RTF_STYLESHEET_FILE",  self.type_edit,      0x200, 1 ],
+                ["RTF_EXTENSIONS_FILE",  self.type_edit,      0x200, 1 ]
             ]
             self.addElements(label_1_elements, 0x0900)
     
@@ -1338,10 +1339,14 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_MAN",   self.type_check_box, 0x200, 0, False ],
+                ["MAN_OUTPUT",     self.type_edit,      0x200, 1 ],
+                ["MAN_EXTENSION",  self.type_edit,      0x200, 0 ],
+                ["MAN_SUBDIR",     self.type_edit,      0x200, 0 ],
+                ["MAN_LINKS",      self.type_check_box, 0x200, 0, False ],
             ]
             self.addElements(label_1_elements, 0x0A00)
     
@@ -1351,10 +1356,13 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_XML",            self.type_check_box, 0x200, 0, False ],
+                ["XML_OUTPUT",              self.type_edit,      0x200, 1 ],
+                ["XML_PROGRAMLISTING",      self.type_check_box, 0x200, 0, False ],
+                ["XML_NS_MEMB_FILE_SCOPE",  self.type_check_box, 0x200, 0, False ]
             ]
             self.addElements(label_1_elements, 0x0B00)
     
@@ -1367,7 +1375,8 @@ try:
             self.content_widget.setMinimumHeight(1400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_DOCBOOK",  self.type_check_box, 0x200, 0, False ],
+                ["DOCBOOK_OUTPUT",    self.type_edit,      0x200, 1 ],
             ]
             self.addElements(label_1_elements, 0x0C00)
     
@@ -1377,10 +1386,10 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_AUTOGEN_DEF",  self.type_check_box, 0x200, 0, False ]
             ]
             self.addElements(label_1_elements, 0x0D00)
     
@@ -1390,10 +1399,12 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_SQLITE3",     self.type_check_box, 0x200, 0, False ],
+                ["SQLITE3_OUTPUT",       self.type_edit,      0x200, 1 ],
+                ["SQLITE3_RECREATE_DB",  self.type_check_box, 0x200, 0, True  ],
             ]
             self.addElements(label_1_elements, 0x0E00)
     
@@ -1403,10 +1414,13 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_PERLMOD",        self.type_check_box, 0x200, 0, False ],
+                ["PERLMOD_LATEX",           self.type_check_box, 0x200, 0, False ],
+                ["PERLMOD_PRETTY",          self.type_check_box, 0x200, 0, False ],
+                ["PERLMOD_MAKEVAR_PREFIX",  self.type_edit,      0x200, 1 ]
             ]
             self.addElements(label_1_elements, 0x0F00)
     
@@ -1416,10 +1430,18 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(800)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["ENABLE_PREPROCESSING",   self.type_check_box, 0x200, 0, True  ],
+                ["MACRO_EXPANSION",        self.type_check_box, 0x200, 0, True  ],
+                ["EXPAND_ONLY_PREDEF",     self.type_check_box, 0x200, 0, False ],
+                ["SEARCH_INCLUDES",        self.type_check_box, 0x200, 0, False ],
+                ["INCLUDE_PATH",           self.type_edit,      0x200, 3 ],
+                ["INCLUDE_FILE_PATTERNS",  self.type_edit,      0x200, 3 ],
+                ["PREDEFINED",             self.type_edit,      0x200, 3 ],
+                ["EXPAND_AS_DEFINED",      self.type_edit,      0x200, 3 ],
+                ["SKIP_FUNCTION_MACROS",   self.type_check_box, 0x200, 0, True  ]
             ]
             self.addElements(label_1_elements, 0x1000)
     
@@ -1429,10 +1451,14 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(400)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["TAGFILES",          self.type_edit, 0x200, 3 ],
+                ["GENERATE_TAGFILE",  self.type_edit, 0x200, 1 ],
+                ["ALLEXTERNALS",      self.type_check_box, 0x200, 0, False ],
+                ["EXTERNAL_GROUPS",   self.type_check_box, 0x200, 0, True  ],
+                ["EXTERNAL_PAGES",    self.type_check_box, 0x200, 0, True  ]
             ]
             self.addElements(label_1_elements, 0x1100)
     
@@ -1442,10 +1468,57 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1400)
+            self.content_widget.setMinimumHeight(1800)
             
             label_1_elements = [
-                ["EXTRACT_ALL",              self.type_check_box, 0x200, 0, False ],
+                ["HIDE_UNDOC_RELATIONS",   self.type_check_box, 0x200, 0, False ],
+                ["HAVE_DOT",               self.type_check_box, 0x200, 0, False ],
+                ["DOT_NUM_THREADS",        self.type_spin     , 0x200, 0 ],
+                
+                ["DOT_COMMON_ATTR",        self.type_edit, 0x200, 0 ],
+                ["DOT_EDGE_ATTR",          self.type_edit, 0x200, 0 ],
+                ["DOT_NODE_ATTR",          self.type_edit, 0x200, 0 ],
+                ["DOT_FONTPATH",           self.type_edit, 0x200, 1 ],
+                
+                ["CLASS_GRAPH",            self.type_combo_box, 0x200, 2, [ "YES", "NO" ] ],
+                ["COLLABORATION_GRAPH",    self.type_check_box, 0x200, 0, True  ],
+                ["GROUP_GRAPHS",           self.type_check_box, 0x200, 0, True  ],
+                ["UML_LOOK",               self.type_check_box, 0x200, 0, False ],
+                ["UML_LIMIT_NUM_FIELDS",   self.type_spin     , 0x200, 0 ],
+                ["DOT_UML_DETAILS",        self.type_combo_box, 0x200, 2, [ "NO", "YES" ] ],
+                ["DOT_WRAP_THRESHOLD",     self.type_spin     , 0x200, 0 ],
+                
+                ["TEMPLATE_RELATIONS",     self.type_check_box, 0x200, 0, False ],
+                ["INCLUDE_GRAPH",          self.type_check_box, 0x200, 0, False ],
+                ["INCLUDED_BY_GRAPH",      self.type_check_box, 0x200, 0, False ],
+                ["CALL_GRAPH",             self.type_check_box, 0x200, 0, False ],
+                ["CALLER_GRAPH",           self.type_check_box, 0x200, 0, False ],
+                ["IGRAPHICAL_HIERARCHY",   self.type_check_box, 0x200, 0, False ],
+                ["DIRECTORY_GRAPH",        self.type_check_box, 0x200, 0, False ],
+                
+                ["DIR_GRAPH_MAX_DEPTH",    self.type_spin     , 0x200, 0 ],
+                ["DOT_IMAGE_FORMAT",       self.type_combo_box, 0x200, 2, [ "png", "svg" ] ],
+                
+                ["INTERACTIVE_SVG",        self.type_check_box, 0x200, 0, False ],
+                
+                ["DOT_PATH",               self.type_edit     , 0x200, 1 ],
+                ["DOTFILE_DIRS",           self.type_edit     , 0x200, 3 ],
+                
+                ["DIA_PATH",               self.type_edit     , 0x200, 1 ],
+                ["DIAFILE_DIRS",           self.type_edit     , 0x200, 3 ],
+                
+                ["PLANTUML_JAR_PATH",      self.type_edit     , 0x200, 1 ],
+                ["PLANTUML_CFG_FILE",      self.type_edit     , 0x200, 1 ],
+                ["PLANTUML_INCLUDE_PATH",  self.type_edit     , 0x200, 3 ],
+                
+                ["DOT_GRAPH_MAX_NODES",    self.type_spin     , 0x200, 0 ],
+                ["MAX_DOT_GRAPH_DEPTH",    self.type_spin     , 0x200, 0 ],
+                
+                ["DOT_MULTI_TARGETS",      self.type_check_box, 0x200, 0, False ],
+                ["GENERATE_LEGEND",        self.type_check_box, 0x200, 0, False ],
+                ["DOT_CLEANUP",            self.type_check_box, 0x200, 0, True  ],
+                ["MSCGEN_TOOL",            self.type_edit     , 0x200, 1 ],
+                ["MSCFILE_DIRS",           self.type_edit     , 0x200, 3 ]
             ]
             self.addElements(label_1_elements, 0x1200)
     
@@ -2098,10 +2171,10 @@ try:
             with open(__app__config_ini, "w", encoding="utf-8") as output_file:
                 content = ""   \
                 + "[common]\n" \
-                + "language = en\n"
+                + "language = en_us\n"
                 output_file.write(content)
                 output_file.close()
-                ini_lang = "en_us" # default is english; en
+                ini_lang = "en_us" # default is english; en_us
         else:
             config = configparser.ConfigParser()
             config.read(__app__config_ini)
@@ -2122,8 +2195,10 @@ try:
         if not os.path.exists(convertPath(po_file_name)):
             if isPythonWindows() == True:
                 showApplicationInformation(__error__locales_error)
+                sys.exit(EXIT_FAILURE)
             else:
                 print(__error__locales_error)
+                sys.exit(EXIT_FAILURE)
         
         if os_type == os_type_windows or isPythonWindows() == True:
             # -----------------------------------------------------
