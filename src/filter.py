@@ -1026,7 +1026,7 @@ try:
                 
                 ["TIMESTAMP",              self.type_combo_box,  151, 2, ["NO","YES"]]
             ]
-            self.addElements(label_1_elements, 0x0100)
+            self.addElements(label_1_elements, 0x100)
         
         # ----------------------------------------------
         # show help text when mouse move over the label
@@ -1093,7 +1093,7 @@ try:
                 ["LAYOUT_FILE",              self.type_edit,      0x210, 1 ],
                 ["CITE_BIB_FILES",           self.type_edit,      0x210, 3 ]
             ]
-            self.addElements(label_1_elements, 0x0200)
+            self.addElements(label_1_elements, 0x200)
     
     class customScrollView_7(myCustomScrollArea):
         def __init__(self, name):
@@ -1468,7 +1468,7 @@ try:
             self.init_ui()
         def init_ui(self):
             self.label_1.hide()
-            self.content_widget.setMinimumHeight(1800)
+            self.content_widget.setMinimumHeight(1600)
             
             label_1_elements = [
                 ["HIDE_UNDOC_RELATIONS",   self.type_check_box, 0x200, 0, False ],
@@ -1607,7 +1607,7 @@ try:
             # create a new fresh menubar ...
             # ----------------------------------------
             menubar = QMenuBar()
-            menubar.setStyleSheet(_(menu_item_style))
+            menubar.setStyleSheet(tr(menu_item_style))
             
             menu_file = menubar.addMenu("File")
             menu_edit = menubar.addMenu("Edit")
@@ -1620,6 +1620,8 @@ try:
             menu_edit.setFont(menu_font)
             menu_help.setFont(menu_font)
             
+            menu_file.setContentsMargins(0,0,0,0)
+            
             # ----------------------------------------
             # file menu action's ...
             # ----------------------------------------
@@ -1630,9 +1632,39 @@ try:
             menu_file_saveas = QWidgetAction(menu_file)
             menu_file.addSeparator()
             menu_file_exit   = QWidgetAction(menu_file)
-            menu_file.setStyleSheet("color:white;font-weight:normal;font-style:italic")
+            menu_file.setStyleSheet("background-color:navy;")
+            
+            # ----------------------------------------
+            # help menu action's ...
+            # ----------------------------------------
+            menu_help_about   = QWidgetAction(menu_help)
+            
+            menu_style_bg = "background-color:navy;"
+            menu_file.setStyleSheet(menu_style_bg)
+            menu_help.setStyleSheet(menu_style_bg)
             
             menu_label_style = tr("menu_label_style")
+            
+            menu_help_widget = QWidget()
+            menu_help_layout = QHBoxLayout(menu_help_widget)
+            #
+            menu_help_about_icon = QWidget()
+            menu_help_about_icon.setFixedWidth(26)
+            menu_help_about_icon.setContentsMargins(0,0,0,0)
+            #
+            menu_help_about_label = QLabel("About...")
+            menu_help_about_label.setContentsMargins(0,0,0,0)
+            menu_help_about_label.setStyleSheet(menu_label_style)
+            menu_help_about_label.setMinimumWidth(160)
+            #
+            menu_help_about_shortcut = QLabel("F1")
+            menu_help_about_shortcut.setContentsMargins(0,0,0,0)
+            menu_help_about_shortcut.setMinimumWidth(100)
+            menu_help_about_shortcut.setStyleSheet(tr("menu_item"))
+            
+            menu_help_layout.addWidget(menu_help_about_icon)
+            menu_help_layout.addWidget(menu_help_about_label)
+            menu_help_layout.addWidget(menu_help_about_shortcut)
             
             menu_icon_1 = QIcon("")
             menu_icon_2 = QIcon("")
@@ -1647,9 +1679,13 @@ try:
             menu_icon_widget_1.setContentsMargins(0,0,0,0)
             #
             menu_label_1 = QLabel("New ...")
+            menu_label_1.setContentsMargins(0,0,0,0)
             menu_label_1.setStyleSheet(menu_label_style)
             menu_label_1.setMinimumWidth(160)
             menu_label_1_shortcut = QLabel("Ctrl-N")
+            menu_label_1_shortcut.setContentsMargins(0,0,0,0)
+            menu_label_1_shortcut.setMinimumWidth(100)
+            menu_label_1_shortcut.setStyleSheet(tr("menu_item"))
             #
             menu_layout_1.addWidget(menu_icon_widget_1)
             menu_layout_1.addWidget(menu_label_1)
@@ -1670,6 +1706,7 @@ try:
             menu_label_2.setStyleSheet(menu_label_style)
             menu_label_2.setMinimumWidth(160)
             menu_label_2_shortcut = QLabel("Ctrl-O")
+            menu_label_2_shortcut.setStyleSheet(tr("menu_item"))
             #
             menu_layout_2.addWidget(menu_icon_widget_2)
             menu_layout_2.addWidget(menu_label_2)
@@ -1690,6 +1727,7 @@ try:
             menu_label_3.setStyleSheet(menu_label_style)
             menu_label_3.setMinimumWidth(160)
             menu_label_3_shortcut = QLabel("Ctrl-S")
+            menu_label_3_shortcut.setStyleSheet(tr("menu_item"))
             #
             menu_layout_3.addWidget(menu_icon_widget_3)
             menu_layout_3.addWidget(menu_label_3)
@@ -1744,6 +1782,8 @@ try:
             menu_file_saveas.setDefaultWidget(menu_widget_4)
             menu_file_exit  .setDefaultWidget(menu_widget_5)
             
+            menu_help_about.setDefaultWidget(menu_help_widget)
+            
             # ----------------------------------------
             # menu action event's (mouse click):
             # ----------------------------------------
@@ -1758,6 +1798,11 @@ try:
             menu_file.addAction(menu_file_save)
             menu_file.addAction(menu_file_saveas)
             menu_file.addAction(menu_file_exit)
+            
+            # ----------------------------------------
+            
+            menu_help_about.triggered.connect(self.menu_help_clicked_about)
+            menu_help.addAction(menu_help_about)
             
             # ----------------------------------------
             # add toolbar under the main menu ...
@@ -2062,6 +2107,11 @@ try:
             sys.exit(EXIT_SUCCESS)
             return
         
+        def menu_help_clicked_about(self):
+            showInfo("" \
+            + "DOXYGEN wrapper 1.0\n"               \
+            + "(c) 2024 by Jens Kallup - paule32\n" \
+            + "all rights reserved.")
     
     # ------------------------------------------------------------------------
     # inform the user about the rules/license of this application script ...
